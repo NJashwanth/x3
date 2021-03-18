@@ -11,13 +11,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(),
       body: getBody(),
     );
   }
 
   Widget getBody() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -37,11 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  onConfigPressed() {
+  void onConfigPressed() {
     _bloc.onConfigPressed();
   }
 
-  onLoginPressed() {
+  void onLoginPressed() {
     _bloc.onLoginPressed();
   }
 }

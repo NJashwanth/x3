@@ -2,7 +2,8 @@
     package="app.letmebuild.x3">
    <application
         android:label="x3"
-        android:icon="@mipmap/ic_launcher">
+       android:usesCleartextTraffic="true"
+       android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
