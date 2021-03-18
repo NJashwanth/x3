@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'HomeScreen/ui/homeScreen.dart';
+import 'package:x3/Login/ui/loginScreen.dart';
+import 'package:x3/utils/utils.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,9 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomeScreen(),
+          primarySwatch: Colors.blue,
+          inputDecorationTheme: buildInputDecorationTheme(),
+          scaffoldBackgroundColor: Colors.red.shade50),
+      home: LoginScreen(),
     );
   }
 }
