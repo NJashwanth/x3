@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:x3/utils/TextUtils.dart';
 
 Widget getTextFormField(
     TextEditingController controller, String hintText, String labelText,
@@ -14,8 +13,8 @@ Widget getTextFormField(
       decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,
-          prefix: PText(
-            textKey: preText ?? "",
+          prefix: Text(
+            preText ?? "",
           ),
           suffixIcon: InkWell(
               onTap: () => controller.clear(),
@@ -63,9 +62,9 @@ Widget getButtonData(IconData iconData, String title, Color color) {
         ),
         Padding(
           padding: const EdgeInsets.all(2.0),
-          child: PText(
-            textKey: title,
-            theme: TextStyle(color: color, fontWeight: FontWeight.bold),
+          child: Text(
+            title,
+            style: TextStyle(color: color, fontWeight: FontWeight.bold),
           ),
         )
       ],
@@ -80,9 +79,9 @@ Widget getLogo() {
 }
 
 Widget getHeading(String text) {
-  return PText(
-    textKey: text,
-    theme: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+  return Text(
+    text,
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
   );
 }
 
@@ -92,15 +91,15 @@ Widget getDrawer(BuildContext context) {
       padding: EdgeInsets.all(0),
       children: [
         DrawerHeader(
-          child: PText(
-            textKey: 'X3',
+          child: Text(
+            'X3',
           ),
           decoration: BoxDecoration(color: Colors.red.shade50),
         ),
         ListTile(
           trailing: Icon(Icons.arrow_right),
-          title: PText(
-            textKey: 'X3 Configurations Settings',
+          title: Text(
+            'X3 Configurations Settings',
           ),
           onTap: () {
             Navigator.pop(context);

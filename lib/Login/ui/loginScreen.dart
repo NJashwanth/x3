@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/Login/bloc/LoginBloc.dart';
 import 'package:x3/Login/model/userModel.dart';
-import 'package:x3/utils/TextUtils.dart';
 import 'package:x3/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -36,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            getLogo(),
+            Hero(tag: "logo", child: getLogo()),
             Divider(),
             getHeading("LOGIN"),
             getTextFormField(_userNameController, "Username", "Username"),
@@ -76,14 +75,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return AppBar(
       backgroundColor: Colors.red,
       actions: [getActions()],
-      title: PText(textKey: "Login"),
+      title: Text("Login"),
     );
   }
 
   Widget getActions() {
     return TextButton(
-      child: PText(
-        textKey: "Configure Settings",
+      child: Text(
+        "Configure Settings",
+        style: TextStyle(color: Colors.white),
       ),
       onPressed: () => onPressed(),
     );

@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/Bloc/SplashBloc.dart';
-import 'package:x3/utils/TextUtils.dart';
 import 'package:x3/utils/utils.dart';
 
 import 'model/EnumForStateManagement.dart';
@@ -19,8 +19,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: getBody(),
+    return SafeArea(
+      child: Scaffold(
+        body: getBody(),
+      ),
     );
   }
 
@@ -49,17 +51,21 @@ class _SplashScreenState extends State<SplashScreen> {
   Column getLoadingStateWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        getLogo(),
+        Hero(tag: "logo", child: getLogo()),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            PText(
-              textKey: "Checking Configurations",
-              key: textKey,
+            Text(
+              "Checking Configuration",
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            CircularProgressIndicator(),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: CircularProgressIndicator(),
+            ),
           ],
         )
       ],
