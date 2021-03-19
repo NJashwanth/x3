@@ -20,8 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget getBody() {
-    return FutureBuilder<LoginStates>(
-        future: _bloc.,
+    return StreamBuilder<LoginStates>(
+        stream: _bloc.stateStream,
         builder: (context, snapshot) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
