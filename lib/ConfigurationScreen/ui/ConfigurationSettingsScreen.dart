@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/ConfigurationScreen/bloc/ConfigurationSettingsBloc.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
+import 'package:x3/utils/TextUtils.dart';
 import 'package:x3/utils/utils.dart';
 
 class ConfigurationSettingsScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _ConfigurationSettingsScreenState
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: getAppBar(),
         key: _scaffoldKey,
         body: getBody(),
       ),
@@ -157,5 +159,11 @@ class _ConfigurationSettingsScreenState
               language: _languageController.text);
       _bloc.saveConfigurations(configurationSettingsModel);
     }
+  }
+
+  Widget getAppBar() {
+    return PText(
+      textKey: "Configurations Settings",
+    );
   }
 }

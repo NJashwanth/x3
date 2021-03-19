@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x3/Login/ui/loginScreen.dart';
+import 'package:x3/Splash/splashScreen.dart';
 import 'package:x3/utils/utils.dart';
 
 void main() {
@@ -13,10 +13,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+          appBarTheme: AppBarTheme(color: Colors.red),
           primarySwatch: Colors.blue,
           inputDecorationTheme: buildInputDecorationTheme(),
           scaffoldBackgroundColor: Colors.red.shade50),
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }

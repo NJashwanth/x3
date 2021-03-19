@@ -15,6 +15,13 @@ class SplashBloc {
   }
 
   SplashBloc() {
+    checkState();
+  }
+
+  Future<void> checkState() async {
+    await Hive.openBox('configuration');
+    await Hive.openBox('login');
+
     state.add(LoginStates.loading);
     bool isServerConfigWorking = Hive.box("configuration").get("isConfigured");
     if (isServerConfigWorking != null && isServerConfigWorking) {
