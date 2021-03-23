@@ -33,6 +33,7 @@ dependencies:
   font_awesome_flutter: ^8.12.0
   rxdart: 0.25.0
   hive: 1.4.4+1
+  path_provider: ^1.6.28
 
 dev_dependencies:
   flutter_test:

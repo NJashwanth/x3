@@ -32,9 +32,7 @@ String validate(String s) {
 
 InputDecorationTheme buildInputDecorationTheme() {
   return InputDecorationTheme(
-    border: new OutlineInputBorder(
-      borderRadius: BorderRadius.circular(30.0),
-    ),
+    border: new OutlineInputBorder(),
     labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
     hintStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
     enabledBorder: OutlineInputBorder(
