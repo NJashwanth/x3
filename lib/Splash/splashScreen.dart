@@ -15,8 +15,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   SplashBloc _bloc = SplashBloc.getInstance();
-  Key textKey;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(

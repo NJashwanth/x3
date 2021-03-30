@@ -12,12 +12,18 @@ class ConfigurationSettingsScreen extends StatefulWidget {
 
 class _ConfigurationSettingsScreenState
     extends State<ConfigurationSettingsScreen> {
-  TextEditingController _serverController = new TextEditingController();
-  TextEditingController _portNumberController = new TextEditingController();
-  TextEditingController _userNameController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
-  TextEditingController _folderController = new TextEditingController();
-  TextEditingController _languageController = new TextEditingController();
+  TextEditingController _serverController =
+      new TextEditingController(text: "http://sagex3v12.germinit.com");
+  TextEditingController _portNumberController =
+      new TextEditingController(text: "8124");
+  TextEditingController _userNameController =
+      new TextEditingController(text: "Admin");
+  TextEditingController _passwordController =
+      new TextEditingController(text: "admin");
+  TextEditingController _folderController =
+      new TextEditingController(text: "GITDEV");
+  TextEditingController _languageController =
+      new TextEditingController(text: "eng");
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
@@ -134,8 +140,8 @@ class _ConfigurationSettingsScreenState
 
   void onTestConfigurationsButtonPressed() {
     if (_formKey.currentState.validate()) {
-      ConfigurationSettingsModel configurationSettingsModel =
-          new ConfigurationSettingsModel(
+      ConfigurationSettings configurationSettingsModel =
+          new ConfigurationSettings(
               server: _serverController.text,
               port: _portNumberController.text,
               userName: _userNameController.text,
@@ -148,14 +154,14 @@ class _ConfigurationSettingsScreenState
 
   onSaveButtonPressed() {
     if (_formKey.currentState.validate()) {
-      ConfigurationSettingsModel configurationSettingsModel =
-          new ConfigurationSettingsModel(
-              server: _serverController.text,
-              port: _portNumberController.text,
-              userName: _userNameController.text,
-              password: _passwordController.text,
-              folder: _folderController.text,
-              language: _languageController.text);
+      ConfigurationSettings configurationSettingsModel =
+      new ConfigurationSettings(
+          server: _serverController.text,
+          port: _portNumberController.text,
+          userName: _userNameController.text,
+          password: _passwordController.text,
+          folder: _folderController.text,
+          language: _languageController.text);
       _bloc.saveConfigurations(configurationSettingsModel);
     }
   }

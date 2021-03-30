@@ -1,4 +1,4 @@
-class ConfigurationSettingsModel {
+class ConfigurationSettings {
   String server;
   String port;
   String userName;
@@ -6,7 +6,7 @@ class ConfigurationSettingsModel {
   String folder;
   String language;
 
-  ConfigurationSettingsModel(
+  ConfigurationSettings(
       {this.server,
       this.port,
       this.userName,
@@ -14,7 +14,7 @@ class ConfigurationSettingsModel {
       this.folder,
       this.language});
 
-  ConfigurationSettingsModel.fromJson(Map<String, dynamic> json) {
+  ConfigurationSettings.fromJson(Map<String, dynamic> json) {
     server = json['server'];
     port = json['port'];
     userName = json['userName'];
