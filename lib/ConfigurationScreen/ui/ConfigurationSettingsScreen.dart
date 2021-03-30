@@ -155,13 +155,13 @@ class _ConfigurationSettingsScreenState
   onSaveButtonPressed() {
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
-      new ConfigurationSettings(
-          server: _serverController.text,
-          port: _portNumberController.text,
-          userName: _userNameController.text,
-          password: _passwordController.text,
-          folder: _folderController.text,
-          language: _languageController.text);
+          new ConfigurationSettings(
+              server: _serverController.text,
+              port: _portNumberController.text,
+              userName: _userNameController.text,
+              password: _passwordController.text,
+              folder: _folderController.text,
+              language: _languageController.text);
       _bloc.saveConfigurations(configurationSettingsModel);
     }
   }

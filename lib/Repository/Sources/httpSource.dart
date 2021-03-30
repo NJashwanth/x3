@@ -29,7 +29,8 @@ class HttpSource {
     return 'Basic ${base64Encode(utf8.encode('$name:$password'))}';
   }
 
-  dynamic testConnection(ConfigurationSettings configurationSettings) async {
+  Future<String> testConnection(
+      ConfigurationSettings configurationSettings) async {
     var request = http.Request(
         'POST',
         Uri.parse(
@@ -72,6 +73,7 @@ class HttpSource {
       }
     } catch (e) {
       print("Exception " + e.toString());
+      return "Failure";
     }
   }
 

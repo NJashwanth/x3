@@ -9,8 +9,9 @@ class ConfigurationSettingsBloc {
     return _instance ?? new ConfigurationSettingsBloc();
   }
 
-  dynamic testConfigurations(ConfigurationSettings configurationSettings) {
-    return _repo.testConnection(configurationSettings);
+  Future<String> testConfigurations(
+      ConfigurationSettings configurationSettings) async {
+    return await _repo.testConnection(configurationSettings);
   }
 
   void saveConfigurations(ConfigurationSettings configurationSettingsModel) {}

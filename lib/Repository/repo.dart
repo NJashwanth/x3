@@ -10,7 +10,8 @@ class Repo {
     return _instance;
   }
 
-  dynamic testConnection(ConfigurationSettings configurationSettings) {
-    return httpSource.testConnection(configurationSettings);
+  Future<String> testConnection(
+      ConfigurationSettings configurationSettings) async {
+    return await httpSource.testConnection(configurationSettings);
   }
 }
