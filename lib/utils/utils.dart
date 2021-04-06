@@ -107,3 +107,13 @@ Widget getDrawer(BuildContext context) {
     ),
   );
 }
+
+void showErrorMessageInSnackBar(BuildContext context, String message,
+    GlobalKey<ScaffoldState> _scaffoldKey) {
+  _scaffoldKey.currentState.showSnackBar(SnackBar(
+    content: Text(
+      message,
+    ),
+    duration: Duration(seconds: 3),
+  ));
+}

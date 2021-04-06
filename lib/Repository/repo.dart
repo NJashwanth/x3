@@ -1,4 +1,5 @@
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
+import 'package:x3/Login/model/userModel.dart';
 import 'package:x3/Repository/Sources/httpSource.dart';
 
 class Repo {
@@ -13,5 +14,9 @@ class Repo {
   Future<String> testConnection(
       ConfigurationSettings configurationSettings) async {
     return await httpSource.testConnection(configurationSettings);
+  }
+
+  Future<String> login(UserModel userModel) async {
+    return await httpSource.login(userModel);
   }
 }

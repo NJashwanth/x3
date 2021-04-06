@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
-import 'package:x3/Login/bloc/LoginBloc.dart';
 import 'package:x3/Login/model/userModel.dart';
+import 'package:x3/Splash/Bloc/SplashBloc.dart';
 import 'package:x3/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  LoginBloc _bloc = LoginBloc.getInstance();
+  SplashBloc _bloc = SplashBloc.getInstance();
 
   @override
   Widget build(BuildContext context) {

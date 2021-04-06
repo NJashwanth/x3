@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/ConfigurationScreen/bloc/ConfigurationSettingsBloc.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
+import 'package:x3/Splash/Bloc/SplashBloc.dart';
+import 'package:x3/Splash/model/EnumForStateManagement.dart';
 import 'package:x3/utils/utils.dart';
 
 class ConfigurationSettingsScreen extends StatefulWidget {
@@ -28,7 +30,7 @@ class _ConfigurationSettingsScreenState
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  ConfigurationSettingsBloc _bloc = ConfigurationSettingsBloc.getInstance();
+  SplashBloc _bloc = SplashBloc.getInstance();
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +140,7 @@ class _ConfigurationSettingsScreenState
     );
   }
 
-  void onTestConfigurationsButtonPressed() {
+  Future<void> onTestConfigurationsButtonPressed() async {
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           new ConfigurationSettings(
@@ -148,7 +150,12 @@ class _ConfigurationSettingsScreenState
               password: _passwordController.text,
               folder: _folderController.text,
               language: _languageController.text);
-      _bloc.testConfigurations(configurationSettingsModel);
+      String responseFromServer =
+          await _bloc.testConfigurations(configurationSettingsModel);
+      if (responseFromServer == "Success")
+        _bloc.state.add(LoginStates.login);
+      else
+        _bloc.state.add(LoginStates.errorInConfigure);
     }
   }
 

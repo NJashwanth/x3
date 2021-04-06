@@ -4,6 +4,7 @@ import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/Bloc/SplashBloc.dart';
+import 'package:x3/utils/LoadingScreen.dart';
 import 'package:x3/utils/utils.dart';
 
 import 'model/EnumForStateManagement.dart';
@@ -15,10 +16,13 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   SplashBloc _bloc = SplashBloc.getInstance();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         body: getBody(),
       ),
     );
@@ -39,7 +43,13 @@ class _SplashScreenState extends State<SplashScreen> {
               return ConfigurationSettingsScreen();
               break;
             case LoginStates.loading:
-              return getLoadingStateWidget();
+              return LoadingScreen();
+              break;
+            case LoginStates.errorInConfigure:
+              return ConfigurationSettingsScreen();
+              break;
+            case LoginStates.splash:
+              // TODO: Handle this case.
               break;
           }
           return getLoadingStateWidget();
@@ -68,5 +78,18 @@ class _SplashScreenState extends State<SplashScreen> {
         )
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc.state.stream.listen(onStateChange);
+  }
+
+  void onStateChange(LoginStates event) {
+    if (event == LoginStates.errorInConfigure) {
+      showErrorMessageInSnackBar(
+          context, "Error Occurred! Please try again later", _scaffoldKey);
+    }
   }
 }

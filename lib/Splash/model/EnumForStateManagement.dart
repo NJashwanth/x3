@@ -1,1 +1,8 @@
-enum LoginStates { login, home, configurationSettings, loading }
+enum LoginStates {
+  login,
+  home,
+  configurationSettings,
+  loading,
+  errorInConfigure,
+  splash
+}

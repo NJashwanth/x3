@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
+import 'package:x3/Login/model/userModel.dart';
 import 'package:xml2json/xml2json.dart';
 
 class HttpSource {
@@ -67,6 +68,7 @@ class HttpSource {
         results.forEach((element) {
           if (element["NAME"] == "ZSTATUS") status = element["\$t"];
         });
+        print(status);
         return status;
       } else {
         print("Error " + response.reasonPhrase);
@@ -78,4 +80,52 @@ class HttpSource {
   }
 
   Future<void> method() async {}
+
+  login(UserModel userModel) async {
+    var headers = {
+      'soapaction': '*',
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic YWRtaW46YWRtaW4='
+    };
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            'http://sagex3v12.germinit.com:8124/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC'));
+    request.body =
+        '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS">\r\n<soapenv:Header/>\r\n<soapenv:Body>\r\n<wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\r\n<callContext xsi:type="wss:CAdxCallContext">\r\n<codeLang xsi:type="xsd:string">ENG</codeLang>\r\n<poolAlias xsi:type="xsd:string">GITDEV</poolAlias>\r\n<poolId xsi:type="xsd:string"></poolId>\r\n<requestConfig xsi:type="xsd:string">adxwss.optreturn=JSON&adxwss.beautify=true</requestConfig>\r\n</callContext>\r\n<publicName xsi:type="xsd:string">ZLOGINWEB</publicName>\r\n<inputXml xsi:type="xsd:string">\r\n{\r\n"GRP1":{"ZUNAME":"USR01","ZPSSWRD":"USR01","ZMCODE":"166","ZMODEL":"USR01","ZLATLONG":"USR01","ZMSG":""}\r\n}\r\n</inputXml>\r\n</wss:run>\r\n</soapenv:Body>\r\n</soapenv:Envelope>''';
+    request.headers.addAll(headers);
+
+    try {
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        String responseStream = await response.stream.bytesToString();
+        final myTransformer = Xml2Json();
+        myTransformer.parse(responseStream);
+        Map<dynamic, dynamic> json = jsonDecode(myTransformer.toGData());
+        //(version, encoding, soapenv$Envelope)
+        json = json["soapenv\$Envelope"];
+        // (xmlns, xmlns$soapenv, xmlns$xsd, xmlns$xsi, ..., xmlns$wss, soapenv$Body)
+        json = json["soapenv\$Body"];
+        //wss$runResponse
+        json = json["wss\$runResponse"];
+        // (soapenv:encodingStyle, runReturn)
+        json = json["runReturn"];
+        // (xsi:type, messages, resultXml, status, technicalInfos)
+        json = json["resultXml"];
+        //(xsi:type, __cdata)
+        String s = json["__cdata"];
+        String msp = jsonDecode(jsonEncode(s));
+        print("map is ${msp}");
+        // myTransformer.parse(s);
+        // json = jsonDecode(myTransformer.toGData());
+        // json = json["RESULT"];
+        return "success";
+      } else {
+        print("Error " + response.reasonPhrase);
+      }
+    } catch (e) {
+      print("Exception " + e.toString());
+      return "Failure";
+    }
+  }
 }
