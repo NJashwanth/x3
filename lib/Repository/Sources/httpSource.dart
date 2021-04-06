@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
+import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
 import 'package:xml2json/xml2json.dart';
 
@@ -81,7 +82,7 @@ class HttpSource {
 
   Future<void> method() async {}
 
-  login(UserModel userModel) async {
+  Future<LoginResponse> login(UserModel userModel) async {
     var headers = {
       'soapaction': '*',
       'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ class HttpSource {
         Uri.parse(
             'http://sagex3v12.germinit.com:8124/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC'));
     request.body =
-        '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS">\r\n<soapenv:Header/>\r\n<soapenv:Body>\r\n<wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\r\n<callContext xsi:type="wss:CAdxCallContext">\r\n<codeLang xsi:type="xsd:string">ENG</codeLang>\r\n<poolAlias xsi:type="xsd:string">GITDEV</poolAlias>\r\n<poolId xsi:type="xsd:string"></poolId>\r\n<requestConfig xsi:type="xsd:string">adxwss.optreturn=JSON&adxwss.beautify=true</requestConfig>\r\n</callContext>\r\n<publicName xsi:type="xsd:string">ZLOGINWEB</publicName>\r\n<inputXml xsi:type="xsd:string">\r\n{\r\n"GRP1":{"ZUNAME":"USR01","ZPSSWRD":"USR01","ZMCODE":"166","ZMODEL":"USR01","ZLATLONG":"USR01","ZMSG":""}\r\n}\r\n</inputXml>\r\n</wss:run>\r\n</soapenv:Body>\r\n</soapenv:Envelope>''';
+        '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS">\r\n<soapenv:Header/>\r\n<soapenv:Body>\r\n<wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\r\n<callContext xsi:type="wss:CAdxCallContext">\r\n<codeLang xsi:type="xsd:string">ENG</codeLang>\r\n<poolAlias xsi:type="xsd:string">GITDEV</poolAlias>\r\n<poolId xsi:type="xsd:string"></poolId>\r\n<requestConfig xsi:type="xsd:string">adxwss.optreturn=JSON&adxwss.beautify=true</requestConfig>\r\n</callContext>\r\n<publicName xsi:type="xsd:string">ZLOGINWEB</publicName>\r\n<inputXml xsi:type="xsd:string">\r\n{\r\n"GRP1":{"ZUNAME":"USR01","ZPSSWRD":"USR01","ZMCODE":"166","ZMODEL":"USR01","ZLATLONG":"USR01","ZMSG":""}\r\n}\r\n</inputXml>\r\n</wss:run>\r\n</soapenv:Body>\r\n</soapenv:Envelope>\r\n''';
     request.headers.addAll(headers);
 
     try {
@@ -114,18 +115,25 @@ class HttpSource {
         json = json["resultXml"];
         //(xsi:type, __cdata)
         String s = json["__cdata"];
-        String msp = jsonDecode(jsonEncode(s));
-        print("map is ${msp}");
-        // myTransformer.parse(s);
-        // json = jsonDecode(myTransformer.toGData());
-        // json = json["RESULT"];
-        return "success";
+        s = s.replaceAll("\\n", "");
+        s = s.replaceAll("\\t", "");
+        Map<dynamic, dynamic> map = jsonDecode(s);
+        if (map["GRP1"]["ZSTATCD"].toString() == "200") {
+          List<String> mapToReturn = new List();
+          List listFromResponse = map["GRP2"];
+          listFromResponse.forEach((element) {
+            mapToReturn.add(element.toString());
+          });
+          return new LoginResponse(true, mapToReturn);
+        } else {
+          return new LoginResponse(false, null);
+        }
       } else {
-        print("Error " + response.reasonPhrase);
+        return new LoginResponse(false, null);
       }
     } catch (e) {
       print("Exception " + e.toString());
-      return "Failure";
+      return new LoginResponse(false, null);
     }
   }
 }

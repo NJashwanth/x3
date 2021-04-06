@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
+import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
 import 'package:x3/Repository/repo.dart';
 import 'package:x3/Splash/model/EnumForStateManagement.dart';
@@ -46,9 +47,17 @@ class SplashBloc {
 
   void saveConfigurations(ConfigurationSettings configurationSettingsModel) {}
 
-  Future<String> login(UserModel userModel) async {
+  Future<LoginResponse> login(UserModel userModel) async {
     // state.add(LoginStates.loading);
 
-    return await _repo.login(userModel);
+    return await _repo.login(
+        userModel,
+        new ConfigurationSettings(
+            folder: "GITAPP",
+            server: "http://sagex3v12.germinit.com",
+            port: "8124",
+            language: "ENG",
+            password: "admin",
+            userName: "admin"));
   }
 }

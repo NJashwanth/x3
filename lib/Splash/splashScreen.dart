@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
               return HomeScreen();
               break;
             case LoginStates.configurationSettings:
-              return ConfigurationSettingsScreen();
+              return LoginScreen();
               break;
             case LoginStates.loading:
               return LoadingScreen();
