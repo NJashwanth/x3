@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:x3/HomeScreen/bloc/bloc.dart';
+import 'package:x3/Login/model/LoginResponse.dart';
+import 'package:x3/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
+  final LoginResponse loginResponse;
+
+  HomeScreen({this.loginResponse});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -11,38 +17,30 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(),
+      drawer: getDrawer(context),
+      appBar: getAppBar(),
       body: getBody(),
     );
   }
 
   Widget getBody() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
+    return ListView.builder(
+      itemCount: widget.loginResponse.grp2.length,
+      itemBuilder: (context, index) {
+        String title = widget.loginResponse.grp2[index];
+        return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: RaisedButton(
-            onPressed: () => onConfigPressed(),
-            child: Text("Config"),
+          child: ListTile(
+            title: Text(title),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RaisedButton(
-            onPressed: () => onLoginPressed(),
-            child: Text("Login"),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
-  void onConfigPressed() {
-    _bloc.onConfigPressed();
-  }
-
-  void onLoginPressed() {
-    _bloc.onLoginPressed();
+  Widget getAppBar() {
+    return AppBar(
+      title: Text("Home  Screen"),
+    );
   }
 }

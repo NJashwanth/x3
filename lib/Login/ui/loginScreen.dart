@@ -11,8 +11,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _userNameController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
+  TextEditingController _userNameController =
+      new TextEditingController(text: "USR01");
+  TextEditingController _passwordController =
+      new TextEditingController(text: "USR01");
 
   final _formKey = GlobalKey<FormState>();
 
@@ -63,11 +65,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  onLoginButtonPressed() {
+  void onLoginButtonPressed() async {
     if (_formKey.currentState.validate()) {
       UserModel userModel =
           new UserModel(_userNameController.text, _passwordController.text);
-      _bloc.login(userModel);
+      await _bloc.login(userModel);
     }
   }
 

@@ -36,11 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
             case LoginStates.login:
               return LoginScreen();
               break;
-            case LoginStates.home:
-              return HomeScreen();
-              break;
             case LoginStates.configurationSettings:
-              return LoginScreen();
+              return ConfigurationSettingsScreen();
               break;
             case LoginStates.loading:
               return LoadingScreen();
@@ -50,6 +47,9 @@ class _SplashScreenState extends State<SplashScreen> {
               break;
             case LoginStates.splash:
               // TODO: Handle this case.
+              break;
+            case LoginStates.home:
+              return HomeScreen(loginResponse: _bloc.loginResponse);
               break;
           }
           return getLoadingStateWidget();

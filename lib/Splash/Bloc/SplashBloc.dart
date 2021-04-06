@@ -11,6 +11,8 @@ class SplashBloc {
 
   BehaviorSubject<LoginStates> state = new BehaviorSubject();
 
+  LoginResponse loginResponse;
+
   Stream<LoginStates> get stateStream => state.stream;
 
   Repo _repo = Repo.getInstance();
@@ -31,8 +33,8 @@ class SplashBloc {
     print("isServerConfigWorking $isServerConfigWorking");
     if (isServerConfigWorking != null && isServerConfigWorking) {
       bool isLoggedIn = Hive.box("login").get("isLoggedIn");
-      if (isLoggedIn != null && isLoggedIn)
-        state.add(LoginStates.home);
+      if (isLoggedIn != null && isLoggedIn) {
+      } // state.add(LoginStates.home);
       else
         state.add(LoginStates.login);
     } else
@@ -45,12 +47,15 @@ class SplashBloc {
     return await _repo.testConnection(configurationSettings);
   }
 
-  void saveConfigurations(ConfigurationSettings configurationSettingsModel) {}
+  Future<void> saveConfigurations(
+      ConfigurationSettings configurationSettingsModel) async {
+    return await _repo.testConnection(configurationSettingsModel);
+  }
 
   Future<LoginResponse> login(UserModel userModel) async {
-    // state.add(LoginStates.loading);
+    state.add(LoginStates.loading);
 
-    return await _repo.login(
+    loginResponse = await _repo.login(
         userModel,
         new ConfigurationSettings(
             folder: "GITAPP",
@@ -59,5 +64,9 @@ class SplashBloc {
             language: "ENG",
             password: "admin",
             userName: "admin"));
+
+    if (loginResponse.isSuccess) {
+      state.add(LoginStates.home);
+    }
   }
 }
