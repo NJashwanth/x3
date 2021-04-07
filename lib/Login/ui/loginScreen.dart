@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/Login/bloc/LoginBloc.dart';
+import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
 import 'package:x3/utils/utils.dart';
 
@@ -11,6 +12,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   TextEditingController _userNameController =
       new TextEditingController(text: "USR01");
   TextEditingController _passwordController =
@@ -31,6 +34,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget getBody() {
+    return StreamBuilder<bool>(
+        stream: _bloc.loadingStream,
+        builder: (context, snapshot) {
+          if (snapshot.data) return getDefaultLoading();
+          return getLoadedBody();
+        });
+  }
+
+  Form getLoadedBody() {
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -69,7 +81,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState.validate()) {
       UserModel userModel =
           new UserModel(_userNameController.text, _passwordController.text);
-      await _bloc.login(userModel);
+
+      LoginResponse responseFromServer = await _bloc.login(userModel);
+      if (responseFromServer.isSuccess)
+        navigateToSplashScreen(context);
+      else
+        showErrorMessageInSnackBar(context, "Error", _scaffoldKey);
     }
   }
 

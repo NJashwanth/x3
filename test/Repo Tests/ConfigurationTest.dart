@@ -9,9 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
+import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Repository/repo.dart';
-
-import 'file:///C:/Users/vnsad/Documents/Germinit/Flutter%20app/lib/Repository/Sources/RemoteSource/httpSource.dart';
 
 void main() {
   test('IsReturningSuccessWithValidConfiguration', () async {

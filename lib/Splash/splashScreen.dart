@@ -4,10 +4,9 @@ import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/Bloc/SplashBloc.dart';
-import 'package:x3/utils/LoadingScreen.dart';
 import 'package:x3/utils/utils.dart';
 
-import 'model/EnumForStateManagement.dart';
+import 'model/LoginState.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -29,27 +28,20 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget getBody() {
-    return StreamBuilder<LoginStates>(
-        stream: _bloc.stateStream,
+    return StreamBuilder<LoginState>(
+        stream: _bloc.loginStateStream,
         builder: (context, snapshot) {
-          switch (snapshot.data) {
-            case LoginStates.login:
+          switch (snapshot.data.lState) {
+            case LState.NEW:
+              return ConfigurationSettingsScreen();
+              break;
+            case LState.SETTINGS_CONFIGURED:
               return LoginScreen();
               break;
-            case LoginStates.configurationSettings:
-              return ConfigurationSettingsScreen();
-              break;
-            case LoginStates.loading:
-              return LoadingScreen();
-              break;
-            case LoginStates.errorInConfigure:
-              return ConfigurationSettingsScreen();
-              break;
-            case LoginStates.splash:
-              return getLoadingStateWidget();
-              break;
-            case LoginStates.home:
-              return HomeScreen(loginResponse: _bloc.loginResponse);
+            case LState.LOGGED_IN:
+              return HomeScreen(
+                loginResponse: snapshot.data.homeScreenData,
+              );
               break;
             default:
               return getLoadingStateWidget();
@@ -80,18 +72,5 @@ class _SplashScreenState extends State<SplashScreen> {
         )
       ],
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _bloc.state.stream.listen(onStateChange);
-  }
-
-  void onStateChange(LoginStates event) {
-    if (event == LoginStates.errorInConfigure) {
-      showErrorMessageInSnackBar(
-          context, "Error Occurred! Please try again later", _scaffoldKey);
-    }
   }
 }

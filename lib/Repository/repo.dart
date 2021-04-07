@@ -3,9 +3,8 @@ import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
 import 'package:x3/Repository/Sources/LocalSource/localSource.dart';
+import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Splash/model/LoginState.dart';
-
-import 'file:///C:/Users/vnsad/Documents/Germinit/Flutter%20app/lib/Repository/Sources/RemoteSource/httpSource.dart';
 
 class Repo {
   static Repo _instance;

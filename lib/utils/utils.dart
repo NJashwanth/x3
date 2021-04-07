@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
+import 'package:x3/Splash/splashScreen.dart';
 
 Widget getTextFormField(
     TextEditingController controller, String hintText, String labelText,
@@ -206,5 +207,21 @@ Widget getAppBar(String title) {
     title: Text(
       title,
     ),
+  );
+}
+
+void navigateToSplashScreen(BuildContext context) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => SplashScreen(),
+    ),
+    (route) => false,
+  );
+}
+
+Widget getDefaultLoading() {
+  return Center(
+    child: CircularProgressIndicator(),
   );
 }

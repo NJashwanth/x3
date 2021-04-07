@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
-  final LoginResponse loginResponse;
+  final List<String> loginResponse;
 
   HomeScreen({this.loginResponse});
 
@@ -23,9 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget getBody() {
     return ListView.builder(
-      itemCount: widget.loginResponse.grp2.length,
+      itemCount: widget.loginResponse.length,
       itemBuilder: (context, index) {
-        String title = widget.loginResponse.grp2[index];
+        String title = widget.loginResponse[index];
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(

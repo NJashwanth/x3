@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:x3/ConfigurationScreen/bloc/ConfigurationSettingsBloc.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
-import 'package:x3/Splash/Bloc/SplashBloc.dart';
 import 'package:x3/utils/utils.dart';
 
 class ConfigurationSettingsScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _ConfigurationSettingsScreenState
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  SplashBloc _bloc = SplashBloc.getInstance();
+  ConfigurationSettingsBloc _bloc = ConfigurationSettingsBloc.getInstance();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +42,15 @@ class _ConfigurationSettingsScreenState
   }
 
   Widget getBody() {
+    return StreamBuilder<bool>(
+        stream: _bloc.loadingStream,
+        builder: (context, snapshot) {
+          if (snapshot.data) return getDefaultLoading();
+          return getLoadedBody();
+        });
+  }
+
+  SingleChildScrollView getLoadedBody() {
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -153,11 +162,16 @@ class _ConfigurationSettingsScreenState
     }
   }
 
-  onSaveButtonPressed() async {
+  Future<void> onSaveButtonPressed() async {
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           getUserEnteredConfigurationsSettings();
-      _bloc.saveConfigurations(configurationSettingsModel);
+      String responseFromServer =
+          await _bloc.saveConfigurations(configurationSettingsModel);
+      if (responseFromServer == "Success")
+        navigateToSplashScreen(context);
+      else
+        showErrorMessageInSnackBar(context, "Error", _scaffoldKey);
     }
   }
 
