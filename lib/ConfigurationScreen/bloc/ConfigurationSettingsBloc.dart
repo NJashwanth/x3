@@ -6,9 +6,9 @@ class ConfigurationSettingsBloc {
   static ConfigurationSettingsBloc _instance;
   Repo _repo = Repo.getInstance();
 
-  BehaviorSubject<bool> loadingController = new BehaviorSubject();
+  BehaviorSubject<bool> _loadingController = new BehaviorSubject();
 
-  Stream<bool> get loadingStream => loadingController.stream;
+  Stream<bool> get loadingStream => _loadingController.stream;
 
   static ConfigurationSettingsBloc getInstance() {
     if (_instance == null) _instance = new ConfigurationSettingsBloc();
@@ -18,6 +18,10 @@ class ConfigurationSettingsBloc {
   Future<String> testConfigurations(
       ConfigurationSettings configurationSettings) async {
     return await _repo.testConnection(configurationSettings);
+  }
+
+  void changeLoadingState(bool value) {
+    _loadingController.add(value);
   }
 
   Future<String> saveConfigurations(

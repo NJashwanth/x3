@@ -17,13 +17,22 @@ class SplashBloc {
   }
 
   SplashBloc() {
-    print("new splash bloc instance");
+    print("check state in Splash block");
     checkState();
+    loginStateController.stream.listen((event) => onChange(event));
   }
 
   Future<void> checkState() async {
     loginStateController.add(LoginState.splash());
     LoginState loginState = await _repo.getAppState();
     loginStateController.add(loginState);
+  }
+
+  void clear() {
+    _instance = null;
+  }
+
+  void onChange(LoginState event) {
+    print("Current Login State  = ${event.lState}");
   }
 }
