@@ -32,15 +32,13 @@ class Repo {
     return await httpSource.testConnection(configurationSettings);
   }
 
-  Future saveConfiguration(ConfigurationSettings configurationSettings) async {
+  Future<bool> saveConfiguration(
+      ConfigurationSettings configurationSettings) async {
     if (await testConnection(configurationSettings) == "Success") {
-      Hive.box("configuration").put("isConfigured", true);
-      Hive.box("configuration").put("server", configurationSettings.server);
-      Hive.box("configuration").put("port", configurationSettings.port);
-      Hive.box("configuration").put("userName", configurationSettings.userName);
-      Hive.box("configuration").put("password", configurationSettings.password);
-      Hive.box("configuration").put("folder", configurationSettings.folder);
-      Hive.box("configuration").put("language", configurationSettings.language);
+      await _localSource.saveConfiguration(configurationSettings);
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -53,5 +51,17 @@ class Repo {
     savedSettings.port = Hive.box("configuration").get("port");
     savedSettings.server = Hive.box("configuration").get("server");
     return await httpSource.login(userModel, savedSettings);
+  }
+
+  ConfigurationSettings getConfiguration() {
+    ConfigurationSettings savedSettings = new ConfigurationSettings();
+    savedSettings.language = Hive.box("configuration").get("language");
+    savedSettings.folder = Hive.box("configuration").get("folder");
+    savedSettings.password = Hive.box("configuration").get("password");
+    savedSettings.userName = Hive.box("configuration").get("userName");
+    savedSettings.port = Hive.box("configuration").get("port");
+    savedSettings.server = Hive.box("configuration").get("server");
+
+    return savedSettings;
   }
 }

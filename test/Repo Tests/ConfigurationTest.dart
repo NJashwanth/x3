@@ -13,17 +13,18 @@ import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Repository/repo.dart';
 
 void main() {
-  test('IsReturningSuccessWithValidConfiguration', () async {
+  var workingConfigurationSettings = new ConfigurationSettings(
+      folder: "GITAPP",
+      server: "http://sagex3v12.germinit.com",
+      port: "8124",
+      language: "ENG",
+      password: "admin",
+      userName: "admin");
+
+  test('IsTestConnectionReturningSuccessWithValidConfiguration', () async {
     // Build our app and trigger a frame.
-    Repo configurationSettingsBloc = Repo.getInstance();
-    String a = await configurationSettingsBloc.testConnection(
-        new ConfigurationSettings(
-            folder: "GITAPP",
-            server: "http://sagex3v12.germinit.com",
-            port: "8124",
-            language: "ENG",
-            password: "admin",
-            userName: "admin"));
+    Repo repo = Repo.getInstance();
+    String a = await repo.testConnection(workingConfigurationSettings);
     expect(a, "Success");
   });
 
@@ -33,11 +34,38 @@ void main() {
         "Basic YWRtaW46YWRtaW4=");
   });
 
-  test('Login Test', () async {
+  test('Login Test without config', () async {
     // Build our app and trigger a frame.
-    Repo configurationSettingsBloc = Repo.getInstance();
+    Repo repo = Repo.getInstance();
     LoginResponse loginResponse =
-        await configurationSettingsBloc.login(new UserModel("USR01", "USR01"));
-    expect(loginResponse.isSuccess, true);
+        await repo.login(new UserModel("USR01", "USR01"));
+    expect(loginResponse.isSuccess, false);
+  });
+
+  test("Configuration saved", () async {
+    Repo repo = Repo.getInstance();
+    await repo.saveConfiguration(workingConfigurationSettings);
+    ConfigurationSettings configurationSettingsSaved = repo.getConfiguration();
+    expect(
+        configurationSettingsSaved.server, workingConfigurationSettings.server);
+    expect(
+        configurationSettingsSaved.folder, workingConfigurationSettings.folder);
+    expect(configurationSettingsSaved.userName,
+        workingConfigurationSettings.userName);
+    expect(configurationSettingsSaved.language,
+        workingConfigurationSettings.language);
+    expect(configurationSettingsSaved.password,
+        workingConfigurationSettings.password);
+
+    expect(configurationSettingsSaved.port, workingConfigurationSettings.port);
+  });
+
+  test('Login Test with config', () async {
+    // Build our app and trigger a frame.
+    Repo repo = Repo.getInstance();
+    await repo.testConnection(workingConfigurationSettings);
+    LoginResponse loginResponse =
+        await repo.login(new UserModel("USR01", "USR01"));
+    expect(loginResponse.isSuccess, false);
   });
 }
