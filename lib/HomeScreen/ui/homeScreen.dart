@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:x3/HomeScreen/bloc/bloc.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/utils/utils.dart';
 
@@ -13,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HomeBloc _bloc = HomeBloc.getInstance();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

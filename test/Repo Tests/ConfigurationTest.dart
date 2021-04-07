@@ -9,16 +9,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
-import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Repository/repo.dart';
 
+import 'file:///C:/Users/vnsad/Documents/Germinit/Flutter%20app/lib/Repository/Sources/RemoteSource/httpSource.dart';
+
 void main() {
-  test('Auth header test', () {
-    HttpSource httpSource = HttpSource.getInstance();
-    expect(httpSource.getAuthorization("admin", "admin"),
-        "Basic YWRtaW46YWRtaW4=");
-  });
-  test('Configuration test', () async {
+  test('IsReturningSuccessWithValidConfiguration', () async {
     // Build our app and trigger a frame.
     Repo configurationSettingsBloc = Repo.getInstance();
     String a = await configurationSettingsBloc.testConnection(
@@ -30,6 +26,12 @@ void main() {
             password: "admin",
             userName: "admin"));
     expect(a, "Success");
+  });
+
+  test('Auth header test', () {
+    HttpSource httpSource = HttpSource.getInstance();
+    expect(httpSource.getAuthorization("admin", "admin"),
+        "Basic YWRtaW46YWRtaW4=");
   });
 
   test('Login Test', () async {
