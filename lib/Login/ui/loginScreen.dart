@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
+import 'package:x3/Login/bloc/LoginBloc.dart';
 import 'package:x3/Login/model/userModel.dart';
-import 'package:x3/Splash/Bloc/SplashBloc.dart';
 import 'package:x3/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,13 +18,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  SplashBloc _bloc = SplashBloc.getInstance();
+  LoginBloc _bloc = LoginBloc.getInstance();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: getAppBar(),
+        appBar: getAppBar("Login"),
         body: getBody(),
       ),
     );
@@ -71,14 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
           new UserModel(_userNameController.text, _passwordController.text);
       await _bloc.login(userModel);
     }
-  }
-
-  Widget getAppBar() {
-    return AppBar(
-      backgroundColor: Colors.red,
-      actions: [getActions()],
-      title: Text("Login"),
-    );
   }
 
   Widget getActions() {

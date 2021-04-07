@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: getDrawer(context),
-      appBar: getAppBar(),
+      appBar: getAppBar('Home Screen'),
       body: getBody(),
     );
   }
@@ -35,12 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget getAppBar() {
-    return AppBar(
-      title: Text("Home  Screen"),
     );
   }
 }

@@ -36,14 +36,8 @@ void main() {
     // Build our app and trigger a frame.
     Repo configurationSettingsBloc = Repo.getInstance();
     LoginResponse loginResponse = await configurationSettingsBloc.login(
-        new UserModel("USR01", "USR01"),
-        new ConfigurationSettings(
-            folder: "GITAPP",
-            server: "http://sagex3v12.germinit.com",
-            port: "8124",
-            language: "ENG",
-            password: "admin",
-            userName: "admin"));
+      new UserModel("USR01", "USR01"),
+    );
     expect(loginResponse.isSuccess, true);
   });
 }

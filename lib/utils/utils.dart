@@ -1,29 +1,52 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 
 Widget getTextFormField(
     TextEditingController controller, String hintText, String labelText,
     {String preText, TextInputType textInputType, TextStyle textStyle}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
-    child: TextFormField(
-      controller: controller,
-      keyboardType: textInputType ?? TextInputType.text,
-      style: textStyle,
-      validator: (s) => validate(s),
-      decoration: InputDecoration(
-          labelText: labelText,
-          hintText: hintText,
-          prefix: Text(
-            preText ?? "",
-          ),
-          suffixIcon: InkWell(
-              onTap: () => controller.clear(),
-              child: Icon(
-                Icons.cancel,
-                color: Colors.grey,
-              ))),
-    ),
+    child: textFormFieldWithoutPadding(
+        controller, textInputType, textStyle, labelText, hintText, preText),
   );
+}
+
+TextFormField textFormFieldWithoutPadding(
+    TextEditingController controller,
+    TextInputType textInputType,
+    TextStyle textStyle,
+    String labelText,
+    String hintText,
+    String preText) {
+  return TextFormField(
+    controller: controller,
+    keyboardType: textInputType ?? TextInputType.text,
+    style: textStyle,
+    validator: (s) => validate(s),
+    decoration: inputDecoration(labelText, hintText, preText, controller),
+  );
+}
+
+InputDecoration inputDecoration(String labelText, String hintText,
+    String preText, TextEditingController controller) {
+  return InputDecoration(
+      labelText: labelText,
+      hintText: hintText,
+      prefix: Text(
+        preText ?? "",
+      ),
+      suffixIcon: inkWell(controller));
+}
+
+InkWell inkWell(TextEditingController controller) {
+  return InkWell(
+      onTap: () => controller.clear(),
+      child: Icon(
+        Icons.cancel,
+        color: Colors.grey,
+      ));
 }
 
 String validate(String s) {
@@ -32,9 +55,13 @@ String validate(String s) {
 
 InputDecorationTheme buildInputDecorationTheme() {
   return InputDecorationTheme(
-    border: new OutlineInputBorder(),
+    border: new OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15))),
     labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
-    hintStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
+    hintStyle: TextStyle(
+        color: Colors.grey.shade600,
+        fontWeight: FontWeight.normal,
+        fontStyle: FontStyle.italic),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.grey, width: 1.0),
     ),
@@ -100,7 +127,11 @@ Widget getDrawer(BuildContext context) {
             'X3 Configurations Settings',
           ),
           onTap: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ConfigurationSettingsScreen(),
+                ));
           },
         ),
       ],
@@ -116,4 +147,64 @@ void showErrorMessageInSnackBar(BuildContext context, String message,
     ),
     duration: Duration(seconds: 3),
   ));
+}
+
+void showDialogForSuccessAndFailureResponse(
+    BuildContext context, String title, String contentText, Widget widget) {
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+            title: Text(title),
+            content: Row(
+              children: [
+                widget,
+                Flexible(
+                    child: Text(
+                  contentText,
+                  softWrap: true,
+                )),
+              ],
+            ),
+          ));
+}
+
+String getSuccessText() {
+  return "You've successfully connected to Sage X3. If you would like to use these credentials, please press the Save button";
+}
+
+String getFailureText() {
+  return "The server has report an undefined error. The most likely cause is an incorrect Folder and/or Language value in the application setup. Please contact your administrator";
+}
+
+Icon getSuccessIcon() {
+  return Icon(
+    Icons.check,
+    size: 80,
+    color: Colors.green,
+  );
+}
+
+Transform getCrossIcon() {
+  return Transform.rotate(
+      angle: -math.pi / 4,
+      child: Icon(
+        Icons.add_rounded,
+        color: Colors.red,
+        size: 80,
+      ));
+}
+
+Widget getAppBar(String title) {
+  return AppBar(
+    title: Text(
+      title,
+    ),
+  );
 }

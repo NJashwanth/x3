@@ -14,5 +14,8 @@ class ConfigurationSettingsBloc {
     return await _repo.testConnection(configurationSettings);
   }
 
-  void saveConfigurations(ConfigurationSettings configurationSettingsModel) {}
+  Future<String> saveConfigurations(
+      ConfigurationSettings configurationSettingsModel) async {
+    return await _repo.testConnection(configurationSettingsModel);
+  }
 }

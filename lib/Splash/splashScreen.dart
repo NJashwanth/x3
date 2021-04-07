@@ -46,13 +46,15 @@ class _SplashScreenState extends State<SplashScreen> {
               return ConfigurationSettingsScreen();
               break;
             case LoginStates.splash:
-              // TODO: Handle this case.
+              return getLoadingStateWidget();
               break;
             case LoginStates.home:
               return HomeScreen(loginResponse: _bloc.loginResponse);
               break;
+            default:
+              return getLoadingStateWidget();
+              break;
           }
-          return getLoadingStateWidget();
         });
   }
 

@@ -17,8 +17,7 @@ class Repo {
     return await httpSource.testConnection(configurationSettings);
   }
 
-  Future<LoginResponse> login(
-      UserModel userModel, ConfigurationSettings configurationSettings) async {
+  Future<LoginResponse> login(UserModel userModel) async {
     return await httpSource.login(userModel);
   }
 }

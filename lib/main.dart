@@ -23,6 +23,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           appBarTheme: AppBarTheme(color: Colors.red),
           primarySwatch: Colors.blue,
+          primaryColor: Colors.red.shade600,
+          buttonColor: Colors.red.shade400,
+          dividerColor: Colors.red.shade100,
+          accentColor: Colors.grey.shade400,
           inputDecorationTheme: buildInputDecorationTheme(),
           scaffoldBackgroundColor: Colors.red.shade50),
       home: SplashScreen(),

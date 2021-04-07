@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:x3/ConfigurationScreen/bloc/ConfigurationSettingsBloc.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/Splash/Bloc/SplashBloc.dart';
-import 'package:x3/Splash/model/EnumForStateManagement.dart';
 import 'package:x3/utils/utils.dart';
 
 class ConfigurationSettingsScreen extends StatefulWidget {
@@ -36,7 +34,7 @@ class _ConfigurationSettingsScreenState
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: getAppBar(),
+        appBar: getAppBar("Configurations Settings"),
         key: _scaffoldKey,
         body: getBody(),
       ),
@@ -143,41 +141,33 @@ class _ConfigurationSettingsScreenState
   Future<void> onTestConfigurationsButtonPressed() async {
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
-          new ConfigurationSettings(
-              server: _serverController.text,
-              port: _portNumberController.text,
-              userName: _userNameController.text,
-              password: _passwordController.text,
-              folder: _folderController.text,
-              language: _languageController.text);
+          getUserEnteredConfigurationsSettings();
       String responseFromServer =
           await _bloc.testConfigurations(configurationSettingsModel);
       if (responseFromServer == "Success")
-        _bloc.state.add(LoginStates.login);
+        showDialogForSuccessAndFailureResponse(
+            context, "Success", getSuccessText(), getSuccessIcon());
       else
-        _bloc.state.add(LoginStates.errorInConfigure);
+        showDialogForSuccessAndFailureResponse(
+            context, "Error", getFailureText(), getCrossIcon());
     }
   }
 
-  onSaveButtonPressed() {
+  onSaveButtonPressed() async {
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
-          new ConfigurationSettings(
-              server: _serverController.text,
-              port: _portNumberController.text,
-              userName: _userNameController.text,
-              password: _passwordController.text,
-              folder: _folderController.text,
-              language: _languageController.text);
+          getUserEnteredConfigurationsSettings();
       _bloc.saveConfigurations(configurationSettingsModel);
     }
   }
 
-  Widget getAppBar() {
-    return AppBar(
-      title: Text(
-        "Configurations Settings",
-      ),
-    );
+  ConfigurationSettings getUserEnteredConfigurationsSettings() {
+    return new ConfigurationSettings(
+        server: _serverController.text,
+        port: _portNumberController.text,
+        userName: _userNameController.text,
+        password: _passwordController.text,
+        folder: _folderController.text,
+        language: _languageController.text);
   }
 }

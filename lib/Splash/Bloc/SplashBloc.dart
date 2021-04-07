@@ -27,6 +27,8 @@ class SplashBloc {
   }
 
   Future<void> checkState() async {
+    state.add(LoginStates.splash);
+
     await Hive.openBox('configuration');
     await Hive.openBox('login');
     bool isServerConfigWorking = Hive.box("configuration").get("isConfigured");
@@ -43,27 +45,29 @@ class SplashBloc {
 
   Future<String> testConfigurations(
       ConfigurationSettings configurationSettings) async {
-    state.add(LoginStates.loading);
+    // state.add(LoginStates.loading);
     return await _repo.testConnection(configurationSettings);
   }
 
   Future<void> saveConfigurations(
       ConfigurationSettings configurationSettingsModel) async {
-    return await _repo.testConnection(configurationSettingsModel);
+    state.add(LoginStates.loading);
+
+    String responseFromServer =
+        await _repo.testConnection(configurationSettingsModel);
+    if (responseFromServer == "Success") {
+      state.add(LoginStates.login);
+    } else {
+      state.add(LoginStates.errorInConfigure);
+    }
   }
 
   Future<LoginResponse> login(UserModel userModel) async {
     state.add(LoginStates.loading);
 
     loginResponse = await _repo.login(
-        userModel,
-        new ConfigurationSettings(
-            folder: "GITAPP",
-            server: "http://sagex3v12.germinit.com",
-            port: "8124",
-            language: "ENG",
-            password: "admin",
-            userName: "admin"));
+      userModel,
+    );
 
     if (loginResponse.isSuccess) {
       state.add(LoginStates.home);
