@@ -78,6 +78,7 @@ class HttpSource {
         return json["GRP1"]["ZSTATUS"];
       } else {
         print("Error " + response.reasonPhrase);
+        return "Failure";
       }
     } catch (e) {
       print("Exception " + e.toString());

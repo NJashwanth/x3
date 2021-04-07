@@ -13,19 +13,30 @@ import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Repository/repo.dart';
 
 void main() {
-  var workingConfigurationSettings = new ConfigurationSettings(
-      folder: "GITAPP",
-      server: "http://sagex3v12.germinit.com",
-      port: "8124",
-      language: "ENG",
-      password: "admin",
-      userName: "admin");
+  final ConfigurationSettings workingConfigurationSettings =
+      new ConfigurationSettings(
+          folder: "GITAPP",
+          server: "http://sagex3v12.germinit.com",
+          port: "8124",
+          language: "ENG",
+          password: "admin",
+          userName: "admin");
 
   test('IsTestConnectionReturningSuccessWithValidConfiguration', () async {
     // Build our app and trigger a frame.
     Repo repo = Repo.getInstance();
     String a = await repo.testConnection(workingConfigurationSettings);
     expect(a, "Success");
+  });
+
+  test('IsTestConnectionReturningFailWithInValidConfiguration', () async {
+    // Build our app and trigger a frame.
+    Repo repo = Repo.getInstance();
+    ConfigurationSettings wrongSettings = new ConfigurationSettings(
+        server: workingConfigurationSettings.server,
+        port: workingConfigurationSettings.port);
+    String a = await repo.testConnection(wrongSettings);
+    expect(a, "Failure");
   });
 
   test('Auth header test', () {
@@ -47,6 +58,8 @@ void main() {
     await repo.saveConfiguration(workingConfigurationSettings);
     ConfigurationSettings configurationSettingsSaved =
         await repo.getConfiguration();
+    print("From repo = " + configurationSettingsSaved.folder);
+    print("from working = " + workingConfigurationSettings.folder);
     expect(
         configurationSettingsSaved.server, workingConfigurationSettings.server);
     expect(

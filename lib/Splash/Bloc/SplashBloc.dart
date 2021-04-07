@@ -17,13 +17,13 @@ class SplashBloc {
   }
 
   SplashBloc() {
+    print("new splash bloc instance");
     checkState();
   }
 
   Future<void> checkState() async {
     loginStateController.add(LoginState.splash());
     LoginState loginState = await _repo.getAppState();
-
     loginStateController.add(loginState);
   }
 }
