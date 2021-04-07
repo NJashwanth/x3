@@ -81,10 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState.validate()) {
       UserModel userModel =
           new UserModel(_userNameController.text, _passwordController.text);
-
+      _bloc.loadingController.add(true);
       LoginResponse responseFromServer = await _bloc.login(userModel);
+      _bloc.loadingController.add(false);
       if (responseFromServer.isSuccess)
-        navigateToSplashScreen(context);
+        navigateToHomeScreen(context, responseFromServer.grp2);
       else
         showErrorMessageInSnackBar(context, "Error", _scaffoldKey);
     }

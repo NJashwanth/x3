@@ -30,8 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget getBody() {
     return StreamBuilder<LoginState>(
         stream: _bloc.loginStateStream,
+        initialData: LoginState.splash(),
         builder: (context, snapshot) {
           switch (snapshot.data.lState) {
+            case LState.SPLASH:
+              return getLoadingStateWidget();
+              break;
+
             case LState.NEW:
               return ConfigurationSettingsScreen();
               break;

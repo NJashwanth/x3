@@ -12,7 +12,8 @@ class LoginBloc {
   Stream<bool> get loadingStream => loadingController.stream;
 
   static LoginBloc getInstance() {
-    return _instance ?? new LoginBloc();
+    if (_instance == null) _instance = new LoginBloc();
+    return _instance;
   }
 
   Future<LoginResponse> login(UserModel userModel) async {

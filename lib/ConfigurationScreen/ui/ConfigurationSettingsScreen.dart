@@ -151,8 +151,10 @@ class _ConfigurationSettingsScreenState
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           getUserEnteredConfigurationsSettings();
+      _bloc.loadingController.add(true);
       String responseFromServer =
           await _bloc.testConfigurations(configurationSettingsModel);
+      _bloc.loadingController.add(false);
       if (responseFromServer == "Success")
         showDialogForSuccessAndFailureResponse(
             context, "Success", getSuccessText(), getSuccessIcon());

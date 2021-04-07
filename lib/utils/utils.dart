@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
+import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
 
 Widget getTextFormField(
@@ -223,5 +224,17 @@ void navigateToSplashScreen(BuildContext context) {
 Widget getDefaultLoading() {
   return Center(
     child: CircularProgressIndicator(),
+  );
+}
+
+void navigateToHomeScreen(BuildContext context, List<String> list) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => HomeScreen(
+        loginResponse: list,
+      ),
+    ),
+    (route) => false,
   );
 }

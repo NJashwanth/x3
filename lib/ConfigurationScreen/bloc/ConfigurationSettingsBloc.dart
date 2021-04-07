@@ -11,7 +11,8 @@ class ConfigurationSettingsBloc {
   Stream<bool> get loadingStream => loadingController.stream;
 
   static ConfigurationSettingsBloc getInstance() {
-    return _instance ?? new ConfigurationSettingsBloc();
+    if (_instance == null) _instance = new ConfigurationSettingsBloc();
+    return _instance;
   }
 
   Future<String> testConfigurations(
@@ -19,7 +20,8 @@ class ConfigurationSettingsBloc {
     return await _repo.testConnection(configurationSettings);
   }
 
-  Future<String> saveConfigurations(ConfigurationSettings configurationSettingsModel) async {
+  Future<String> saveConfigurations(
+      ConfigurationSettings configurationSettingsModel) async {
     return await _repo.testConnection(configurationSettingsModel);
   }
 }
