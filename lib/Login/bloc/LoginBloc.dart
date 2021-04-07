@@ -7,13 +7,17 @@ class LoginBloc {
   static LoginBloc _instance;
   Repo _repo = Repo.getInstance();
 
-  BehaviorSubject<bool> loadingController = new BehaviorSubject();
+  BehaviorSubject<bool> _loadingController = new BehaviorSubject();
 
-  Stream<bool> get loadingStream => loadingController.stream;
+  Stream<bool> get loadingStream => _loadingController.stream;
 
   static LoginBloc getInstance() {
     if (_instance == null) _instance = new LoginBloc();
     return _instance;
+  }
+
+  void changeLoadingState(bool value) {
+    _loadingController.add(value);
   }
 
   Future<LoginResponse> login(UserModel userModel) async {

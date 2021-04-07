@@ -152,25 +152,37 @@ class _ConfigurationSettingsScreenState
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           getUserEnteredConfigurationsSettings();
-      _bloc.loadingController.add(true);
+      _bloc.changeLoadingState(true);
       String responseFromServer =
           await _bloc.testConfigurations(configurationSettingsModel);
-      _bloc.loadingController.add(false);
+      _bloc.changeLoadingState(false);
       if (responseFromServer == "Success")
-        showDialogForSuccessAndFailureResponse(
-            context, "Success", getSuccessText(), getSuccessIcon());
+        successDialog();
       else
-        showDialogForSuccessAndFailureResponse(
-            context, "Error", getFailureText(), getCrossIcon());
+        failureDialog();
     }
+  }
+
+  void failureDialog() {
+    return showDialogForSuccessAndFailureResponse(
+        context, "Error", getFailureText(), getCrossIcon());
+  }
+
+  void successDialog() {
+    return showDialogForSuccessAndFailureResponse(
+        context, "Success", getSuccessText(), getSuccessIcon());
   }
 
   Future<void> onSaveButtonPressed() async {
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           getUserEnteredConfigurationsSettings();
+      _bloc.changeLoadingState(true);
+
       String responseFromServer =
           await _bloc.saveConfigurations(configurationSettingsModel);
+      _bloc.changeLoadingState(false);
+
       if (responseFromServer == "Success")
         navigateToSplashScreen(context);
       else

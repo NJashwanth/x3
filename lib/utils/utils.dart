@@ -203,7 +203,9 @@ Transform getCrossIcon() {
       ));
 }
 
-Widget getAppBar(String title) {
+Widget getAppBar(
+  String title,
+) {
   return AppBar(
     title: Text(
       title,
