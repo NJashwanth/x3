@@ -17,14 +17,16 @@ class Repo {
   }
 
   Future<LoginState> getAppState() async {
-    ConfigurationSettings savedSettings = new ConfigurationSettings();
-    savedSettings.server = Hive.box("configuration").get("server");
-
+    ConfigurationSettings savedSettings = await _localSource.getConfiguration();
     if (savedSettings.server == null) {
       return LoginState.newState();
     } else {
       return LoginState.savedSettings();
     }
+  }
+
+  Stream<String> getLanguage() {
+    return _localSource.getLanguage();
   }
 
   Future<String> testConnection(
@@ -53,15 +55,7 @@ class Repo {
     return await httpSource.login(userModel, savedSettings);
   }
 
-  ConfigurationSettings getConfiguration() {
-    ConfigurationSettings savedSettings = new ConfigurationSettings();
-    savedSettings.language = Hive.box("configuration").get("language");
-    savedSettings.folder = Hive.box("configuration").get("folder");
-    savedSettings.password = Hive.box("configuration").get("password");
-    savedSettings.userName = Hive.box("configuration").get("userName");
-    savedSettings.port = Hive.box("configuration").get("port");
-    savedSettings.server = Hive.box("configuration").get("server");
-
-    return savedSettings;
+  Future<ConfigurationSettings> getConfiguration() {
+    return _localSource.getConfiguration();
   }
 }

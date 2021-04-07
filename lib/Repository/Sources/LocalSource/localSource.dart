@@ -23,6 +23,9 @@ class LocalSource {
     Hive.init(appDocumentDirectory.path);
 
     await Hive.openBox("configuration");
+    String languageSelected = Hive.box("configuration").get("language");
+    if (languageSelected == null)
+      Hive.box("configuration").put("language", "ENG");
   }
 
   Future<void> saveConfiguration(
@@ -35,5 +38,25 @@ class LocalSource {
     Hive.box("configuration").put("password", configurationSettings.password);
     Hive.box("configuration").put("folder", configurationSettings.folder);
     Hive.box("configuration").put("language", configurationSettings.language);
+  }
+
+  Stream<String> getLanguage() {
+    return Hive.box("configuration").watch(key: "language").map((event) {
+      return event.value.toString();
+    });
+  }
+
+  Future<ConfigurationSettings> getConfiguration() async {
+    if (!Hive.isBoxOpen("configuration")) await openBoxes();
+
+    ConfigurationSettings savedSettings = new ConfigurationSettings();
+    savedSettings.language = Hive.box("configuration").get("language");
+    savedSettings.folder = Hive.box("configuration").get("folder");
+    savedSettings.password = Hive.box("configuration").get("password");
+    savedSettings.userName = Hive.box("configuration").get("userName");
+    savedSettings.port = Hive.box("configuration").get("port");
+    savedSettings.server = Hive.box("configuration").get("server");
+
+    return savedSettings;
   }
 }

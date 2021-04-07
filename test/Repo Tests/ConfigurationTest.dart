@@ -45,7 +45,8 @@ void main() {
   test("Configuration saved", () async {
     Repo repo = Repo.getInstance();
     await repo.saveConfiguration(workingConfigurationSettings);
-    ConfigurationSettings configurationSettingsSaved = repo.getConfiguration();
+    ConfigurationSettings configurationSettingsSaved =
+        await repo.getConfiguration();
     expect(
         configurationSettingsSaved.server, workingConfigurationSettings.server);
     expect(
