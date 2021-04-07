@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget getBody() {
     return StreamBuilder<bool>(
         stream: _bloc.loadingStream,
+        initialData: false,
         builder: (context, snapshot) {
           if (snapshot.data) return getDefaultLoading();
           return getLoadedBody();

@@ -48,7 +48,6 @@ class LocalSource {
 
   Future<ConfigurationSettings> getConfiguration() async {
     if (!Hive.isBoxOpen("configuration")) await openBoxes();
-
     ConfigurationSettings savedSettings = new ConfigurationSettings();
     savedSettings.language = Hive.box("configuration").get("language");
     savedSettings.folder = Hive.box("configuration").get("folder");
@@ -56,7 +55,6 @@ class LocalSource {
     savedSettings.userName = Hive.box("configuration").get("userName");
     savedSettings.port = Hive.box("configuration").get("port");
     savedSettings.server = Hive.box("configuration").get("server");
-
     return savedSettings;
   }
 }

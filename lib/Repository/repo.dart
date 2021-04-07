@@ -9,7 +9,7 @@ import 'package:x3/Splash/model/LoginState.dart';
 class Repo {
   static Repo _instance;
   final HttpSource httpSource = HttpSource.getInstance();
-  LocalSource _localSource = LocalSource.getInstance();
+  final LocalSource _localSource = LocalSource.getInstance();
 
   static Repo getInstance() {
     if (_instance == null) _instance = new Repo();
@@ -19,6 +19,7 @@ class Repo {
   Future<LoginState> getAppState() async {
     ConfigurationSettings savedSettings = await _localSource.getConfiguration();
     if (savedSettings.server == null) {
+      print("Server is null");
       return LoginState.newState();
     } else {
       return LoginState.savedSettings();
@@ -34,13 +35,13 @@ class Repo {
     return await httpSource.testConnection(configurationSettings);
   }
 
-  Future<bool> saveConfiguration(
+  Future<String> saveConfiguration(
       ConfigurationSettings configurationSettings) async {
     if (await testConnection(configurationSettings) == "Success") {
       await _localSource.saveConfiguration(configurationSettings);
-      return true;
+      return "Success";
     } else {
-      return false;
+      return "Failure";
     }
   }
 

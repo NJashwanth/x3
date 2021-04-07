@@ -90,6 +90,8 @@ class HttpSource {
 
   Future<LoginResponse> login(
       UserModel userModel, ConfigurationSettings configurationSettings) async {
+    print(configurationSettings.language);
+
     var headers = {
       'soapaction': '*',
       'Content-Type': 'application/json',
@@ -100,7 +102,7 @@ class HttpSource {
         Uri.parse(
             '${configurationSettings.server}:${configurationSettings.port}/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC'));
     request.body =
-        '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
          xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
           xmlns:wss="http://www.adonix.com/WSS">
@@ -110,7 +112,7 @@ class HttpSource {
           soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
           \r\n<callContext xsi:type="wss:CAdxCallContext">
           \r\n<codeLang xsi:type="xsd:string">
-          ${configurationSettings.language}
+          ENG
           </codeLang>
           \r\n<poolAlias xsi:type="xsd:string">
           ${configurationSettings.folder}
