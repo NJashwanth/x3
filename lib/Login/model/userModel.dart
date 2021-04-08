@@ -9,6 +9,11 @@ class UserModel {
     password = json['password'];
   }
 
+  @override
+  String toString() {
+    return 'UserModel{userName: $userName, password: $password}';
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['userName'] = this.userName;

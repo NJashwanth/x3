@@ -90,59 +90,24 @@ class HttpSource {
 
   Future<LoginResponse> login(
       UserModel userModel, ConfigurationSettings configurationSettings) async {
-    print(configurationSettings.language);
+    print(configurationSettings.toString());
+    print(userModel.toString());
 
-    var headers = {
-      'soapaction': '*',
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic YWRtaW46YWRtaW4='
-    };
     var request = http.Request(
         'POST',
         Uri.parse(
             '${configurationSettings.server}:${configurationSettings.port}/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC'));
     request.body =
-    '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-          xmlns:wss="http://www.adonix.com/WSS">
-          \r\n<soapenv:Header/>
-          \r\n<soapenv:Body>
-          \r\n<wss:run 
-          soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-          \r\n<callContext xsi:type="wss:CAdxCallContext">
-          \r\n<codeLang xsi:type="xsd:string">
-          ENG
-          </codeLang>
-          \r\n<poolAlias xsi:type="xsd:string">
-          ${configurationSettings.folder}
-          </poolAlias>
-          \r\n<poolId xsi:type="xsd:string"></poolId>
-          \r\n<requestConfig 
-          xsi:type="xsd:string">adxwss.optreturn=JSON&adxwss.beautify=true
-          </requestConfig>
-          \r\n</callContext>
-          \r\n<publicName
-           xsi:type="xsd:string">ZLOGINWEB
-           </publicName>
-           \r\n<inputXml 
-           xsi:type="xsd:string">
-           \r\n{\r\n"GRP1":{"ZUNAME":\"${userModel.userName}\","ZPSSWRD":\"${userModel.password}\","ZMCODE":"166","ZMODEL":"USR01","ZLATLONG":"USR01","ZMSG":""}
-           \r\n}
-           \r\n</inputXml>
-           \r\n</wss:run>
-           \r\n</soapenv:Body>
-           \r\n</soapenv:Envelope>\r\n''';
-    request.headers.addAll(headers);
-
-    print("Request = " + request.toString());
-    print("Request body = " + request.body);
+        '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS">\r\n<soapenv:Header/>\r\n<soapenv:Body>\r\n<wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\r\n<callContext xsi:type="wss:CAdxCallContext">\r\n<codeLang xsi:type="xsd:string">${configurationSettings.language}</codeLang>\r\n<poolAlias xsi:type="xsd:string">${configurationSettings.folder}</poolAlias>\r\n<poolId xsi:type="xsd:string"></poolId>\r\n<requestConfig xsi:type="xsd:string">adxwss.optreturn=JSON&adxwss.beautify=true</requestConfig>\r\n</callContext>\r\n<publicName xsi:type="xsd:string">ZLOGINWEB</publicName>\r\n<inputXml xsi:type="xsd:string">\r\n{\r\n"GRP1":{"ZUNAME":"${userModel.userName}","ZPSSWRD":"${userModel.password}","ZMCODE":"166","ZMODEL":"USR01","ZLATLONG":"USR01","ZMSG":""}\r\n}\r\n</inputXml>\r\n</wss:run>\r\n</soapenv:Body>\r\n</soapenv:Envelope>\r\n''';
+    request.headers.addAll(headers(
+        configurationSettings.userName, configurationSettings.password));
 
     try {
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
         String responseStream = await response.stream.bytesToString();
         String s = parseResponse(responseStream);
+        print("S = " + s);
         Map<dynamic, dynamic> map = jsonDecode(s);
         if (map["GRP1"]["ZSTATCD"].toString() == "200") {
           List<String> mapToReturn = new List();
@@ -164,25 +129,36 @@ class HttpSource {
   }
 
   String parseResponse(String responseStream) {
-    print("Parsing response = " + responseStream);
+    print("Response start = ");
 
+    print(responseStream);
+
+    print("Response ends = ");
     final myTransformer = Xml2Json();
     myTransformer.parse(responseStream);
     Map<dynamic, dynamic> json = jsonDecode(myTransformer.toGData());
+
     //(version, encoding, soapenv$Envelope)
     json = json["soapenv\$Envelope"];
     // (xmlns, xmlns$soapenv, xmlns$xsd, xmlns$xsi, ..., xmlns$wss, soapenv$Body)
     json = json["soapenv\$Body"];
+
     //wss$runResponse
     json = json["wss\$runResponse"];
+
     // (soapenv:encodingStyle, runReturn)
     json = json["runReturn"];
+
+    print("xml = " + json.keys.toString());
+    print("xml = " + json["messages"].toString());
+
     // (xsi:type, messages, resultXml, status, technicalInfos)
     json = json["resultXml"];
-    //(xsi:type, __cdata)
     String s = json["__cdata"];
-    s = s.replaceAll("\\n", "");
-    s = s.replaceAll("\\t", "");
+    try {
+      s = s.replaceAll("\\n", "");
+      s = s.replaceAll("\\t", "");
+    } catch (e) {}
     return s;
   }
 }

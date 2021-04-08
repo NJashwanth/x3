@@ -15,7 +15,7 @@ import 'package:x3/Repository/repo.dart';
 void main() {
   final ConfigurationSettings workingConfigurationSettings =
       new ConfigurationSettings(
-          folder: "GITAPP",
+          folder: "GITDEV",
           server: "http://sagex3v12.germinit.com",
           port: "8124",
           language: "ENG",
@@ -77,9 +77,9 @@ void main() {
   test('Login Test with config', () async {
     // Build our app and trigger a frame.
     Repo repo = Repo.getInstance();
-    await repo.testConnection(workingConfigurationSettings);
+    await repo.saveConfiguration(workingConfigurationSettings);
     LoginResponse loginResponse =
         await repo.login(new UserModel("USR01", "USR01"));
-    expect(loginResponse.isSuccess, false);
+    expect(loginResponse.isSuccess, true);
   });
 }

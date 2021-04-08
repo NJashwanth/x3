@@ -23,6 +23,11 @@ class ConfigurationSettings {
     language = json['language'];
   }
 
+  @override
+  String toString() {
+    return 'ConfigurationSettings{server: $server, port: $port, userName: $userName, password: $password, folder: $folder, language: $language}';
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['server'] = this.server;
