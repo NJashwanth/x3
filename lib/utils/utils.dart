@@ -128,13 +128,7 @@ Widget getDrawer(BuildContext context) {
           title: Text(
             'X3 Configurations Settings',
           ),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ConfigurationSettingsScreen(),
-                ));
-          },
+          onTap: () => navigateToConfigurationSettingsScreen(context),
         ),
       ],
     ),
@@ -203,9 +197,7 @@ Transform getCrossIcon() {
       ));
 }
 
-Widget getAppBar(
-  String title,
-) {
+Widget getAppBar(String title) {
   return AppBar(
     title: Text(
       title,
@@ -239,4 +231,12 @@ void navigateToHomeScreen(BuildContext context, List<String> list) {
     ),
     (route) => false,
   );
+}
+
+void navigateToConfigurationSettingsScreen(BuildContext context) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfigurationSettingsScreen(),
+      ));
 }
