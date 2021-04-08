@@ -90,9 +90,6 @@ class HttpSource {
 
   Future<LoginResponse> login(
       UserModel userModel, ConfigurationSettings configurationSettings) async {
-    print(configurationSettings.toString());
-    print(userModel.toString());
-
     var request = http.Request(
         'POST',
         Uri.parse(
@@ -101,7 +98,6 @@ class HttpSource {
         '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS">\r\n<soapenv:Header/>\r\n<soapenv:Body>\r\n<wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\r\n<callContext xsi:type="wss:CAdxCallContext">\r\n<codeLang xsi:type="xsd:string">${configurationSettings.language}</codeLang>\r\n<poolAlias xsi:type="xsd:string">${configurationSettings.folder}</poolAlias>\r\n<poolId xsi:type="xsd:string"></poolId>\r\n<requestConfig xsi:type="xsd:string">adxwss.optreturn=JSON&adxwss.beautify=true</requestConfig>\r\n</callContext>\r\n<publicName xsi:type="xsd:string">ZLOGINWEB</publicName>\r\n<inputXml xsi:type="xsd:string">\r\n{\r\n"GRP1":{"ZUNAME":"${userModel.userName}","ZPSSWRD":"${userModel.password}","ZMCODE":"166","ZMODEL":"USR01","ZLATLONG":"USR01","ZMSG":""}\r\n}\r\n</inputXml>\r\n</wss:run>\r\n</soapenv:Body>\r\n</soapenv:Envelope>\r\n''';
     request.headers.addAll(headers(
         configurationSettings.userName, configurationSettings.password));
-
     try {
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
