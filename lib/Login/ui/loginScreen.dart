@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         drawer: getDrawer(context),
         appBar: getAppBar("Login"),
         body: getBody(),

@@ -40,7 +40,8 @@ class LocalSource {
     Hive.box("configuration").put("language", configurationSettings.language);
   }
 
-  Stream<String> getLanguage() {
+  Future<Stream<String>> getLanguage() async {
+    await Hive.openBox("configuration");
     return Hive.box("configuration").watch(key: "language").map((event) {
       return event.value.toString();
     });

@@ -240,3 +240,9 @@ void navigateToConfigurationSettingsScreen(BuildContext context) {
         builder: (context) => ConfigurationSettingsScreen(),
       ));
 }
+
+Widget getNoDataWidget() {
+  return Center(
+    child: Text("No Data"),
+  );
+}

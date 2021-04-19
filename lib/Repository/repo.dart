@@ -26,13 +26,13 @@ class Repo {
     }
   }
 
-  Stream<String> getLanguage() {
-    return _localSource.getLanguage();
+  Future<Stream<String>> getLanguage() async {
+    return await _localSource.getLanguage();
   }
 
   Future<String> testConnection(
       ConfigurationSettings configurationSettings) async {
-    return await httpSource.testConnection(configurationSettings);
+    return await httpSource.testConnectionNew(configurationSettings);
   }
 
   Future<String> saveConfiguration(
@@ -53,7 +53,7 @@ class Repo {
     savedSettings.userName = Hive.box("configuration").get("userName");
     savedSettings.port = Hive.box("configuration").get("port");
     savedSettings.server = Hive.box("configuration").get("server");
-    return await httpSource.login(userModel, savedSettings);
+    return await httpSource.loginNew(userModel, savedSettings);
   }
 
   Future<ConfigurationSettings> getConfiguration() {
