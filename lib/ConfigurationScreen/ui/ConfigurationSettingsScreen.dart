@@ -58,7 +58,7 @@ class _ConfigurationSettingsScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            getLogo(),
+            Hero(tag: "logo", child: getLogo()),
             Divider(),
             getHeading("WEB SERVICES SETTINGS"),
             getFormFields(),
@@ -75,8 +75,10 @@ class _ConfigurationSettingsScreenState
         getServerAndPortFields(),
         getTextFormField(_userNameController, "Username", "Username"),
         getTextFormField(_passwordController, "Password", "Password"),
-        getTextFormField(_folderController, "Folder", "Folder"),
-        getTextFormField(_languageController, "Language", "Language"),
+        getTextFormField(_folderController, "Folder", "Folder",
+            capitalise: true),
+        getTextFormField(_languageController, "Language", "Language",
+            capitalise: true),
       ],
     );
   }
@@ -86,17 +88,12 @@ class _ConfigurationSettingsScreenState
       children: [
         Expanded(
           child: getTextFormField(
-            _serverController,
-            "Server : sagex3.yourcompany.com",
-            "Server",
-          ),
+              _serverController, "Server : sagex3.yourcompany.com", "Server",
+              capitalise: true),
         ),
         Expanded(
-          child: getTextFormField(
-            _portNumberController,
-            "Port : 8124",
-            "Port",
-          ),
+          child: getTextFormField(_portNumberController, "Port : 8124", "Port",
+              capitalise: true),
         ),
       ],
     );

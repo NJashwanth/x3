@@ -3,15 +3,20 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
+import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
 
 Widget getTextFormField(
     TextEditingController controller, String hintText, String labelText,
-    {String preText, TextInputType textInputType, TextStyle textStyle}) {
+    {String preText,
+    TextInputType textInputType,
+    TextStyle textStyle,
+    bool capitalise}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: textFormFieldWithoutPadding(
-        controller, textInputType, textStyle, labelText, hintText, preText),
+        controller, textInputType, textStyle, labelText, hintText, preText,
+        capitalise: capitalise),
   );
 }
 
@@ -21,10 +26,14 @@ TextFormField textFormFieldWithoutPadding(
     TextStyle textStyle,
     String labelText,
     String hintText,
-    String preText) {
+    String preText,
+    {bool capitalise}) {
   return TextFormField(
     controller: controller,
     keyboardType: textInputType ?? TextInputType.text,
+    textCapitalization: (capitalise ?? false)
+        ? TextCapitalization.characters
+        : TextCapitalization.none,
     style: textStyle,
     validator: (s) => validate(s),
     decoration: inputDecoration(labelText, hintText, preText, controller),
@@ -36,6 +45,7 @@ InputDecoration inputDecoration(String labelText, String hintText,
   return InputDecoration(
       labelText: labelText,
       hintText: hintText,
+      hintStyle: TextStyle(fontStyle: FontStyle.italic),
       prefix: Text(
         preText ?? "",
       ),
@@ -115,13 +125,28 @@ Widget getHeading(String text) {
 Widget getDrawer(BuildContext context) {
   return Drawer(
     child: ListView(
-      padding: EdgeInsets.all(0),
+      padding: EdgeInsets.zero,
       children: [
-        DrawerHeader(
-          child: Text(
-            'X3',
+        Container(
+          height: 100,
+          child: DrawerHeader(
+            child: Row(
+              children: [
+                getCompanyLogo(),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "Menu",
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.white60,
+                  ),
+                )
+              ],
+            ),
+            decoration: BoxDecoration(color: Colors.red.shade300),
           ),
-          decoration: BoxDecoration(color: Colors.red.shade50),
         ),
         ListTile(
           trailing: Icon(Icons.arrow_right),
@@ -130,8 +155,22 @@ Widget getDrawer(BuildContext context) {
           ),
           onTap: () => navigateToConfigurationSettingsScreen(context),
         ),
+        ListTile(
+          trailing: Icon(Icons.arrow_right),
+          title: Text(
+            'About',
+          ),
+          // onTap: () => navigateToConfigurationSettingsScreen(context),
+        ),
       ],
     ),
+  );
+}
+
+Image getCompanyLogo() {
+  return Image.asset(
+    'assets/Logo-CircleX_50px.png',
+    alignment: Alignment.centerLeft,
   );
 }
 
@@ -228,6 +267,16 @@ void navigateToHomeScreen(BuildContext context, List<String> list) {
       builder: (BuildContext context) => HomeScreen(
         loginResponse: list,
       ),
+    ),
+    (route) => false,
+  );
+}
+
+void navigateToLoginScreen(BuildContext context) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => LoginScreen(),
     ),
     (route) => false,
   );
