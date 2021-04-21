@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
@@ -11,12 +12,16 @@ Widget getTextFormField(
     {String preText,
     TextInputType textInputType,
     TextStyle textStyle,
-    bool capitalise}) {
+    bool capitalise,
+    int validationType,
+    TextInputFormatter textInputFormatter}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: textFormFieldWithoutPadding(
         controller, textInputType, textStyle, labelText, hintText, preText,
-        capitalise: capitalise),
+        capitalise: capitalise,
+        validationType: validationType,
+        textInputFormatter: textInputFormatter),
   );
 }
 
@@ -27,14 +32,21 @@ TextFormField textFormFieldWithoutPadding(
     String labelText,
     String hintText,
     String preText,
-    {bool capitalise}) {
+    {bool capitalise,
+    int validationType,
+    TextInputFormatter textInputFormatter}) {
   return TextFormField(
     controller: controller,
     keyboardType: textInputType ?? TextInputType.text,
+    inputFormatters: textInputFormatter != null ? [textInputFormatter] : null,
     textCapitalization: (capitalise ?? false)
         ? TextCapitalization.characters
         : TextCapitalization.none,
     style: textStyle,
+    onChanged: (value) {
+      if (capitalise ?? false) if (controller.text != value.toUpperCase())
+        controller.value = controller.value.copyWith(text: value.toUpperCase());
+    },
     validator: (s) => validate(s),
     decoration: inputDecoration(labelText, hintText, preText, controller),
   );
@@ -45,7 +57,6 @@ InputDecoration inputDecoration(String labelText, String hintText,
   return InputDecoration(
       labelText: labelText,
       hintText: hintText,
-      hintStyle: TextStyle(fontStyle: FontStyle.italic),
       prefix: Text(
         preText ?? "",
       ),
@@ -65,23 +76,30 @@ String validate(String s) {
   return s.isNotEmpty ? null : 'Enter Valid Details';
 }
 
-InputDecorationTheme buildInputDecorationTheme() {
+InputDecorationTheme buildInputDecorationTheme(BuildContext context) {
   return InputDecorationTheme(
     border: new OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15))),
+        borderSide:
+            BorderSide(color: Theme.of(context).primaryColor, width: 2.0),
+        borderRadius: getCircularBorderForTextFormField()),
     labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
     hintStyle: TextStyle(
         color: Colors.grey.shade600,
         fontWeight: FontWeight.normal,
         fontStyle: FontStyle.italic),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+      borderRadius: getCircularBorderForTextFormField(),
+      borderSide: BorderSide(color: Colors.grey, width: 2.0),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.pinkAccent, width: 1.0),
+      borderRadius: getCircularBorderForTextFormField(),
+      borderSide: BorderSide(color: Colors.pinkAccent, width: 2.0),
     ),
   );
 }
+
+BorderRadius getCircularBorderForTextFormField() =>
+    BorderRadius.all(Radius.circular(15));
 
 Widget getButtonData(IconData iconData, String title, Color color) {
   return Padding(
@@ -293,5 +311,25 @@ void navigateToConfigurationSettingsScreen(BuildContext context) {
 Widget getNoDataWidget() {
   return Center(
     child: Text("No Data"),
+  );
+}
+
+Widget getFlatButton(void Function() onPressed, Widget child) {
+  return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: FlatButton(
+          minWidth: 150,
+          color: Colors.red,
+          onPressed: onPressed,
+          child: child));
+}
+
+Widget getOutLineButton(void Function() onPressed, Widget child) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: OutlineButton(
+        borderSide: BorderSide(color: Colors.red),
+        onPressed: onPressed,
+        child: child),
   );
 }

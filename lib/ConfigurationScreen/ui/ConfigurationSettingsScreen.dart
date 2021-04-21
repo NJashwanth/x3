@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/ConfigurationScreen/bloc/ConfigurationSettingsBloc.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
@@ -93,7 +94,9 @@ class _ConfigurationSettingsScreenState
         ),
         Expanded(
           child: getTextFormField(_portNumberController, "Port : 8124", "Port",
-              capitalise: true),
+              textInputFormatter: FilteringTextInputFormatter.digitsOnly,
+              textInputType: TextInputType.numberWithOptions(
+                  decimal: true, signed: false)),
         ),
       ],
     );
@@ -113,36 +116,15 @@ class _ConfigurationSettingsScreenState
   }
 
   Widget getTestConnectionButton() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () => onTestConfigurationsButtonPressed(),
-        child: Container(
-          alignment: Alignment.center,
-          width: 150,
-          height: 80,
-          decoration: BoxDecoration(border: Border.all(color: Colors.red)),
-          child: getButtonData(
-              FontAwesomeIcons.database, "Test Connection", Colors.red),
-        ),
-      ),
-    );
+    return getOutLineButton(
+        onTestConfigurationsButtonPressed,
+        getButtonData(
+            FontAwesomeIcons.database, "Test Connection", Colors.red));
   }
 
   Widget getSaveButton() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () => onSaveButtonPressed(),
-        child: Container(
-          alignment: Alignment.center,
-          width: 150,
-          height: 80,
-          color: Colors.red,
-          child: getButtonData(FontAwesomeIcons.save, "Save", Colors.white),
-        ),
-      ),
-    );
+    return getFlatButton(onSaveButtonPressed,
+        getButtonData(FontAwesomeIcons.save, "Save", Colors.white));
   }
 
   Future<void> onTestConfigurationsButtonPressed() async {

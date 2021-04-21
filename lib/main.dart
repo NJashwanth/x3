@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           buttonColor: Colors.red.shade400,
           dividerColor: Colors.red.shade100,
           accentColor: Colors.grey.shade400,
-          inputDecorationTheme: buildInputDecorationTheme(),
+          inputDecorationTheme: buildInputDecorationTheme(context),
           scaffoldBackgroundColor: Colors.red.shade50),
       home: SplashScreen(),
     );
