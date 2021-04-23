@@ -35,7 +35,10 @@ dependencies:
   hive: 1.4.4+1
   path_provider: ^1.6.28
   xml2json: 4.2.0
-  recase: ^3.0.1
+  progress_dialog: ^1.2.4
+  package_info: ^0.4.3+2
+
+
 
 dev_dependencies:
   flutter_test:

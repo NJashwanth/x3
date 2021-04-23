@@ -211,7 +211,8 @@ class HttpSource {
       request.headers.addAll(headers(
           configurationSettings.userName, configurationSettings.password));
 
-      http.StreamedResponse response = await request.send();
+      http.StreamedResponse response =
+          await request.send().timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         String responseStream = await response.stream.bytesToString();
         String s = parseResponse(responseStream);

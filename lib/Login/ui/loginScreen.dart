@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/Login/bloc/LoginBloc.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
@@ -22,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   LoginBloc _bloc = LoginBloc.getInstance();
+  final FocusNode userNameFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget getBody() {
-    return StreamBuilder<bool>(
-        stream: _bloc.loadingStream,
-        initialData: false,
-        builder: (context, snapshot) {
-          if (snapshot.data) return getDefaultLoading();
-          return getLoadedBody();
-        });
-  }
-
-  Form getLoadedBody() {
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -55,8 +48,13 @@ class _LoginScreenState extends State<LoginScreen> {
             Hero(tag: "logo", child: getLogo()),
             Divider(),
             getHeading("LOGIN"),
-            getTextFormField(_userNameController, "Username", "Username"),
-            getTextFormField(_passwordController, "Password", "Password"),
+            getTextFormField(
+                context, _userNameController, "Username", "Username",
+                currentFocusNode: userNameFocusNode,
+                nextFocusNode: passwordFocusNode),
+            getTextFormField(
+                context, _passwordController, "Password", "Password",
+                currentFocusNode: passwordFocusNode),
             getLoginButton(),
           ],
         ),
@@ -84,9 +82,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState.validate()) {
       UserModel userModel =
           new UserModel(_userNameController.text, _passwordController.text);
-      _bloc.changeLoadingState(true);
+      ProgressDialog dialog = getProgressDialog(context);
+      await dialog.show();
       LoginResponse responseFromServer = await _bloc.login(userModel);
-      _bloc.changeLoadingState(false);
+      await dialog.hide();
+
       if (responseFromServer.isSuccess)
         navigateToHomeScreen(context, responseFromServer.grp2);
       else

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:x3/ConfigurationScreen/bloc/ConfigurationSettingsBloc.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/utils/utils.dart';
@@ -31,6 +32,14 @@ class _ConfigurationSettingsScreenState
 
   ConfigurationSettingsBloc _bloc = ConfigurationSettingsBloc.getInstance();
 
+  final FocusNode serverFocusNode = FocusNode();
+  final FocusNode portFocusNode = FocusNode();
+  final FocusNode userNameFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode adminFocusNode = FocusNode();
+  final FocusNode folderFocusNode = FocusNode();
+  final FocusNode lanFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -43,30 +52,26 @@ class _ConfigurationSettingsScreenState
   }
 
   Widget getBody() {
-    return StreamBuilder<bool>(
-        stream: _bloc.loadingStream,
-        initialData: false,
-        builder: (context, snapshot) {
-          if (snapshot.data) return getDefaultLoading();
-          return getLoadedBody();
-        });
-  }
-
-  SingleChildScrollView getLoadedBody() {
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Hero(tag: "logo", child: getLogo()),
-            Divider(),
-            getHeading("WEB SERVICES SETTINGS"),
-            getFormFields(),
-            getButtons(),
-          ],
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Hero(tag: "logo", child: getLogo()),
+                  Divider(),
+                  getHeading("WEB SERVICES SETTINGS"),
+                  getFormFields(),
+                ],
+              ),
+            ),
+          ),
         ),
-      ),
+        getButtons(),
+      ],
     );
   }
 
@@ -74,12 +79,18 @@ class _ConfigurationSettingsScreenState
     return Column(
       children: [
         getServerAndPortFields(),
-        getTextFormField(_userNameController, "Username", "Username"),
-        getTextFormField(_passwordController, "Password", "Password"),
-        getTextFormField(_folderController, "Folder", "Folder",
-            capitalise: true),
-        getTextFormField(_languageController, "Language", "Language",
-            capitalise: true),
+        getTextFormField(context, _userNameController, "Username", "Username",
+            currentFocusNode: userNameFocusNode,
+            nextFocusNode: passwordFocusNode),
+        getTextFormField(context, _passwordController, "Password", "Password",
+            currentFocusNode: passwordFocusNode,
+            nextFocusNode: folderFocusNode),
+        getTextFormField(context, _folderController, "Folder", "Folder",
+            capitalise: true,
+            currentFocusNode: folderFocusNode,
+            nextFocusNode: lanFocusNode),
+        getTextFormField(context, _languageController, "Language", "Language",
+            capitalise: true, currentFocusNode: lanFocusNode),
       ],
     );
   }
@@ -88,15 +99,20 @@ class _ConfigurationSettingsScreenState
     return Row(
       children: [
         Expanded(
-          child: getTextFormField(
-              _serverController, "Server : sagex3.yourcompany.com", "Server",
-              capitalise: true),
+          child: getTextFormField(context, _serverController,
+              "Server : sagex3.yourcompany.com", "Server",
+              capitalise: true,
+              currentFocusNode: serverFocusNode,
+              nextFocusNode: portFocusNode),
         ),
         Expanded(
-          child: getTextFormField(_portNumberController, "Port : 8124", "Port",
+          child: getTextFormField(
+              context, _portNumberController, "Port : 8124", "Port",
               textInputFormatter: FilteringTextInputFormatter.digitsOnly,
-              textInputType: TextInputType.numberWithOptions(
-                  decimal: true, signed: false)),
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: false),
+              currentFocusNode: portFocusNode,
+              nextFocusNode: userNameFocusNode),
         ),
       ],
     );
@@ -131,10 +147,12 @@ class _ConfigurationSettingsScreenState
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           getUserEnteredConfigurationsSettings();
-      _bloc.changeLoadingState(true);
+      ProgressDialog dialog = getProgressDialog(context);
+      await dialog.show();
       String responseFromServer =
           await _bloc.testConfigurations(configurationSettingsModel);
-      _bloc.changeLoadingState(false);
+      await dialog.hide();
+
       if (responseFromServer == "Success")
         successDialog();
       else
@@ -156,12 +174,12 @@ class _ConfigurationSettingsScreenState
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           getUserEnteredConfigurationsSettings();
-      _bloc.changeLoadingState(true);
+      ProgressDialog dialog = getProgressDialog(context);
+      await dialog.show();
 
       String responseFromServer =
           await _bloc.saveConfigurations(configurationSettingsModel);
-      _bloc.changeLoadingState(false);
-
+      await dialog.hide();
       if (responseFromServer == "Success")
         navigateToSplashScreen(context);
       else

@@ -2,30 +2,36 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
 
-Widget getTextFormField(
-    TextEditingController controller, String hintText, String labelText,
+Widget getTextFormField(BuildContext context, TextEditingController controller,
+    String hintText, String labelText,
     {String preText,
     TextInputType textInputType,
     TextStyle textStyle,
     bool capitalise,
     int validationType,
-    TextInputFormatter textInputFormatter}) {
+    TextInputFormatter textInputFormatter,
+    FocusNode currentFocusNode,
+    FocusNode nextFocusNode}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
-    child: textFormFieldWithoutPadding(
-        controller, textInputType, textStyle, labelText, hintText, preText,
+    child: textFormFieldWithoutPadding(context, controller, textInputType,
+        textStyle, labelText, hintText, preText,
         capitalise: capitalise,
         validationType: validationType,
-        textInputFormatter: textInputFormatter),
+        textInputFormatter: textInputFormatter,
+        currentFocusNode: currentFocusNode,
+        nextFocusNode: nextFocusNode),
   );
 }
 
 TextFormField textFormFieldWithoutPadding(
+    BuildContext context,
     TextEditingController controller,
     TextInputType textInputType,
     TextStyle textStyle,
@@ -34,8 +40,16 @@ TextFormField textFormFieldWithoutPadding(
     String preText,
     {bool capitalise,
     int validationType,
-    TextInputFormatter textInputFormatter}) {
+    TextInputFormatter textInputFormatter,
+    FocusNode currentFocusNode,
+    FocusNode nextFocusNode}) {
   return TextFormField(
+    focusNode: currentFocusNode != null ? currentFocusNode : null,
+    onFieldSubmitted: (term) {
+      if (currentFocusNode != null) currentFocusNode.unfocus();
+      if (nextFocusNode != null)
+        FocusScope.of(context).requestFocus(nextFocusNode);
+    },
     controller: controller,
     keyboardType: textInputType ?? TextInputType.text,
     inputFormatters: textInputFormatter != null ? [textInputFormatter] : null,
@@ -178,11 +192,74 @@ Widget getDrawer(BuildContext context) {
           title: Text(
             'About',
           ),
-          // onTap: () => navigateToConfigurationSettingsScreen(context),
+          onTap: () => onAboutTapPressed(context),
         ),
       ],
     ),
   );
+}
+
+void onAboutTapPressed(BuildContext context) {
+  Navigator.pop(context);
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+            actions: [
+              ButtonBar(
+                children: [
+                  TextButton(
+                    child: Text("VIEW LICENSES"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: Text("CLOSE"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              )
+            ],
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(width: 30, child: getCompanyLogo()),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                            child: Text(
+                          "Pinpoint Location Management",
+                          softWrap: true,
+                        )),
+                        Text(
+                          "v2.0.0",
+                          style: Theme.of(context).textTheme.caption,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                    child: Text(
+                  "2020 XT3ND Software, LLC",
+                  style: Theme.of(context).textTheme.subtitle2,
+                  softWrap: true,
+                )),
+              ],
+            ),
+          ));
 }
 
 Image getCompanyLogo() {
@@ -331,5 +408,16 @@ Widget getOutLineButton(void Function() onPressed, Widget child) {
         borderSide: BorderSide(color: Colors.red),
         onPressed: onPressed,
         child: child),
+  );
+}
+
+ProgressDialog getProgressDialog(BuildContext context) {
+  return new ProgressDialog(
+    context,
+    isDismissible: false,
+    customBody: LinearProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+      backgroundColor: Colors.white,
+    ),
   );
 }

@@ -33,11 +33,18 @@ class _HomeScreenState extends State<HomeScreen> {
               String title = widget.loginResponse[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(title),
-                ),
+                child: listTile(title),
               );
             },
           );
+  }
+
+  ListTile listTile(String title) {
+    /*UserTaskModel user = UserTaskModel.fromJson(jsonDecode(title.toString()));
+    print("UserTaskModel is $user");
+*/
+    return ListTile(
+      title: Text(title),
+    );
   }
 }
