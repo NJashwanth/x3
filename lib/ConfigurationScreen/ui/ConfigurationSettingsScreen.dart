@@ -26,6 +26,8 @@ class _ConfigurationSettingsScreenState
       new TextEditingController(text: "GITDEV");
   TextEditingController _languageController =
       new TextEditingController(text: "eng");
+  TextEditingController _urlController = new TextEditingController(
+      text: "soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC");
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
@@ -38,7 +40,10 @@ class _ConfigurationSettingsScreenState
   final FocusNode passwordFocusNode = FocusNode();
   final FocusNode adminFocusNode = FocusNode();
   final FocusNode folderFocusNode = FocusNode();
+  final FocusNode uRLFocusNode = FocusNode();
+
   final FocusNode lanFocusNode = FocusNode();
+  String type = 'http';
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +83,10 @@ class _ConfigurationSettingsScreenState
   Widget getFormFields() {
     return Column(
       children: [
+        getRadioButtons(),
         getServerAndPortFields(),
+        getTextFormField(context, _urlController, "URL", "URL",
+            currentFocusNode: uRLFocusNode, nextFocusNode: userNameFocusNode),
         getTextFormField(context, _userNameController, "Username", "Username",
             currentFocusNode: userNameFocusNode,
             nextFocusNode: passwordFocusNode),
@@ -112,7 +120,7 @@ class _ConfigurationSettingsScreenState
               textInputType:
                   TextInputType.numberWithOptions(decimal: true, signed: false),
               currentFocusNode: portFocusNode,
-              nextFocusNode: userNameFocusNode),
+              nextFocusNode: uRLFocusNode),
         ),
       ],
     );
@@ -183,7 +191,7 @@ class _ConfigurationSettingsScreenState
       if (responseFromServer == "Success")
         navigateToSplashScreen(context);
       else
-        showErrorMessageInSnackBar(context, "Error", _scaffoldKey);
+        showErrorMessageInSnackBar(context, responseFromServer, _scaffoldKey);
     }
   }
 
@@ -194,6 +202,45 @@ class _ConfigurationSettingsScreenState
         userName: _userNameController.text,
         password: _passwordController.text,
         folder: _folderController.text,
-        language: _languageController.text);
+        language: _languageController.text,
+        url: _urlController.text,
+        urlType: type);
+  }
+
+  Widget getRadioButtons() {
+    return getActionTypeRadioButtons();
+  }
+
+  Widget getActionTypeRadioButtons() {
+    return Row(
+      children: [
+        Radio<String>(
+          onChanged: (value) {
+            setState(() {
+              type = value;
+            });
+          },
+          groupValue: type,
+          value: 'http',
+        ),
+        Text(
+          'Http ',
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+        Radio<String>(
+          onChanged: (value) {
+            setState(() {
+              type = value;
+            });
+          },
+          groupValue: type,
+          value: 'https',
+        ),
+        Text(
+          'Https ',
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+      ],
+    );
   }
 }

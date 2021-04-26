@@ -66,9 +66,9 @@ class UserTaskModel {
     yXTASKDESC = json['YXTASKDESC'];
     yXAPP = json['YXAPP'];
     yXGUITY = json['YXGUITY'];
-    yXTASKORD = json['YXTASKORD'];
-    yXSOURCEDOC = json['YXSOURCEDOC'];
-    yXSOURCETYP = json['YXSOURCETYP'];
+    yXTASKORD = int.parse(json['YXTASKORD'].toString());
+    yXSOURCEDOC = int.parse(json['YXSOURCEDOC'].toString());
+    yXSOURCETYP = int.parse(json['YXSOURCETYP'].toString());
     yXSOURCEPRG = json['YXSOURCEPRG'];
     yXSOURCESUBP = json['YXSOURCESUBP'];
     yXSCANFIELD = json['YXSCANFIELD'];
@@ -78,18 +78,18 @@ class UserTaskModel {
     yXDESTSUBP = json['YXDESTSUBP'];
     yXDESTSTOFCY = json['YXDESTSTOFCY'];
     yXDESTLOC = json['YXDESTLOC'];
-    yXTASKLIN = json['YXTASKLIN'];
+    yXTASKLIN = int.parse(json['YXTASKLIN'].toString());
     yXTASKNUM = json['YXTASKNUM'];
     yXPARAM = json['YXPARAM'];
     yXPARAMTEXT = json['YXPARAMTEXT'];
     yXDISPLAY = json['YXDISPLAY'];
-    yXCOLUMNORD = json['YXCOLUMNORD'];
-    yXSORTORD = json['YXSORTORD'];
-    yXSTOFCYLEN = json['YXSTOFCYLEN'];
-    yXDOCNUMLEN = json['YXDOCNUMLEN'];
-    yXSLOLEN = json['YXSLOLEN'];
-    yXSRCLOCLEN = json['YXSRCLOCLEN'];
-    yXDSTLOCLEN = json['YXDSTLOCLEN'];
+    yXCOLUMNORD = int.parse(json['YXCOLUMNORD'].toString());
+    yXSORTORD = int.parse(json['YXSORTORD'].toString());
+    yXSTOFCYLEN = int.parse(json['YXSTOFCYLEN'].toString());
+    yXDOCNUMLEN = int.parse(json['YXDOCNUMLEN'].toString());
+    yXSLOLEN = int.parse(json['YXSLOLEN'].toString());
+    yXSRCLOCLEN = int.parse(json['YXSRCLOCLEN'].toString());
+    yXDSTLOCLEN = int.parse(json['YXDSTLOCLEN'].toString());
   }
 
   Map<String, dynamic> toJson() {

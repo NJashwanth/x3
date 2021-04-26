@@ -1,6 +1,8 @@
+import 'package:x3/HomeScreen/model/UserTaskModel.dart';
+
 class LoginState {
   LState lState;
-  List<String> homeScreenData;
+  List<UserTaskModel> homeScreenData;
 
   LoginState.newState() {
     homeScreenData = null;

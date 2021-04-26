@@ -5,6 +5,8 @@ class ConfigurationSettings {
   String password;
   String folder;
   String language;
+  String urlType;
+  String url;
 
   ConfigurationSettings(
       {this.server,
@@ -12,7 +14,9 @@ class ConfigurationSettings {
       this.userName,
       this.password,
       this.folder,
-      this.language});
+      this.language,
+      this.urlType,
+      this.url});
 
   ConfigurationSettings.fromJson(Map<String, dynamic> json) {
     server = json['server'];

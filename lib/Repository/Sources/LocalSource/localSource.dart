@@ -38,6 +38,8 @@ class LocalSource {
     Hive.box("configuration").put("password", configurationSettings.password);
     Hive.box("configuration").put("folder", configurationSettings.folder);
     Hive.box("configuration").put("language", configurationSettings.language);
+    Hive.box("configuration").put("urlType", configurationSettings.urlType);
+    Hive.box("configuration").put("url", configurationSettings.url);
   }
 
   Future<Stream<String>> getLanguage() async {

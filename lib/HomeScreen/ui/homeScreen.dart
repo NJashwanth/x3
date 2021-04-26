@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
-  final List<String> loginResponse;
+  final List<UserTaskModel> loginResponse;
 
   HomeScreen({this.loginResponse});
 
@@ -12,6 +14,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey key = new GlobalKey();
+  List<UserTaskModel> loginResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    this.loginResponse = widget.loginResponse;
+    loginResponse.sort((a, b) {
+      return a.yXTASKORD.compareTo(b.yXTASKORD);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,26 +37,41 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget getBody() {
-    return widget.loginResponse.length == 0
+    return loginResponse.length == 0
         ? getNoDataWidget()
         : ListView.builder(
-            itemCount: widget.loginResponse.length,
+            itemCount: loginResponse.length,
             itemBuilder: (context, index) {
-              String title = widget.loginResponse[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: listTile(title),
+                child: listTile(widget.loginResponse[index]),
               );
             },
           );
   }
 
-  ListTile listTile(String title) {
-    /*UserTaskModel user = UserTaskModel.fromJson(jsonDecode(title.toString()));
-    print("UserTaskModel is $user");
-*/
+  ListTile listTile(UserTaskModel loginResponse) {
     return ListTile(
-      title: Text(title),
+      leading: getLeading(loginResponse),
+      title: Text(loginResponse.yXTASKNAM),
+      subtitle: Text(loginResponse.yXTASKDESC),
     );
+  }
+
+  Widget getLeading(UserTaskModel loginResponse) {
+    switch (loginResponse.yXGUITY) {
+      case "Stock Change":
+        return Icon(FontAwesomeIcons.warehouse);
+        break;
+      case 'Miscellaneous Receipt':
+        return Icon(FontAwesomeIcons.pallet);
+        break;
+      case 'Sales Delivery':
+        return Icon(FontAwesomeIcons.truckLoading, color: Colors.blueAccent);
+        break;
+      default:
+        return Icon(FontAwesomeIcons.barcode);
+        break;
+    }
   }
 }

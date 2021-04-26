@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
+import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
@@ -355,7 +356,7 @@ Widget getDefaultLoading() {
   );
 }
 
-void navigateToHomeScreen(BuildContext context, List<String> list) {
+void navigateToHomeScreen(BuildContext context, List<UserTaskModel> list) {
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(

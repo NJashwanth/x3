@@ -37,11 +37,12 @@ class Repo {
 
   Future<String> saveConfiguration(
       ConfigurationSettings configurationSettings) async {
-    if (await testConnection(configurationSettings) == "Success") {
+    String response = await testConnection(configurationSettings);
+    if (response == "Success") {
       await _localSource.saveConfiguration(configurationSettings);
       return "Success";
     } else {
-      return "Failure";
+      return response;
     }
   }
 
@@ -53,6 +54,9 @@ class Repo {
     savedSettings.userName = Hive.box("configuration").get("userName");
     savedSettings.port = Hive.box("configuration").get("port");
     savedSettings.server = Hive.box("configuration").get("server");
+    savedSettings.urlType = Hive.box("configuration").get("urlType") ?? "http";
+    savedSettings.url = Hive.box("configuration").get("url") ??
+        "soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC";
     return await httpSource.loginNew(userModel, savedSettings);
   }
 
