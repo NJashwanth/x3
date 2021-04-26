@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/utils/utils.dart';
 
 class SplashScreenUi extends StatefulWidget {
@@ -6,11 +7,56 @@ class SplashScreenUi extends StatefulWidget {
   _SplashScreenUiState createState() => _SplashScreenUiState();
 }
 
-class _SplashScreenUiState extends State<SplashScreenUi> {
+class _SplashScreenUiState extends State<SplashScreenUi>
+    with SingleTickerProviderStateMixin {
+  AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = new AnimationController(
+      vsync: this,
+      duration: new Duration(seconds: 7),
+    );
+
+    animationController.repeat();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: getLoadingStateWidget(),
+      body: animateLogo(),
+    );
+  }
+
+  Widget animateLogo() {
+    return Column(
+      children: [
+        new Container(
+          alignment: Alignment.center,
+          color: Colors.white,
+          child: Hero(
+            tag: "logo",
+            child: new AnimatedBuilder(
+              animation: animationController,
+              child: new Container(
+                height: 150.0,
+                width: 150.0,
+                child: new Image.asset('assets/Logo-CircleX_50px.png'),
+              ),
+              builder: (BuildContext context, Widget _widget) {
+                return new Transform.rotate(
+                  angle: animationController.value * 50,
+                  child: _widget,
+                );
+              },
+            ),
+          ),
+        ),
+        RaisedButton(
+          onPressed: () => navigate(),
+        )
+      ],
     );
   }
 
@@ -35,6 +81,34 @@ class _SplashScreenUiState extends State<SplashScreenUi> {
           ],
         )
       ],
+    );
+  }
+
+  void navigate() {
+    animationController.dispose();
+    Navigator.pushAndRemoveUntil(
+      context,
+      _createRoute(),
+      (route) => false,
+    );
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      transitionDuration: Duration(seconds: 5),
+      pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+        return child;
+      },
     );
   }
 }
