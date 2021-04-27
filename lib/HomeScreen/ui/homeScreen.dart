@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print(userTaskModel.yXGUITY);
     switch (userTaskModel.yXGUITY) {
       case "Stock Change":
-        navigateToStockChangeScreen(context, userTaskModel);
+        // navigateToStockChangeScreen(context, userTaskModel);
         break;
 
       default:

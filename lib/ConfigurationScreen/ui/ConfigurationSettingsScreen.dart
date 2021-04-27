@@ -15,7 +15,7 @@ class ConfigurationSettingsScreen extends StatefulWidget {
 class _ConfigurationSettingsScreenState
     extends State<ConfigurationSettingsScreen> {
   TextEditingController _serverController =
-      new TextEditingController(text: "sagex3v12.germinit.com");
+      new TextEditingController(text: "SAGEX3V12.GERMINIT.COM");
   TextEditingController _portNumberController =
       new TextEditingController(text: "8124");
   TextEditingController _userNameController =
@@ -25,7 +25,7 @@ class _ConfigurationSettingsScreenState
   TextEditingController _folderController =
       new TextEditingController(text: "GITDEV");
   TextEditingController _languageController =
-      new TextEditingController(text: "eng");
+      new TextEditingController(text: "ENG");
   TextEditingController _urlController = new TextEditingController(
       text: "soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC");
 
@@ -106,7 +106,6 @@ class _ConfigurationSettingsScreenState
   }
 
   Row getServerAndPortFields() {
-    print("Type is $type");
     return Row(
       children: [
         Expanded(
@@ -124,7 +123,8 @@ class _ConfigurationSettingsScreenState
               textInputType:
                   TextInputType.numberWithOptions(decimal: true, signed: false),
               currentFocusNode: portFocusNode,
-              nextFocusNode: uRLFocusNode),
+              nextFocusNode: uRLFocusNode,
+              validationType: 2),
         ),
       ],
     );
@@ -159,6 +159,7 @@ class _ConfigurationSettingsScreenState
     if (_formKey.currentState.validate()) {
       ConfigurationSettings configurationSettingsModel =
           getUserEnteredConfigurationsSettings();
+      print(configurationSettingsModel.toString());
       ProgressDialog dialog = getProgressDialog(context);
       await dialog.show();
       String responseFromServer =
@@ -201,7 +202,7 @@ class _ConfigurationSettingsScreenState
 
   ConfigurationSettings getUserEnteredConfigurationsSettings() {
     return new ConfigurationSettings(
-      server: type + _serverController.text,
+      server: type + (_serverController.text.toUpperCase()),
       port: _portNumberController.text,
       userName: _userNameController.text,
       password: _passwordController.text,

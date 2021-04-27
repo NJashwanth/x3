@@ -67,10 +67,25 @@ TextFormField textFormFieldWithoutPadding(
       if (capitalise ?? false) if (controller.text != value.toUpperCase())
         controller.value = controller.value.copyWith(text: value.toUpperCase());
     },
-    validator: (s) => validate(s),
+    validator: (s) =>
+        validationType == null ? validate(s) : getValidation(s, validationType),
     decoration:
         inputDecoration(labelText, hintText, preText, controller, prefixText),
   );
+}
+
+String getValidation(String s, int validationType) {
+  switch (validationType) {
+    case 2:
+      return getPortValidation(s);
+      break;
+    default:
+      return validate(s);
+  }
+}
+
+String getPortValidation(String s) {
+  return s.isNotEmpty && s == '8124' ? null : "Enter Valid Port Number";
 }
 
 InputDecoration inputDecoration(String labelText, String hintText,

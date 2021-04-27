@@ -84,7 +84,7 @@ class HttpSource {
       } catch (e) {}
       maptoReturn = {"isSuccess": true, "message": s};
     }
-
+    print("map to return after parsing is $maptoReturn");
     return maptoReturn;
   }
 
