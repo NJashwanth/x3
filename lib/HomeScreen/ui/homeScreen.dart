@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: getDrawer(context),
       appBar: AppBar(
-        title: Text("HomeScreen"),
+        title: Text("Choose a Task"),
       ),
       body: getBody(),
     );
@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ListTile listTile(UserTaskModel loginResponse) {
     return ListTile(
+      onTap: () => onListTileTapped(),
       leading: getLeading(loginResponse),
       title: Text(loginResponse.yXTASKNAM),
       subtitle: Text(loginResponse.yXTASKDESC),
@@ -74,4 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
     }
   }
+
+  void onListTileTapped() {}
 }

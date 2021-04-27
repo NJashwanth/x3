@@ -15,7 +15,7 @@ class ConfigurationSettingsScreen extends StatefulWidget {
 class _ConfigurationSettingsScreenState
     extends State<ConfigurationSettingsScreen> {
   TextEditingController _serverController =
-      new TextEditingController(text: "http://sagex3v12.germinit.com");
+      new TextEditingController(text: "sagex3v12.germinit.com");
   TextEditingController _portNumberController =
       new TextEditingController(text: "8124");
   TextEditingController _userNameController =
@@ -43,7 +43,7 @@ class _ConfigurationSettingsScreenState
   final FocusNode uRLFocusNode = FocusNode();
 
   final FocusNode lanFocusNode = FocusNode();
-  String type = 'http';
+  String type = 'http://';
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,9 @@ class _ConfigurationSettingsScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Hero(tag: "logo", child: getLogo()),
+                  Container(
+                      height: getScreenHeight(context) * 0.3,
+                      child: Hero(tag: "logo", child: getLogo())),
                   Divider(),
                   getHeading("WEB SERVICES SETTINGS"),
                   getFormFields(),
@@ -104,12 +106,14 @@ class _ConfigurationSettingsScreenState
   }
 
   Row getServerAndPortFields() {
+    print("Type is $type");
     return Row(
       children: [
         Expanded(
-          child: getTextFormField(context, _serverController,
-              "Server : sagex3.yourcompany.com", "Server",
+          child: getTextFormField(
+              context, _serverController, "sagex3.yourcompany.com", "Server",
               capitalise: true,
+              preText: type,
               currentFocusNode: serverFocusNode,
               nextFocusNode: portFocusNode),
         ),
@@ -118,7 +122,7 @@ class _ConfigurationSettingsScreenState
               context, _portNumberController, "Port : 8124", "Port",
               textInputFormatter: FilteringTextInputFormatter.digitsOnly,
               textInputType:
-                  TextInputType.numberWithOptions(decimal: true, signed: false),
+              TextInputType.numberWithOptions(decimal: true, signed: false),
               currentFocusNode: portFocusNode,
               nextFocusNode: uRLFocusNode),
         ),
@@ -197,14 +201,14 @@ class _ConfigurationSettingsScreenState
 
   ConfigurationSettings getUserEnteredConfigurationsSettings() {
     return new ConfigurationSettings(
-        server: _serverController.text,
-        port: _portNumberController.text,
-        userName: _userNameController.text,
-        password: _passwordController.text,
-        folder: _folderController.text,
-        language: _languageController.text,
-        url: _urlController.text,
-        urlType: type);
+      server: type + _serverController.text,
+      port: _portNumberController.text,
+      userName: _userNameController.text,
+      password: _passwordController.text,
+      folder: _folderController.text,
+      language: _languageController.text,
+      url: _urlController.text,
+    );
   }
 
   Widget getRadioButtons() {
@@ -221,7 +225,7 @@ class _ConfigurationSettingsScreenState
             });
           },
           groupValue: type,
-          value: 'http',
+          value: 'http://',
         ),
         Text(
           'Http ',
@@ -234,7 +238,7 @@ class _ConfigurationSettingsScreenState
             });
           },
           groupValue: type,
-          value: 'https',
+          value: 'https://',
         ),
         Text(
           'Https ',

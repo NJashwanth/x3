@@ -45,7 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Hero(tag: "logo", child: getLogo()),
+            Container(
+                height: getScreenHeight(context) * 0.3,
+                child: Hero(tag: "logo", child: getLogo())),
             Divider(),
             getHeading("LOGIN"),
             getTextFormField(

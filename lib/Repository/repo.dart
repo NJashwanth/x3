@@ -54,7 +54,6 @@ class Repo {
     savedSettings.userName = Hive.box("configuration").get("userName");
     savedSettings.port = Hive.box("configuration").get("port");
     savedSettings.server = Hive.box("configuration").get("server");
-    savedSettings.urlType = Hive.box("configuration").get("urlType") ?? "http";
     savedSettings.url = Hive.box("configuration").get("url") ??
         "soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC";
     return await httpSource.loginNew(userModel, savedSettings);

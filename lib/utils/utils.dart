@@ -18,7 +18,8 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
     int validationType,
     TextInputFormatter textInputFormatter,
     FocusNode currentFocusNode,
-    FocusNode nextFocusNode}) {
+    FocusNode nextFocusNode,
+    String prefixText}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: textFormFieldWithoutPadding(context, controller, textInputType,
@@ -27,7 +28,8 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
         validationType: validationType,
         textInputFormatter: textInputFormatter,
         currentFocusNode: currentFocusNode,
-        nextFocusNode: nextFocusNode),
+        nextFocusNode: nextFocusNode,
+        prefixText: prefixText),
   );
 }
 
@@ -43,7 +45,8 @@ TextFormField textFormFieldWithoutPadding(
     int validationType,
     TextInputFormatter textInputFormatter,
     FocusNode currentFocusNode,
-    FocusNode nextFocusNode}) {
+    FocusNode nextFocusNode,
+    String prefixText}) {
   return TextFormField(
     focusNode: currentFocusNode != null ? currentFocusNode : null,
     onFieldSubmitted: (term) {
@@ -63,18 +66,20 @@ TextFormField textFormFieldWithoutPadding(
         controller.value = controller.value.copyWith(text: value.toUpperCase());
     },
     validator: (s) => validate(s),
-    decoration: inputDecoration(labelText, hintText, preText, controller),
+    decoration:
+        inputDecoration(labelText, hintText, preText, controller, prefixText),
   );
 }
 
 InputDecoration inputDecoration(String labelText, String hintText,
-    String preText, TextEditingController controller) {
+    String preText, TextEditingController controller, String prefixText) {
   return InputDecoration(
       labelText: labelText,
       hintText: hintText,
       prefix: Text(
         preText ?? "",
       ),
+      prefixText: prefixText ?? null,
       suffixIcon: inkWell(controller));
 }
 
@@ -143,9 +148,7 @@ Widget getButtonData(IconData iconData, String title, Color color) {
 }
 
 Widget getLogo() {
-  return Container(
-    child: Image.asset("assets/LocationManagementSplash.png"),
-  );
+  return Image.asset("assets/LocationManagementSplash.png");
 }
 
 Widget getHeading(String text) {
@@ -386,6 +389,16 @@ void navigateToConfigurationSettingsScreen(BuildContext context) {
       ));
 }
 
+void initialNavigateToConfigurationSettingsScreen(BuildContext context) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => ConfigurationSettingsScreen(),
+    ),
+    (route) => false,
+  );
+}
+
 Widget getNoDataWidget() {
   return Center(
     child: Text("No Data"),
@@ -421,4 +434,8 @@ ProgressDialog getProgressDialog(BuildContext context) {
       backgroundColor: Colors.white,
     ),
   );
+}
+
+double getScreenHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
 }

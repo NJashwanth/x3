@@ -28,27 +28,31 @@ class _SplashScreenState extends State<SplashScreen> {
     return getLoadingStateWidget();
   }
 
-  Column getLoadingStateWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Hero(tag: "logo", child: getLogo()),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Checking Configuration",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: CircularProgressIndicator(),
-            ),
-          ],
-        )
-      ],
+  Widget getLoadingStateWidget() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+              height: getScreenHeight(context) * 0.3,
+              child: Hero(tag: "logo", child: getLogo())),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Checking Configuration",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: CircularProgressIndicator(),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -67,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void onStateChange(LoginState event) {
     switch (event.lState) {
       case LState.NEW:
-        navigateToConfigurationSettingsScreen(context);
+        initialNavigateToConfigurationSettingsScreen(context);
         break;
       case LState.SETTINGS_CONFIGURED:
         navigateToLoginScreen(context);
