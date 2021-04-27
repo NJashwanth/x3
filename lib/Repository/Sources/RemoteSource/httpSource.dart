@@ -35,7 +35,8 @@ class HttpSource {
 
   Future<void> method() async {}
 
-  String parseResponse(String responseStream) {
+  Map<String, dynamic> parseResponse(String responseStream) {
+    Map<String, dynamic> maptoReturn = new Map();
     print("Response start = ");
 
     print(responseStream);
@@ -65,11 +66,26 @@ class HttpSource {
 
     String s = json["__cdata"];
     print("c data = $s");
-    try {
-      s = s.replaceAll("\\n", "");
-      s = s.replaceAll("\\t", "");
-    } catch (e) {}
-    return s;
+    if (s == null) {
+      Map<dynamic, dynamic> errorJson = jsonDecode(myTransformer.toGData());
+      errorJson = errorJson["soapenv\$Envelope"];
+      // (xmlns, xmlns$soapenv, xmlns$xsd, xmlns$xsi, ..., xmlns$wss, soapenv$Body)
+      errorJson = errorJson["soapenv\$Body"];
+      errorJson = errorJson['multiRef'];
+      errorJson = errorJson['message'];
+      String s1 = errorJson["\$t"];
+      s1 = s1.replaceAll("\'", "");
+      s1 = s1.replaceAll("\\", "");
+      maptoReturn = {"isSuccess": false, "message": s1};
+    } else {
+      try {
+        s = s.replaceAll("\\n", "");
+        s = s.replaceAll("\\t", "");
+      } catch (e) {}
+      maptoReturn = {"isSuccess": true, "message": s};
+    }
+
+    return maptoReturn;
   }
 
   Future<LoginResponse> loginNew(
@@ -91,23 +107,28 @@ class HttpSource {
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
         String responseStream = await response.stream.bytesToString();
-        String s = parseResponse(responseStream);
-        print("S = " + s);
-        Map<dynamic, dynamic> map = jsonDecode(s);
+        Map<String, dynamic> dataAfterParsing = parseResponse(responseStream);
+        String s = dataAfterParsing['message'];
+        if (dataAfterParsing['isSuccess']) {
+          Map<dynamic, dynamic> map = jsonDecode(s);
 
-        List<UserTaskModel> mapToReturn = new List();
-        List listFromResponse = map["GRP2"];
-        listFromResponse.forEach((element) {
-          mapToReturn.add(UserTaskModel.fromJson(element));
-        });
-        print("Users Task Length is " + mapToReturn.length.toString());
-        return new LoginResponse(true, mapToReturn);
+          List<UserTaskModel> mapToReturn = new List();
+          List listFromResponse = map["GRP2"];
+          listFromResponse.forEach((element) {
+            mapToReturn.add(UserTaskModel.fromJson(element));
+          });
+          print("Users Task Length is " + mapToReturn.length.toString());
+          return new LoginResponse(true, mapToReturn);
+        } else {
+          return new LoginResponse(false, null, failureReason: s);
+        }
       } else {
-        return new LoginResponse(false, null);
+        return new LoginResponse(false, null,
+            failureReason: response.reasonPhrase);
       }
     } catch (e) {
       print("Exception " + e.toString());
-      return new LoginResponse(false, null);
+      return new LoginResponse(false, null, failureReason: e);
     }
   }
 
@@ -130,16 +151,20 @@ class HttpSource {
           await request.send().timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         String responseStream = await response.stream.bytesToString();
-        String s = parseResponse(responseStream);
-        Map<dynamic, dynamic> json = jsonDecode(s);
-        return json["GRP1"]["YXSTATUS"];
+        Map<String, dynamic> dataAfterParsing = parseResponse(responseStream);
+        String s = dataAfterParsing['message'];
+        if (dataAfterParsing['isSuccess']) {
+          Map<dynamic, dynamic> json = jsonDecode(s);
+          return json["GRP1"]["YXSTATUS"];
+        } else
+          return s;
       } else {
         print("Error " + response.reasonPhrase);
-        return response.reasonPhrase;
+        return response.stream.bytesToString();
       }
     } catch (e) {
       print("Exception " + e.toString());
-      return "Internal Error";
+      return e.toString();
     }
   }
 }

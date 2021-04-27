@@ -92,7 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (responseFromServer.isSuccess)
         navigateToHomeScreen(context, responseFromServer.grp2);
       else
-        showErrorMessageInSnackBar(context, "Error", _scaffoldKey);
+        showErrorMessageInSnackBar(
+            context, responseFromServer.failureReason, _scaffoldKey);
     }
   }
 

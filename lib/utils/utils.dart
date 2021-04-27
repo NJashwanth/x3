@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:x3/BarcodeScanScreen/ui/BarcodeScannerScreen.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
@@ -386,6 +387,15 @@ void navigateToConfigurationSettingsScreen(BuildContext context) {
       context,
       MaterialPageRoute(
         builder: (context) => ConfigurationSettingsScreen(),
+      ));
+}
+
+void navigateToBarCodeScannerScreen(
+    BuildContext context, UserTaskModel userTaskModel) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BarCodeScannerScreen(userTaskModel),
       ));
 }
 

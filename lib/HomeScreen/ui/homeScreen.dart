@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ListTile listTile(UserTaskModel loginResponse) {
     return ListTile(
-      onTap: () => onListTileTapped(),
+      onTap: () => onListTileTapped(loginResponse),
       leading: getLeading(loginResponse),
       title: Text(loginResponse.yXTASKNAM),
       subtitle: Text(loginResponse.yXTASKDESC),
@@ -76,5 +76,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void onListTileTapped() {}
+  void onListTileTapped(UserTaskModel userTaskModel) {
+    print(userTaskModel.yXGUITY);
+    switch (userTaskModel.yXGUITY) {
+      case "Stock Change":
+        break;
+
+      default:
+        navigateToBarCodeScannerScreen(context, userTaskModel);
+        break;
+    }
+  }
 }

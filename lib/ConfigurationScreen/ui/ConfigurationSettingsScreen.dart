@@ -122,7 +122,7 @@ class _ConfigurationSettingsScreenState
               context, _portNumberController, "Port : 8124", "Port",
               textInputFormatter: FilteringTextInputFormatter.digitsOnly,
               textInputType:
-              TextInputType.numberWithOptions(decimal: true, signed: false),
+                  TextInputType.numberWithOptions(decimal: true, signed: false),
               currentFocusNode: portFocusNode,
               nextFocusNode: uRLFocusNode),
         ),
