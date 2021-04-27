@@ -9,6 +9,7 @@ import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
+import 'package:x3/StockChangeScreen/ui/stockExchangeScreen.dart';
 
 Widget getTextFormField(BuildContext context, TextEditingController controller,
     String hintText, String labelText,
@@ -448,4 +449,13 @@ ProgressDialog getProgressDialog(BuildContext context) {
 
 double getScreenHeight(BuildContext context) {
   return MediaQuery.of(context).size.height;
+}
+
+void navigateToStockChangeScreen(
+    BuildContext context, UserTaskModel userTaskModel) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StockExchangeScreen(userTaskModel),
+      ));
 }

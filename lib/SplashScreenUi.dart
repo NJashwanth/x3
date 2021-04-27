@@ -98,16 +98,14 @@ class _SplashScreenUiState extends State<SplashScreenUi>
       transitionDuration: Duration(seconds: 5),
       pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
+        var begin = Offset(0.0, 0.0);
         var end = Offset.zero;
-        var curve = Curves.ease;
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var curve = Curves.easeInCirc;
+        var tween = Tween(begin: begin, end: end);
         return SlideTransition(
           position: animation.drive(tween),
           child: child,
         );
-        return child;
       },
     );
   }
