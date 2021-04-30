@@ -110,24 +110,25 @@ class _ConfigurationSettingsScreenState
       children: [
         Expanded(
           child: getTextFormField(
-              context, _serverController, "sagex3.yourcompany.com", "Server",
-              capitalise: true,
-              preText: type,
-              currentFocusNode: serverFocusNode,
-              nextFocusNode: portFocusNode),
+            context,
+            _serverController,
+            "sagex3.yourcompany.com",
+            "Server",
+            capitalise: true,
+            preText: type,
+            currentFocusNode: serverFocusNode,
+            nextFocusNode: portFocusNode,
+          ),
         ),
         Expanded(
           child: getTextFormField(
-            context,
-            _portNumberController,
-            "Port : 8124",
-            "Port",
-            textInputFormatter: FilteringTextInputFormatter.digitsOnly,
-            textInputType:
-                TextInputType.numberWithOptions(decimal: true, signed: false),
-            currentFocusNode: portFocusNode,
-            nextFocusNode: uRLFocusNode,
-          ),
+              context, _portNumberController, "Port : 8124", "Port",
+              textInputFormatter: FilteringTextInputFormatter.digitsOnly,
+              textInputType:
+                  TextInputType.numberWithOptions(decimal: true, signed: false),
+              currentFocusNode: portFocusNode,
+              nextFocusNode: uRLFocusNode,
+              validationType: 2),
         ),
       ],
     );

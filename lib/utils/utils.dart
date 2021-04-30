@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info/package_info.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:x3/BarcodeScanScreen/ui/BarcodeScannerScreen.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
@@ -10,6 +11,7 @@ import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
 import 'package:x3/StockChangeScreen/ui/stockExchangeScreen.dart';
+import 'package:x3/utils/textStyles.dart';
 
 Widget getTextFormField(BuildContext context, TextEditingController controller,
     String hintText, String labelText,
@@ -67,20 +69,21 @@ TextFormField textFormFieldWithoutPadding(
       if (capitalise ?? false) if (controller.text != value.toUpperCase())
         controller.value = controller.value.copyWith(text: value.toUpperCase());
     },
-    validator: (s) =>
-        validationType == null ? validate(s) : getValidation(s, validationType),
+    validator: (s) => validationType == null
+        ? validate(s, labelText)
+        : getValidation(s, validationType, labelText),
     decoration:
         inputDecoration(labelText, hintText, preText, controller, prefixText),
   );
 }
 
-String getValidation(String s, int validationType) {
+String getValidation(String s, int validationType, String labelText) {
   switch (validationType) {
     case 2:
       return getPortValidation(s);
       break;
     default:
-      return validate(s);
+      return validate(s, labelText);
   }
 }
 
@@ -109,8 +112,8 @@ InkWell inkWell(TextEditingController controller) {
       ));
 }
 
-String validate(String s) {
-  return s.isNotEmpty ? null : 'Enter Valid Details';
+String validate(String s, String labelText) {
+  return s.isNotEmpty ? null : 'Enter Valid $labelText';
 }
 
 InputDecorationTheme buildInputDecorationTheme(BuildContext context) {
@@ -175,53 +178,11 @@ Widget getHeading(String text) {
   );
 }
 
-Widget getDrawer(BuildContext context) {
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        Container(
-          height: 100,
-          child: DrawerHeader(
-            child: Row(
-              children: [
-                getCompanyLogo(),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Menu",
-                  style: const TextStyle(
-                    fontSize: 28,
-                    color: Colors.white60,
-                  ),
-                )
-              ],
-            ),
-            decoration: BoxDecoration(color: Colors.red.shade300),
-          ),
-        ),
-        ListTile(
-          trailing: Icon(Icons.arrow_right),
-          title: Text(
-            'X3 Configurations Settings',
-          ),
-          onTap: () => navigateToConfigurationSettingsScreen(context),
-        ),
-        ListTile(
-          trailing: Icon(Icons.arrow_right),
-          title: Text(
-            'About',
-          ),
-          onTap: () => onAboutTapPressed(context),
-        ),
-      ],
-    ),
-  );
-}
-
-void onAboutTapPressed(BuildContext context) {
+Future<void> onAboutTapPressed(BuildContext context) async {
   Navigator.pop(context);
+
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -260,7 +221,7 @@ void onAboutTapPressed(BuildContext context) {
                           softWrap: true,
                         )),
                         Text(
-                          "v2.0.0",
+                          "v${packageInfo.version}",
                           style: Theme.of(context).textTheme.caption,
                         )
                       ],
@@ -354,9 +315,7 @@ Transform getCrossIcon() {
 
 Widget getAppBar(String title) {
   return AppBar(
-    title: Text(
-      title,
-    ),
+    title: Text(title, style: appBarTextStyle),
   );
 }
 
@@ -473,4 +432,38 @@ void navigateToStockChangeScreen(
       MaterialPageRoute(
         builder: (context) => StockExchangeScreen(userTaskModel),
       ));
+}
+
+ListTile buildListTileForDrawer(String title, Function() onTapped) {
+  return ListTile(
+    trailing: Icon(Icons.arrow_right),
+    title: Text(
+      title,
+    ),
+    onTap: onTapped,
+  );
+}
+
+Container getDrawerHeader() {
+  return Container(
+    height: 100,
+    child: DrawerHeader(
+      child: Row(
+        children: [
+          getCompanyLogo(),
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            "Menu",
+            style: const TextStyle(
+              fontSize: 28,
+              color: Colors.white60,
+            ),
+          )
+        ],
+      ),
+      decoration: BoxDecoration(color: Colors.red.shade300),
+    ),
+  );
 }

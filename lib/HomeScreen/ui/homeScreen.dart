@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
+import 'package:x3/utils/DrawerInAppBar.dart';
 import 'package:x3/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: getDrawer(context),
+      drawer: DrawerInAppBar(),
       appBar: AppBar(
         title: Text("Choose a Task"),
       ),
@@ -42,10 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         : ListView.builder(
             itemCount: loginResponse.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: listTile(widget.loginResponse[index]),
-              );
+              return listTile(widget.loginResponse[index]);
             },
           );
   }

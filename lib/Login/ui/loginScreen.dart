@@ -5,6 +5,7 @@ import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/Login/bloc/LoginBloc.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
+import 'package:x3/utils/DrawerInAppBar.dart';
 import 'package:x3/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: getDrawer(context),
+        drawer: DrawerInAppBar(),
         appBar: getAppBar("Login"),
         body: getBody(),
       ),
