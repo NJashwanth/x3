@@ -50,12 +50,17 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  ListTile listTile(UserTaskModel loginResponse) {
-    return ListTile(
-      onTap: () => onListTileTapped(loginResponse),
-      leading: getLeading(loginResponse),
-      title: Text(loginResponse.yXTASKNAM),
-      subtitle: Text(loginResponse.yXTASKDESC),
+  Widget listTile(UserTaskModel loginResponse) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Card(
+        child: ListTile(
+          onTap: () => onListTileTapped(loginResponse),
+          leading: getLeading(loginResponse),
+          title: Text(loginResponse.yXTASKNAM),
+          subtitle: Text(loginResponse.yXTASKDESC),
+        ),
+      ),
     );
   }
 
@@ -80,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print(userTaskModel.yXGUITY);
     switch (userTaskModel.yXGUITY) {
       case "Stock Change":
-        // navigateToStockChangeScreen(context, userTaskModel);
+        navigateToStockChangeScreen(context, userTaskModel);
         break;
 
       default:

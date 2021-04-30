@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
-              height: getScreenHeight(context) * 0.3,
+              height: getScreenHeight(context) * 0.5,
               child: Hero(tag: "logo", child: getLogo())),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
