@@ -16,15 +16,23 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
 
   Widget getDrawer(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
-          getDrawerHeader(),
-          buildListTileForDrawer("X3 Configurations Settings",
-              () => navigateToConfigurationSettingsScreen(context)),
-          buildListTileForDrawer("About", () => onAboutTapPressed(context)),
-          getRadioButtonsForLanguage(),
-          getSliderForTextSizes()
+          Expanded(
+            child: Column(
+              children: [
+                getDrawerHeader(),
+                buildListTileForDrawer("X3 Configurations Settings",
+                    () => navigateToConfigurationSettingsScreen(context)),
+                buildListTileForDrawer(
+                    "About", () => onAboutTapPressed(context)),
+                getRadioButtonsForLanguage(),
+                getSliderForTextSizes(),
+              ],
+            ),
+          ),
+          buildListTileForDrawer(
+              "Logout", () => navigateToLoginScreen(context)),
         ],
       ),
     );
@@ -35,7 +43,7 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
       title: getHeading("Text Size"),
       subtitle: Slider(
         value: _currentSliderValue,
-        min: 1,
+        min: -10,
         max: 10,
         divisions: 10,
         label: _currentSliderValue.round().toString(),
