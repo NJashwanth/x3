@@ -8,6 +8,12 @@ class LocalSource {
 
   BehaviorSubject<String> languageBehaviorSubject = new BehaviorSubject();
 
+  BehaviorSubject<TextConfiguration> _textConfigurationBehaviorSubject =
+      new BehaviorSubject();
+
+  Stream<TextConfiguration> get textConfigurationStream =>
+      _textConfigurationBehaviorSubject.stream;
+
   Stream<String> get languageStream => languageBehaviorSubject.stream;
 
   static getInstance() {
@@ -17,6 +23,10 @@ class LocalSource {
 
   LocalSource._newInstance() {
     openBoxes();
+  }
+
+  void setLanguage(String language) {
+    Hive.box("configuration").put("language", language);
   }
 
   Future openBoxes() async {
@@ -32,13 +42,20 @@ class LocalSource {
     if (languageSelected == null) {
       Hive.box("configuration").put("language", "eng");
       languageBehaviorSubject.add('eng');
+      _textConfigurationBehaviorSubject.add(new TextConfiguration("eng", 0));
     } else if (languageSelected == 'eng') {
       Hive.box("configuration").put("language", "eng");
     } else {
       languageBehaviorSubject.add(languageSelected);
+
+      _textConfigurationBehaviorSubject
+          .add(new TextConfiguration(languageSelected, 0));
     }
     Hive.box("configuration").watch(key: 'language').listen((event) {
       languageBehaviorSubject.add(event.value.toString());
+
+      _textConfigurationBehaviorSubject
+          .add(new TextConfiguration(event.value.toString(), 0));
     });
   }
 
@@ -56,8 +73,12 @@ class LocalSource {
     Hive.box("configuration").put("url", configurationSettings.url);
   }
 
-  Future<Stream<String>> getLanguage() async {
+  Stream<String> getLanguage() {
     return languageStream;
+  }
+
+  Stream<TextConfiguration> getTextConfiguration() {
+    return textConfigurationStream;
   }
 
   Future<ConfigurationSettings> getConfiguration() async {
@@ -71,4 +92,11 @@ class LocalSource {
     savedSettings.server = Hive.box("configuration").get("server");
     return savedSettings;
   }
+}
+
+class TextConfiguration {
+  String language;
+  int incrementer;
+
+  TextConfiguration(this.language, this.incrementer);
 }

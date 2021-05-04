@@ -26,8 +26,16 @@ class Repo {
     }
   }
 
-  Future<Stream<String>> getLanguage() async {
-    return await _localSource.getLanguage();
+  Stream<String> getLanguage() {
+    return _localSource.getLanguage();
+  }
+
+  Stream<TextConfiguration> getTextConfiguration() {
+    return _localSource.getTextConfiguration();
+  }
+
+  void setLanguage(String language) {
+    return _localSource.setLanguage(language);
   }
 
   Future<String> testConnection(
