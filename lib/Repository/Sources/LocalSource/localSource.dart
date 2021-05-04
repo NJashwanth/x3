@@ -5,6 +5,8 @@ import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 
 class LocalSource {
   static LocalSource instance;
+  String languageSelected;
+  int incrementer;
 
   BehaviorSubject<String> languageBehaviorSubject = new BehaviorSubject();
 
@@ -29,6 +31,18 @@ class LocalSource {
     Hive.box("configuration").put("language", language);
   }
 
+  void setIncrementer(int incrementer) {
+    Hive.box("configuration").put("incrementer", incrementer);
+  }
+
+  String getLanguage() {
+    return Hive.box("configuration").get("language");
+  }
+
+  int getIncrementer() {
+    return Hive.box("configuration").get("incrementer");
+  }
+
   Future openBoxes() async {
     print("Open boxes called");
 
@@ -38,25 +52,30 @@ class LocalSource {
     Hive.init(appDocumentDirectory.path);
 
     await Hive.openBox("configuration");
-    String languageSelected = Hive.box("configuration").get("language");
-    if (languageSelected == null) {
-      Hive.box("configuration").put("language", "eng");
-      languageBehaviorSubject.add('eng');
-      _textConfigurationBehaviorSubject.add(new TextConfiguration("eng", 0));
-    } else if (languageSelected == 'eng') {
-      Hive.box("configuration").put("language", "eng");
-    } else {
-      languageBehaviorSubject.add(languageSelected);
 
-      _textConfigurationBehaviorSubject
-          .add(new TextConfiguration(languageSelected, 0));
-    }
+    languageSelected = Hive.box("configuration").get("language");
+    incrementer = Hive.box("configuration").get("incrementer");
+
+    languageSelected = languageSelected == null ? "eng" : languageSelected;
+    incrementer = incrementer == null ? 0 : incrementer;
+
+    Hive.box("configuration").put("language", languageSelected);
+    Hive.box("configuration").put("incrementer", incrementer);
+    _textConfigurationBehaviorSubject
+        .add(new TextConfiguration(languageSelected, incrementer));
     Hive.box("configuration").watch(key: 'language').listen((event) {
-      languageBehaviorSubject.add(event.value.toString());
-
-      _textConfigurationBehaviorSubject
-          .add(new TextConfiguration(event.value.toString(), 0));
+      languageSelected = event.value.toString();
+      updateTextConfigurationStream();
     });
+    Hive.box("configuration").watch(key: 'incrementer').listen((event) {
+      incrementer = int.parse(event.value.toString());
+      updateTextConfigurationStream();
+    });
+  }
+
+  void updateTextConfigurationStream() {
+    _textConfigurationBehaviorSubject
+        .add(new TextConfiguration(languageSelected, incrementer));
   }
 
   Future<void> saveConfiguration(
@@ -71,10 +90,6 @@ class LocalSource {
     Hive.box("configuration").put("language", configurationSettings.language);
     Hive.box("configuration").put("urlType", configurationSettings.urlType);
     Hive.box("configuration").put("url", configurationSettings.url);
-  }
-
-  Stream<String> getLanguage() {
-    return languageStream;
   }
 
   Stream<TextConfiguration> getTextConfiguration() {

@@ -26,10 +26,6 @@ class Repo {
     }
   }
 
-  Stream<String> getLanguage() {
-    return _localSource.getLanguage();
-  }
-
   Stream<TextConfiguration> getTextConfiguration() {
     return _localSource.getTextConfiguration();
   }
@@ -37,6 +33,10 @@ class Repo {
   void setLanguage(String language) {
     print("setLanguage in repo");
     return _localSource.setLanguage(language);
+  }
+
+  void setIncrementer(int incrementer) {
+    return _localSource.setIncrementer(incrementer);
   }
 
   Future<String> testConnection(
@@ -70,5 +70,9 @@ class Repo {
 
   Future<ConfigurationSettings> getConfiguration() {
     return _localSource.getConfiguration();
+  }
+
+  int getIncrementer() {
+    return _localSource.getIncrementer();
   }
 }
