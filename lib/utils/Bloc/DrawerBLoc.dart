@@ -13,4 +13,8 @@ class DrawerBloc {
     print("setLanguage in Drawer Bloc");
     _repo.setLanguage(language);
   }
+
+  void setIncrementer(double value) {
+    _repo.setIncrementer(value.toInt());
+  }
 }

@@ -55,6 +55,7 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
         onChanged: (double value) {
           setState(() {
             _currentSliderValue = value;
+            _bloc.setIncrementer(value);
           });
         },
       ),

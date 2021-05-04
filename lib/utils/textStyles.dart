@@ -29,3 +29,15 @@ const body2TextStyle = TextStyle(
   fontSize: smallTextSize,
   color: Colors.black,
 );
+
+const redButtonTextStyle = TextStyle(
+  fontFamily: fontFamily,
+  fontSize: smallTextSize,
+  color: Colors.red,
+);
+
+const whiteButtonTextStyle = TextStyle(
+  fontFamily: fontFamily,
+  fontSize: smallTextSize,
+  color: Colors.white,
+);

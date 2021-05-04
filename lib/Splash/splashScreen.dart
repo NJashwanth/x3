@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               PText(
                 textKey: TextConstants.CHECKING_CONFIGURATIONS_IN_SPLASH,
-                theme: TextStyle(fontWeight: FontWeight.bold),
+                textType: TextType.body1,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),

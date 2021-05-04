@@ -13,7 +13,6 @@ import 'package:x3/Splash/splashScreen.dart';
 import 'package:x3/StockChangeScreen/ui/stockExchangeScreen.dart';
 import 'package:x3/utils/TextUtils.dart';
 import 'package:x3/utils/textConstants.dart';
-import 'package:x3/utils/textStyles.dart';
 
 Widget getTextFormField(BuildContext context, TextEditingController controller,
     String hintText, String labelText,
@@ -163,9 +162,10 @@ Widget getButtonData(IconData iconData, String title, Color color) {
         Padding(
           padding: const EdgeInsets.all(2.0),
           child: PText(
-            textKey: title,
-            theme: TextStyle(color: color, fontWeight: FontWeight.bold),
-          ),
+              textKey: title,
+              textType: color == Colors.red
+                  ? TextType.redButtonText
+                  : TextType.whiteButtonText),
         )
       ],
     ),
@@ -177,9 +177,7 @@ Widget getLogo() {
 }
 
 Widget getHeading(String text) {
-  return PText(
-      textKey: text,
-      theme: TextStyle(fontWeight: FontWeight.bold, fontSize: 20));
+  return PText(textKey: text, textType: TextType.body1);
 }
 
 Future<void> onAboutTapPressed(BuildContext context) async {
@@ -197,12 +195,14 @@ Future<void> onAboutTapPressed(BuildContext context) async {
                   TextButton(
                     child: PText(
                       textKey: TextConstants.VIEW_LICENSES_IN_DIALOG,
+                      textType: TextType.body2,
                     ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   TextButton(
                     child: PText(
                       textKey: TextConstants.VIEW_LICENSES_IN_DIALOG,
+                      textType: TextType.body2,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -275,19 +275,20 @@ void showDialogForSuccessAndFailureResponse(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-            actions: [
+        actions: [
               TextButton(
                 child: Text("OK"),
                 onPressed: () => Navigator.pop(context),
               )
             ],
-            title: PText(textKey: title),
+            title: PText(textKey: title, textType: TextType.title),
             content: Row(
               children: [
                 widget,
                 Flexible(
                     child: PText(
                   textKey: contentText,
+                  textType: TextType.body1,
                   // softWrap: true,
                 )),
               ],
@@ -324,7 +325,7 @@ Transform getCrossIcon() {
 Widget getAppBar(String textKey) {
   return AppBar(
     title: PText(
-      theme: appBarTextStyle,
+      textType: TextType.appBar,
       textKey: textKey,
     ),
   );
@@ -450,6 +451,7 @@ ListTile buildListTileForDrawer(String title, Function() onTapped) {
     trailing: Icon(Icons.arrow_right),
     title: PText(
       textKey: title,
+      textType: TextType.body2,
     ),
     onTap: onTapped,
   );
