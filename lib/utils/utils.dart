@@ -183,7 +183,7 @@ Widget getHeading(String text) {
 }
 
 Future<void> onAboutTapPressed(BuildContext context) async {
-  Navigator.pop(context);
+  // Navigator.pop(context);
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
@@ -198,7 +198,7 @@ Future<void> onAboutTapPressed(BuildContext context) async {
                     child: PText(
                       textKey: TextConstants.VIEW_LICENSES_IN_DIALOG,
                     ),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
                   TextButton(
                     child: PText(

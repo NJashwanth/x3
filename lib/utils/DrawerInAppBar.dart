@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x3/utils/Bloc/DrawerBLoc.dart';
 import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
 
@@ -9,6 +10,8 @@ class DrawerInAppBar extends StatefulWidget {
 
 class _DrawerInAppBarState extends State<DrawerInAppBar> {
   double _currentSliderValue = 1;
+  DrawerBloc _bloc = DrawerBloc.getInstance();
+  String group = "eng";
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +62,32 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
   }
 
   Widget getRadioButtonsForLanguage() {
-    int group = 0;
     return ListTile(
         title: getHeading(TextConstants.LANGUAGE_HEADING_IN_DRAWER),
         subtitle: Row(
           children: [
-            Radio<int>(onChanged: (value) {}, value: 0, groupValue: group),
+            Radio<String>(
+                onChanged: (value) {
+                  changeCurrentLanguage(value);
+                },
+                value: "eng",
+                groupValue: group),
             Text("English"),
-            Radio<int>(onChanged: (value) {}, value: 1, groupValue: group),
+            Radio<String>(
+                onChanged: (value) {
+                  changeCurrentLanguage(value);
+                },
+                value: 'es',
+                groupValue: group),
             Text("Spanish"),
           ],
         ));
+  }
+
+  void changeCurrentLanguage(String value) {
+    return setState(() {
+      group = value;
+      _bloc.setLanguage(value);
+    });
   }
 }
