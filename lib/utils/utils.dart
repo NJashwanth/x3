@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:recase/recase.dart';
 import 'package:x3/BarcodeScanScreen/ui/BarcodeScannerScreen.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
@@ -66,8 +67,11 @@ TextFormField textFormFieldWithoutPadding(
         : TextCapitalization.none,
     style: textStyle,
     onChanged: (value) {
-      if (capitalise ?? false) if (controller.text != value.toUpperCase())
+      if (capitalise ?? false) if (controller.text != value.toUpperCase()) {
+        // ReCase rc = new ReCase(value);
+        // controller.text = rc.titleCase;
         controller.value = controller.value.copyWith(text: value.toUpperCase());
+      }
     },
     validator: (s) => validationType == null
         ? validate(s, labelText)

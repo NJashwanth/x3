@@ -106,21 +106,15 @@ class _ConfigurationSettingsScreenState
   }
 
   Row getServerAndPortFields() {
-    return Row(
-      children: [
-        Expanded(
+    return Row(children: [
+      Expanded(
           child: getTextFormField(
-            context,
-            _serverController,
-            "sagex3.yourcompany.com",
-            "Server",
-            capitalise: true,
-            preText: type,
-            currentFocusNode: serverFocusNode,
-            nextFocusNode: portFocusNode,
-          ),
-        ),
-        Expanded(
+              context, _serverController, "sagex3.yourcompany.com", "Server",
+              capitalise: true,
+              preText: type,
+              currentFocusNode: serverFocusNode,
+              nextFocusNode: portFocusNode)),
+      Expanded(
           child: getTextFormField(
               context, _portNumberController, "Port : 8124", "Port",
               textInputFormatter: FilteringTextInputFormatter.digitsOnly,
@@ -128,10 +122,8 @@ class _ConfigurationSettingsScreenState
                   TextInputType.numberWithOptions(decimal: true, signed: false),
               currentFocusNode: portFocusNode,
               nextFocusNode: uRLFocusNode,
-              validationType: 2),
-        ),
-      ],
-    );
+              validationType: type == "http://" ? 2 : null))
+    ]);
   }
 
   Widget getButtons() {
