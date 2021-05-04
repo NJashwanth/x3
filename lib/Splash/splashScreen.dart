@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:x3/Splash/Bloc/SplashBloc.dart';
+import 'package:x3/utils/TextUtils.dart';
+import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
 
 import 'model/LoginState.dart';
@@ -41,9 +43,9 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                "Checking Configuration",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              PText(
+                textKey: TextConstants.CHECKING_CONFIGURATIONS_IN_SPLASH,
+                theme: TextStyle(fontWeight: FontWeight.bold),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),

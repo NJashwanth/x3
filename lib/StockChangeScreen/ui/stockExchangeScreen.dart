@@ -13,7 +13,7 @@ class StockExchangeScreen extends StatefulWidget {
 class _StockExchangeScreenState extends State<StockExchangeScreen> {
   TextEditingController _documentNumberController = new TextEditingController();
   TextEditingController _scanItemBarCodeController =
-  new TextEditingController();
+      new TextEditingController();
   TextEditingController _scanLocationController = new TextEditingController();
   UserTaskModel userTaskModel;
 

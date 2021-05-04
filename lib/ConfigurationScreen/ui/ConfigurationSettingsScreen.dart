@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:x3/ConfigurationScreen/bloc/ConfigurationSettingsBloc.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
+import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
 
 class ConfigurationSettingsScreen extends StatefulWidget {
@@ -49,7 +50,7 @@ class _ConfigurationSettingsScreenState
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: getAppBar("Configurations Settings"),
+        appBar: getAppBar(TextConstants.CONFIGURATION_APPBAR_TITLE),
         key: _scaffoldKey,
         body: getBody(),
       ),
@@ -70,7 +71,7 @@ class _ConfigurationSettingsScreenState
                       height: getScreenHeight(context) * 0.3,
                       child: Hero(tag: "logo", child: getLogo())),
                   Divider(),
-                  getHeading("WEB SERVICES SETTINGS"),
+                  getHeading(TextConstants.WEBSERVICES_TEXT),
                   getFormFields(),
                 ],
               ),
@@ -142,13 +143,15 @@ class _ConfigurationSettingsScreenState
   Widget getTestConnectionButton() {
     return getOutLineButton(
         onTestConfigurationsButtonPressed,
-        getButtonData(
-            FontAwesomeIcons.database, "Test Connection", Colors.red));
+        getButtonData(FontAwesomeIcons.database,
+            TextConstants.TEST_CONNECTION_BUTTON_NAME, Colors.red));
   }
 
   Widget getSaveButton() {
-    return getFlatButton(onSaveButtonPressed,
-        getButtonData(FontAwesomeIcons.save, "Save", Colors.white));
+    return getFlatButton(
+        onSaveButtonPressed,
+        getButtonData(FontAwesomeIcons.save, TextConstants.SAVE_BUTTON_NAME,
+            Colors.white));
   }
 
   Future<void> onTestConfigurationsButtonPressed() async {
@@ -170,13 +173,16 @@ class _ConfigurationSettingsScreenState
   }
 
   void failureDialog() {
-    return showDialogForSuccessAndFailureResponse(
-        context, "Error", getFailureText(), getCrossIcon());
+    return showDialogForSuccessAndFailureResponse(context,
+        TextConstants.FAILURE_TEXT_IN_DIALOG, getFailureText(), getCrossIcon());
   }
 
   void successDialog() {
     return showDialogForSuccessAndFailureResponse(
-        context, "Success", getSuccessText(), getSuccessIcon());
+        context,
+        TextConstants.SUCCESS_TEXT_IN_DIALOG,
+        getSuccessText(),
+        getSuccessIcon());
   }
 
   Future<void> onSaveButtonPressed() async {

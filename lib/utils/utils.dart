@@ -12,6 +12,7 @@ import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
 import 'package:x3/StockChangeScreen/ui/stockExchangeScreen.dart';
 import 'package:x3/utils/TextUtils.dart';
+import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/textStyles.dart';
 
 Widget getTextFormField(BuildContext context, TextEditingController controller,
@@ -161,9 +162,9 @@ Widget getButtonData(IconData iconData, String title, Color color) {
         ),
         Padding(
           padding: const EdgeInsets.all(2.0),
-          child: Text(
-            title,
-            style: TextStyle(color: color, fontWeight: FontWeight.bold),
+          child: PText(
+            textKey: title,
+            theme: TextStyle(color: color, fontWeight: FontWeight.bold),
           ),
         )
       ],
@@ -176,10 +177,9 @@ Widget getLogo() {
 }
 
 Widget getHeading(String text) {
-  return Text(
-    text,
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-  );
+  return PText(
+      textKey: text,
+      theme: TextStyle(fontWeight: FontWeight.bold, fontSize: 20));
 }
 
 Future<void> onAboutTapPressed(BuildContext context) async {
@@ -195,11 +195,15 @@ Future<void> onAboutTapPressed(BuildContext context) async {
               ButtonBar(
                 children: [
                   TextButton(
-                    child: Text("VIEW LICENSES"),
+                    child: PText(
+                      textKey: TextConstants.VIEW_LICENSES_IN_DIALOG,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                   TextButton(
-                    child: Text("CLOSE"),
+                    child: PText(
+                      textKey: TextConstants.VIEW_LICENSES_IN_DIALOG,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -271,13 +275,13 @@ void showDialogForSuccessAndFailureResponse(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-            actions: [
+        actions: [
               TextButton(
                 child: Text("OK"),
                 onPressed: () => Navigator.pop(context),
               )
             ],
-            title: Text(title),
+            title: PText(textKey: title),
             content: Row(
               children: [
                 widget,
@@ -317,11 +321,11 @@ Transform getCrossIcon() {
       ));
 }
 
-Widget getAppBar(String title) {
+Widget getAppBar(String textKey) {
   return AppBar(
     title: PText(
       theme: appBarTextStyle,
-      textKey: 'LOGINSCREEN_APPBAR_TITLE',
+      textKey: textKey,
     ),
   );
 }
@@ -444,8 +448,8 @@ void navigateToStockChangeScreen(
 ListTile buildListTileForDrawer(String title, Function() onTapped) {
   return ListTile(
     trailing: Icon(Icons.arrow_right),
-    title: Text(
-      title,
+    title: PText(
+      textKey: title,
     ),
     onTap: onTapped,
   );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
 
 class DrawerInAppBar extends StatefulWidget {
@@ -22,17 +23,18 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
             child: Column(
               children: [
                 getDrawerHeader(),
-                buildListTileForDrawer("X3 Configurations Settings",
-                    () => navigateToConfigurationSettingsScreen(context)),
                 buildListTileForDrawer(
-                    "About", () => onAboutTapPressed(context)),
+                    TextConstants.CONFIGURATION_SETTINGS_IN_DRAWER,
+                    () => navigateToConfigurationSettingsScreen(context)),
+                buildListTileForDrawer(TextConstants.ABOUT_IN_DRAWER,
+                    () => onAboutTapPressed(context)),
                 getRadioButtonsForLanguage(),
                 getSliderForTextSizes(),
               ],
             ),
           ),
-          buildListTileForDrawer(
-              "Logout", () => navigateToLoginScreen(context)),
+          buildListTileForDrawer(TextConstants.LOGOUT_IN_DRAWER,
+              () => navigateToLoginScreen(context)),
         ],
       ),
     );
@@ -40,7 +42,7 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
 
   Widget getSliderForTextSizes() {
     return ListTile(
-      title: getHeading("Text Size"),
+      title: getHeading(TextConstants.TEXT_SIZE_HEADING_IN_DRAWER),
       subtitle: Slider(
         value: _currentSliderValue,
         min: -10,
@@ -59,7 +61,7 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
   Widget getRadioButtonsForLanguage() {
     int group = 0;
     return ListTile(
-        title: getHeading("Language"),
+        title: getHeading(TextConstants.LANGUAGE_HEADING_IN_DRAWER),
         subtitle: Row(
           children: [
             Radio<int>(onChanged: (value) {}, value: 0, groupValue: group),

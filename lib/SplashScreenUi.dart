@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
+import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
 
 class SplashScreenUi extends StatefulWidget {
@@ -71,7 +72,7 @@ class _SplashScreenUiState extends State<SplashScreenUi>
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Checking Configuration",
+              TextConstants.CHECKING_CONFIGURATIONS_IN_SPLASH,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Padding(

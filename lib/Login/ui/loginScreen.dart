@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/Login/bloc/LoginBloc.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
 import 'package:x3/utils/DrawerInAppBar.dart';
+import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -33,7 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: DrawerInAppBar(),
-        appBar: getAppBar("Login"),
+        appBar: getAppBar(
+          TextConstants.LOGINSCREEN_APPBAR_TITLE,
+        ),
         body: getBody(),
       ),
     );
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: getScreenHeight(context) * 0.3,
                 child: Hero(tag: "logo", child: getLogo())),
             Divider(),
-            getHeading("LOGIN"),
+            getHeading(TextConstants.LOGIN_TEXT),
             getTextFormField(
                 context, _userNameController, "Username", "Username",
                 currentFocusNode: userNameFocusNode,
@@ -75,7 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 150,
           height: 80,
           color: Colors.red,
-          child: getButtonData(FontAwesomeIcons.user, "Login", Colors.white),
+          child: getButtonData(FontAwesomeIcons.user,
+              TextConstants.LOGIN_BUTTON_NAME, Colors.white),
         ),
       ),
     );
@@ -96,23 +99,5 @@ class _LoginScreenState extends State<LoginScreen> {
         showErrorMessageInSnackBar(
             context, responseFromServer.failureReason, _scaffoldKey);
     }
-  }
-
-  Widget getActions() {
-    return TextButton(
-      child: Text(
-        "Configure Settings",
-        style: TextStyle(color: Colors.white),
-      ),
-      onPressed: () => onPressed(),
-    );
-  }
-
-  onPressed() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ConfigurationSettingsScreen(),
-        ));
   }
 }
