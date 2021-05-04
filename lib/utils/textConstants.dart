@@ -24,6 +24,10 @@ class TextConstants {
   static const LOGIN_BUTTON_NAME = "LOGIN_BUTTON_NAME";
   static const SUCCESS_TEXT_IN_DIALOG = "SUCCESS_TEXT_IN_DIALOG";
   static const FAILURE_TEXT_IN_DIALOG = "FAILURE_TEXT_IN_DIALOG";
+  static const SUCCESS_CONTENT_TEXT_IN_DIALOG =
+      "SUCCESS_CONTENT_TEXT_IN_DIALOG";
+  static const FAILURE_CONTENT_TEXT_IN_DIALOG =
+      "FAILURE_CONTENT_TEXT_IN_DIALOG";
 
   Map<String, String> texts = new Map();
 
@@ -56,6 +60,10 @@ class TextConstants {
     texts['$LOGIN_BUTTON_NAME-eng'] = "Login";
     texts['$SUCCESS_TEXT_IN_DIALOG-eng'] = "Success";
     texts['$FAILURE_TEXT_IN_DIALOG-eng'] = "Error";
+    texts['$SUCCESS_CONTENT_TEXT_IN_DIALOG-eng'] =
+        "You've successfully connected to Sage X3. If you would like to use these credentials, please press the Save button";
+    texts['$FAILURE_CONTENT_TEXT_IN_DIALOG-eng'] =
+        "The server has report an undefined error. The most likely cause is an incorrect Folder and/or Language value in the application setup. Please contact your administrator";
   }
 
   Future<bool> load() async {

@@ -286,9 +286,9 @@ void showDialogForSuccessAndFailureResponse(
               children: [
                 widget,
                 Flexible(
-                    child: Text(
-                  contentText,
-                  softWrap: true,
+                    child: PText(
+                  textKey: contentText,
+                  // softWrap: true,
                 )),
               ],
             ),
@@ -296,11 +296,11 @@ void showDialogForSuccessAndFailureResponse(
 }
 
 String getSuccessText() {
-  return "You've successfully connected to Sage X3. If you would like to use these credentials, please press the Save button";
+  return TextConstants.SUCCESS_CONTENT_TEXT_IN_DIALOG;
 }
 
 String getFailureText() {
-  return "The server has report an undefined error. The most likely cause is an incorrect Folder and/or Language value in the application setup. Please contact your administrator";
+  return TextConstants.FAILURE_CONTENT_TEXT_IN_DIALOG;
 }
 
 Icon getSuccessIcon() {
