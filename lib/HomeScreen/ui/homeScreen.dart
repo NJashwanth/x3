@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/utils/DrawerInAppBar.dart';
+import 'package:x3/utils/TextUtils.dart';
+import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: DrawerInAppBar(),
       appBar: AppBar(
-        title: Text("Choose a Task"),
+        title: PText(
+          textKey: TextConstants.HOMESCREEN_APPBAR_TITLE,
+        ),
       ),
       body: getBody(),
     );

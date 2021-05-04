@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:recase/recase.dart';
 import 'package:x3/BarcodeScanScreen/ui/BarcodeScannerScreen.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
@@ -12,6 +11,7 @@ import 'package:x3/HomeScreen/ui/homeScreen.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
 import 'package:x3/Splash/splashScreen.dart';
 import 'package:x3/StockChangeScreen/ui/stockExchangeScreen.dart';
+import 'package:x3/utils/TextUtils.dart';
 import 'package:x3/utils/textStyles.dart';
 
 Widget getTextFormField(BuildContext context, TextEditingController controller,
@@ -319,7 +319,10 @@ Transform getCrossIcon() {
 
 Widget getAppBar(String title) {
   return AppBar(
-    title: Text(title, style: appBarTextStyle),
+    title: PText(
+      theme: appBarTextStyle,
+      textKey: 'LOGINSCREEN_APPBAR_TITLE',
+    ),
   );
 }
 

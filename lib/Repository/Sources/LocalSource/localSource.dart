@@ -1,9 +1,14 @@
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:rxdart/rxdart.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 
 class LocalSource {
   static LocalSource instance;
+
+  BehaviorSubject<String> languageBehaviorSubject = new BehaviorSubject();
+
+  Stream<String> get languageStream => languageBehaviorSubject.stream;
 
   static getInstance() {
     if (instance == null) instance = LocalSource._newInstance();
@@ -24,8 +29,17 @@ class LocalSource {
 
     await Hive.openBox("configuration");
     String languageSelected = Hive.box("configuration").get("language");
-    if (languageSelected == null)
-      Hive.box("configuration").put("language", "ENG");
+    if (languageSelected == null) {
+      Hive.box("configuration").put("language", "eng");
+      languageBehaviorSubject.add('eng');
+    } else if (languageSelected == 'eng') {
+      Hive.box("configuration").put("language", "eng");
+    } else {
+      languageBehaviorSubject.add(languageSelected);
+    }
+    Hive.box("configuration").watch(key: 'language').listen((event) {
+      languageBehaviorSubject.add(event.value.toString());
+    });
   }
 
   Future<void> saveConfiguration(
@@ -43,10 +57,7 @@ class LocalSource {
   }
 
   Future<Stream<String>> getLanguage() async {
-    await Hive.openBox("configuration");
-    return Hive.box("configuration").watch(key: "language").map((event) {
-      return event.value.toString();
-    });
+    return languageStream;
   }
 
   Future<ConfigurationSettings> getConfiguration() async {
