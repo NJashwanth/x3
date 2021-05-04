@@ -275,7 +275,7 @@ void showDialogForSuccessAndFailureResponse(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        actions: [
+            actions: [
               TextButton(
                 child: Text("OK"),
                 onPressed: () => Navigator.pop(context),
