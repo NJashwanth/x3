@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget listTile(UserTaskModel loginResponse) {
+    print("Login Response" + loginResponse.yXGUITY.toString());
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(

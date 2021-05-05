@@ -123,11 +123,11 @@ class HttpSource {
           List<UserTaskModel> reducedList = new List();
 
           mapToReturn.reduce((value, element) {
-            if (value.yXTASKORD != element.yXTASKORD &&
-                value.yXGUITY != element.yXGUITY &&
-                value.yXAPP != element.yXAPP &&
-                value.yXTASKDESC != element.yXTASKDESC &&
-                value.yXTASKNAM != element.yXTASKNAM &&
+            if (value.yXGUITY != element.yXGUITY ||
+                value.yXTASKORD != element.yXTASKORD ||
+                value.yXAPP != element.yXAPP ||
+                value.yXTASKDESC != element.yXTASKDESC ||
+                value.yXTASKNAM != element.yXTASKNAM ||
                 value.yXTASKNUM0 != element.yXTASKNUM0) reducedList.add(value);
             return element;
           });
