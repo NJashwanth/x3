@@ -11,7 +11,7 @@ class DrawerInAppBar extends StatefulWidget {
 class _DrawerInAppBarState extends State<DrawerInAppBar> {
   double _currentSliderValue = 1;
   DrawerBloc _bloc = DrawerBloc.getInstance();
-  String group = "eng";
+  String group = "ENG";
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
                 onChanged: (value) {
                   changeCurrentLanguage(value);
                 },
-                value: "eng",
+                value: "ENG",
                 groupValue: group),
             Text("English"),
             Radio<String>(

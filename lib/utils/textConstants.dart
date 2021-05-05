@@ -39,30 +39,30 @@ class TextConstants {
   }
 
   TextConstants() {
-    texts["eng-login"] = "Login";
+    texts["ENG-login"] = "Login";
     texts["fn-login"] = "LoginF";
-    texts['$HOMESCREEN_APPBAR_TITLE-eng'] = 'Choose a Task';
-    texts['$LOGINSCREEN_APPBAR_TITLE-eng'] = 'Login';
-    texts['$CONFIGURATION_APPBAR_TITLE-eng'] = "Configurations Settings";
-    texts['$WEBSERVICES_TEXT-eng'] = "WEB SERVICES SETTINGS";
-    texts['$TEXT_SIZE_HEADING_IN_DRAWER-eng'] = "Text Size";
-    texts['$LANGUAGE_HEADING_IN_DRAWER-eng'] = "Language";
-    texts['$LOGIN_TEXT-eng'] = "LOGIN";
-    texts['$VIEW_LICENSES_IN_DIALOG-eng'] = "VIEW LICENSES";
-    texts['$CLOSE_TEXT_IN_DIALOG-eng'] = "CLOSE";
-    texts['$CONFIGURATION_SETTINGS_IN_DRAWER-eng'] =
+    texts['$HOMESCREEN_APPBAR_TITLE-ENG'] = 'Choose a Task';
+    texts['$LOGINSCREEN_APPBAR_TITLE-ENG'] = 'Login';
+    texts['$CONFIGURATION_APPBAR_TITLE-ENG'] = "Configurations Settings";
+    texts['$WEBSERVICES_TEXT-ENG'] = "WEB SERVICES SETTINGS";
+    texts['$TEXT_SIZE_HEADING_IN_DRAWER-ENG'] = "Text Size";
+    texts['$LANGUAGE_HEADING_IN_DRAWER-ENG'] = "Language";
+    texts['$LOGIN_TEXT-ENG'] = "LOGIN";
+    texts['$VIEW_LICENSES_IN_DIALOG-ENG'] = "VIEW LICENSES";
+    texts['$CLOSE_TEXT_IN_DIALOG-ENG'] = "CLOSE";
+    texts['$CONFIGURATION_SETTINGS_IN_DRAWER-ENG'] =
         "X3 Configurations Settings";
-    texts['$ABOUT_IN_DRAWER-eng'] = "About";
-    texts['$LOGOUT_IN_DRAWER-eng'] = "Logout";
-    texts['$CHECKING_CONFIGURATIONS_IN_SPLASH-eng'] = "Checking Configuration";
-    texts['$TEST_CONNECTION_BUTTON_NAME-eng'] = "Test Connection";
-    texts['$SAVE_BUTTON_NAME-eng'] = "Save";
-    texts['$LOGIN_BUTTON_NAME-eng'] = "Login";
-    texts['$SUCCESS_TEXT_IN_DIALOG-eng'] = "Success";
-    texts['$FAILURE_TEXT_IN_DIALOG-eng'] = "Error";
-    texts['$SUCCESS_CONTENT_TEXT_IN_DIALOG-eng'] =
+    texts['$ABOUT_IN_DRAWER-ENG'] = "About";
+    texts['$LOGOUT_IN_DRAWER-ENG'] = "Logout";
+    texts['$CHECKING_CONFIGURATIONS_IN_SPLASH-ENG'] = "Checking Configuration";
+    texts['$TEST_CONNECTION_BUTTON_NAME-ENG'] = "Test Connection";
+    texts['$SAVE_BUTTON_NAME-ENG'] = "Save";
+    texts['$LOGIN_BUTTON_NAME-ENG'] = "Login";
+    texts['$SUCCESS_TEXT_IN_DIALOG-ENG'] = "Success";
+    texts['$FAILURE_TEXT_IN_DIALOG-ENG'] = "Error";
+    texts['$SUCCESS_CONTENT_TEXT_IN_DIALOG-ENG'] =
         "You've successfully connected to Sage X3. If you would like to use these credentials, please press the Save button";
-    texts['$FAILURE_CONTENT_TEXT_IN_DIALOG-eng'] =
+    texts['$FAILURE_CONTENT_TEXT_IN_DIALOG-ENG'] =
         "The server has report an undefined error. The most likely cause is an incorrect Folder and/or Language value in the application setup. Please contact your administrator";
   }
 
@@ -86,9 +86,6 @@ class TextConstants {
 
     print("Text Key is $textKey-$language");
     print("Text Key is " + texts.containsKey("$textKey-$language").toString());
-    texts.keys.forEach((element) {
-      print("$element");
-    });
     return texts["$textKey-$language"];
   }
 }

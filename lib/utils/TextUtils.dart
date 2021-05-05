@@ -15,7 +15,7 @@ class PText extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<TextConfiguration>(
       stream: Repo.getInstance().getTextConfiguration(),
-      initialData: new TextConfiguration("eng", 0),
+      initialData: new TextConfiguration("ENG", 0),
       builder: (BuildContext context,
           AsyncSnapshot<TextConfiguration> languageSnapshot) {
         if (languageSnapshot.connectionState == ConnectionState.active)

@@ -56,7 +56,7 @@ class LocalSource {
     languageSelected = Hive.box("configuration").get("language");
     incrementer = Hive.box("configuration").get("incrementer");
 
-    languageSelected = languageSelected == null ? "eng" : languageSelected;
+    languageSelected = languageSelected == null ? "ENG" : languageSelected;
     incrementer = incrementer == null ? 0 : incrementer;
 
     Hive.box("configuration").put("language", languageSelected);
