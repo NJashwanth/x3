@@ -42,6 +42,7 @@ class TextConstants {
     texts["ENG-login"] = "Login";
     texts["fn-login"] = "LoginF";
     texts['$HOMESCREEN_APPBAR_TITLE-ENG'] = 'Choose a Task';
+    texts['$HOMESCREEN_APPBAR_TITLE-fn'] = 'Choose a Task';
     texts['$LOGINSCREEN_APPBAR_TITLE-ENG'] = 'Login';
     texts['$CONFIGURATION_APPBAR_TITLE-ENG'] = "Configurations Settings";
     texts['$WEBSERVICES_TEXT-ENG'] = "WEB SERVICES SETTINGS";
