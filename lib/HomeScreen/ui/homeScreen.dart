@@ -86,9 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
       case "Stock Change":
         navigateToStockChangeScreen(context, userTaskModel);
         break;
-
+      case 'Miscellaneous Receipt':
+        return navigateToMiscellaneousScreen(context, userTaskModel);
+        break;
+      case 'Sales Delivery':
+        return navigateToSalesDeliveryScreen(context, userTaskModel);
+        break;
+      case 'Purchase Order Receipt':
+        return navigateToPurchaseOrderReceiptScreen(context, userTaskModel);
+        break;
+      case 'Inquiry':
+        return navigateToInquiryScreen(context, userTaskModel);
+        break;
+      case 'Unintelligent Barcode':
+        return navigateToBarCodeScannerScreen(context, userTaskModel);
+        break;
       default:
-        navigateToBarCodeScannerScreen(context, userTaskModel);
+        print("Default");
         break;
     }
   }

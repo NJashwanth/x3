@@ -113,12 +113,27 @@ class HttpSource {
           Map<dynamic, dynamic> map = jsonDecode(s);
 
           List<UserTaskModel> mapToReturn = new List();
+
           List listFromResponse = map["GRP2"];
           listFromResponse.forEach((element) {
+            // mapToReturn.add(UserTaskModel.fromJson(element));
             mapToReturn.add(UserTaskModel.fromJson(element));
           });
-          print("Users Task Length is " + mapToReturn.length.toString());
-          return new LoginResponse(true, mapToReturn);
+
+          List<UserTaskModel> reducedList = new List();
+
+          mapToReturn.reduce((value, element) {
+            if (value.yXTASKORD != element.yXTASKORD &&
+                value.yXGUITY != element.yXGUITY &&
+                value.yXAPP != element.yXAPP &&
+                value.yXTASKDESC != element.yXTASKDESC &&
+                value.yXTASKNAM != element.yXTASKNAM &&
+                value.yXTASKNUM0 != element.yXTASKNUM0) reducedList.add(value);
+            return element;
+          });
+          print(reducedList.length);
+
+          return new LoginResponse(true, reducedList);
         } else {
           return new LoginResponse(false, null, failureReason: s);
         }

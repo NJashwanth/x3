@@ -26,7 +26,7 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(userTaskModel.yXTASKNAM),
+      appBar: getAppBar(userTaskModel.yXTASKNAM.toString()),
       body: getBody(),
     );
   }

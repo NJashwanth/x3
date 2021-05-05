@@ -8,7 +8,11 @@ import 'package:x3/BarcodeScanScreen/ui/BarcodeScannerScreen.dart';
 import 'package:x3/ConfigurationScreen/ui/ConfigurationSettingsScreen.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/HomeScreen/ui/homeScreen.dart';
+import 'package:x3/Inquiry/UI/Inquiry.dart';
 import 'package:x3/Login/ui/loginScreen.dart';
+import 'package:x3/Miscellaneous%20Receipt/UI/MiscellaneousReceipt.dart';
+import 'package:x3/PurchaseOrderReceipt/UI/Purchase_Order_Receipt.dart';
+import 'package:x3/SalesDelivery/UI/SalesDelivery.dart';
 import 'package:x3/Splash/splashScreen.dart';
 import 'package:x3/StockChangeScreen/ui/stockExchangeScreen.dart';
 import 'package:x3/utils/TextUtils.dart';
@@ -383,6 +387,42 @@ void navigateToBarCodeScannerScreen(
       context,
       MaterialPageRoute(
         builder: (context) => BarCodeScannerScreen(userTaskModel),
+      ));
+}
+
+void navigateToMiscellaneousScreen(
+    BuildContext context, UserTaskModel userTaskModel) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MiscellaneousReceiptScreen(userTaskModel),
+      ));
+}
+
+void navigateToSalesDeliveryScreen(
+    BuildContext context, UserTaskModel userTaskModel) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SalesDeliveryScreen(userTaskModel),
+      ));
+}
+
+void navigateToPurchaseOrderReceiptScreen(
+    BuildContext context, UserTaskModel userTaskModel) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PurchaseOrderReceipt(userTaskModel),
+      ));
+}
+
+void navigateToInquiryScreen(
+    BuildContext context, UserTaskModel userTaskModel) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => InquiryScreen(userTaskModel),
       ));
 }
 
