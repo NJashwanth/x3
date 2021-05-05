@@ -118,6 +118,7 @@ class HttpSource {
           listFromResponse.forEach((element) {
             // mapToReturn.add(UserTaskModel.fromJson(element));
             mapToReturn.add(UserTaskModel.fromJson(element));
+            UserTaskModel userTaskModel = UserTaskModel.fromJson(element);
           });
 
           List<UserTaskModel> reducedList = new List();
@@ -131,6 +132,8 @@ class HttpSource {
                 value.yXTASKNUM0 != element.yXTASKNUM0) reducedList.add(value);
             return element;
           });
+          reducedList.add(mapToReturn.last);
+
           print(reducedList.length);
 
           return new LoginResponse(true, reducedList);
