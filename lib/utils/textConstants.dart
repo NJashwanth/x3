@@ -32,6 +32,7 @@ class TextConstants {
       "SUCCESS_CONTENT_TEXT_IN_DIALOG";
   static const FAILURE_CONTENT_TEXT_IN_DIALOG =
       "FAILURE_CONTENT_TEXT_IN_DIALOG";
+  static const BARCODE_COUNT_TEXT = "BARCODE_COUNT_TEXT";
 
   Map<String, String> texts = new Map();
 
@@ -71,6 +72,7 @@ class TextConstants {
         "The server has report an undefined error. The most likely cause is an incorrect Folder and/or Language value in the application setup. Please contact your administrator";
     texts['$SEND_BUTTON_NAME-ENG'] = "Send";
     texts['$CLEAR_BUTTON_NAME-ENG'] = "Clear Screen";
+    texts['$BARCODE_COUNT_TEXT-ENG'] = "Barcode Count";
   }
 
   Future<bool> load() async {

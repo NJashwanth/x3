@@ -52,21 +52,8 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
   }
 
   Widget getGridWidget() {
+    //todo
     return Container();
-    /*return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        onSelectAll: (b) => null,
-        columnSpacing: 20,
-        showBottomBorder: true,
-        headingRowColor:
-            MaterialStateColor.resolveWith((states) => Colors.red.shade200),
-        dataRowHeight: 50,
-        dividerThickness: 2,
-        columns: columns,
-        rows: rows,
-      ),
-    );*/
   }
 
   Widget getButtons() {

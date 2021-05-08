@@ -36,6 +36,7 @@ class BarCodeScannerBloc {
 
   Future<int> addDataToServer(List<BarCodeGridModel> barCodeModelList) async {
     print(barCodeModelList.toString());
+    print("Items To Be Sent = ${barCodeModelList.length}");
     return await _repo.sendUBEntries(barCodeModelList);
   }
 
