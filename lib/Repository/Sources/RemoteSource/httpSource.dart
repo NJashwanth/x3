@@ -222,7 +222,7 @@ class HttpSource {
       } else {
         print("null");
 
-        return 8;
+        return -1;
       }
     } else {
       print("Reason phrase " + request.toString());
