@@ -33,9 +33,7 @@ class Repo {
 
   Future<int> sendUBEntries(List<BarCodeGridModel> ubEntries) async {
     ConfigurationSettings settings = await _localSource.getConfiguration();
-    await httpSource.createUB(ubEntries, settings);
-    await Future.delayed(Duration(seconds: 2));
-    return 5;
+    return await httpSource.createUB(ubEntries, settings);
   }
 
   void setLanguage(String language) {

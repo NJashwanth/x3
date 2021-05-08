@@ -206,7 +206,7 @@ class HttpSource {
 
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
-      return 5;
+      return 8;
     } else {
       print(response.reasonPhrase);
       return -1;
