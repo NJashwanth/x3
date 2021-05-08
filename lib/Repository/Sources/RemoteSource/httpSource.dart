@@ -191,24 +191,30 @@ class HttpSource {
       ConfigurationSettings configurationSettings) async {
     var request = http.Request(
         'POST',
-        XMLUtils.constructURL(
-          configurationSettings.server,
-          configurationSettings.port,
-          configurationSettings.url,
-        ));
+        Uri.parse(
+            "http://sagex3v12.germinit.com:8124/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC"));
     UBRequestBody requestBody = new UBRequestBody(ubEntries);
-    request.body =
+    String body =
         '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS">\r\n<soapenv:Header/>\r\n<soapenv:Body>\r\n<wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\r\n<callContext xsi:type="wss:CAdxCallContext">\r\n<codeLang xsi:type="xsd:string">ENG</codeLang>\r\n<poolAlias xsi:type="xsd:string">GITDEV</poolAlias>\r\n<poolId xsi:type="xsd:string"></poolId>\r\n<requestConfig xsi:type="xsd:string">adxwss.beautify=true</requestConfig>\r\n</callContext>\r\n<publicName xsi:type="xsd:string">YXCREATEUB</publicName>\r\n<inputXml xsi:type="xsd:string">\r\n{\r\n${requestBody.toJson()}\r\n}\r\n</inputXml>\r\n</wss:run>\r\n</soapenv:Body>\r\n</soapenv:Envelope>\r\n''';
+    request.body = body;
     request.headers.addAll(headers(
         configurationSettings.userName, configurationSettings.password));
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      String responseStream = await response.stream.bytesToString();
+      final myTransformer = Xml2Json();
+      myTransformer.parse(responseStream);
+      Map<dynamic, dynamic> json = jsonDecode(myTransformer.toGData());
+      json = json["soapenv\$Envelope"];
+      json = json["soapenv\$Body"];
+      json = json["wss\$runResponse"];
+      print(json["runReturn"]);
+
       return 8;
     } else {
-      print(response.reasonPhrase);
+      print("Reason phrase " + request.toString());
       return -1;
     }
   }
@@ -218,10 +224,10 @@ class UBRequestBody {
   // "GRP1":[{"YXSLO":"REG","YXLOC":"MIG","YXLOT":"PIN","YXINTEGRATED":1},{"YXSLO":"5632","YXLOC":"541","YXLOT":"5463","YXINTEGRATED":1}]
   List<BarCodeGridModel> entries = new List();
 
-  UBRequestBody(List<BarCodeGridModel> ubEntries);
+  UBRequestBody(this.entries);
 
   String toJson() {
-    String mapToReturn = "{\"GRP1\":[";
+    String mapToReturn = "\"GRP1\":[";
     int totalEntries = 0;
     entries.forEach((element) {
       if (totalEntries > 0) mapToReturn += ",";
