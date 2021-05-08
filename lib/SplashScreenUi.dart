@@ -54,6 +54,7 @@ class _SplashScreenUiState extends State<SplashScreenUi>
             ),
           ),
         ),
+        // ignore: deprecated_member_use
         RaisedButton(
           onPressed: () => navigate(),
         )
@@ -101,7 +102,7 @@ class _SplashScreenUiState extends State<SplashScreenUi>
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 0.0);
         var end = Offset.zero;
-        var curve = Curves.easeInCirc;
+        // var curve = Curves.easeInCirc;
         var tween = Tween(begin: begin, end: end);
         return SlideTransition(
           position: animation.drive(tween),

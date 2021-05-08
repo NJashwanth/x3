@@ -28,7 +28,8 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
     TextInputFormatter textInputFormatter,
     FocusNode currentFocusNode,
     FocusNode nextFocusNode,
-    String prefixText}) {
+    String prefixText,
+    bool obscureText}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: textFormFieldWithoutPadding(context, controller, textInputType,
@@ -38,7 +39,8 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
         textInputFormatter: textInputFormatter,
         currentFocusNode: currentFocusNode,
         nextFocusNode: nextFocusNode,
-        prefixText: prefixText),
+        prefixText: prefixText,
+        obscureText: obscureText),
   );
 }
 
@@ -55,8 +57,10 @@ TextFormField textFormFieldWithoutPadding(
     TextInputFormatter textInputFormatter,
     FocusNode currentFocusNode,
     FocusNode nextFocusNode,
-    String prefixText}) {
+    String prefixText,
+    bool obscureText}) {
   return TextFormField(
+    obscureText: obscureText ?? false,
     focusNode: currentFocusNode != null ? currentFocusNode : null,
     onFieldSubmitted: (term) {
       if (currentFocusNode != null) currentFocusNode.unfocus();
@@ -81,7 +85,7 @@ TextFormField textFormFieldWithoutPadding(
         ? validate(s, labelText)
         : getValidation(s, validationType, labelText),
     decoration:
-        inputDecoration(labelText, hintText, preText, controller, prefixText),
+    inputDecoration(labelText, hintText, preText, controller, prefixText),
   );
 }
 
@@ -90,9 +94,16 @@ String getValidation(String s, int validationType, String labelText) {
     case 2:
       return getPortValidation(s);
       break;
+    case 3:
+      return noValidation(s);
+      break;
     default:
       return validate(s, labelText);
   }
+}
+
+String noValidation(String s) {
+  return null;
 }
 
 String getPortValidation(String s) {
@@ -265,6 +276,7 @@ Image getCompanyLogo() {
 
 void showErrorMessageInSnackBar(BuildContext context, String message,
     GlobalKey<ScaffoldState> _scaffoldKey) {
+  // ignore: deprecated_member_use
   _scaffoldKey.currentState.showSnackBar(SnackBar(
     content: Text(
       message,
@@ -445,6 +457,7 @@ Widget getNoDataWidget() {
 Widget getFlatButton(void Function() onPressed, Widget child) {
   return Padding(
       padding: const EdgeInsets.all(8.0),
+      // ignore: deprecated_member_use
       child: FlatButton(
           minWidth: 150,
           color: Colors.red,
@@ -455,6 +468,7 @@ Widget getFlatButton(void Function() onPressed, Widget child) {
 Widget getOutLineButton(void Function() onPressed, Widget child) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
+    // ignore: deprecated_member_use
     child: OutlineButton(
         borderSide: BorderSide(color: Colors.red),
         onPressed: onPressed,
@@ -522,19 +536,21 @@ Container getDrawerHeader() {
 }
 
 Widget getRowTextFormFieldAndBarCode(
-    BuildContext context, TextEditingController _controller, String labelText) {
+    BuildContext context,
+    TextEditingController _controller,
+    String labelText,
+    int validationType,
+    void Function() onPressed) {
   return Row(
     children: [
       Expanded(
         flex: 9,
-        child: getTextFormField(context, _controller, labelText, labelText),
+        child: getTextFormField(context, _controller, labelText, labelText,
+            validationType: validationType),
       ),
       Expanded(
         flex: 1,
-        child: IconButton(
-          icon: Icon(Icons.add_circle),
-          onPressed: () {},
-        ),
+        child: IconButton(icon: Icon(Icons.add_circle), onPressed: onPressed),
       )
     ],
   );
@@ -542,16 +558,8 @@ Widget getRowTextFormFieldAndBarCode(
 
 List<DataColumn> getDataRowForBarCodeScannerScreen() {
   return [
-    getDataColumn(Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.check_box),
-        Padding(
-          padding: const EdgeInsets.only(left: 4.0),
-          child: Text("Document"),
-        )
-      ],
-    )),
+    getDataColumn(Icon(Icons.check_box)),
+    getDataColumn(Text("Document")),
     getDataColumn(Text("Barcode")),
     getDataColumn(Text("Location"))
   ];

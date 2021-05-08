@@ -8,6 +8,7 @@ class LocalSource {
   String languageSelected;
   int incrementer;
 
+  // ignore: close_sinks
   BehaviorSubject<String> languageBehaviorSubject = new BehaviorSubject();
 
   BehaviorSubject<TextConfiguration> _textConfigurationBehaviorSubject =

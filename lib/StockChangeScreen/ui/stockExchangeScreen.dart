@@ -42,9 +42,9 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
         getTextFormField(context, _documentNumberController, "Document number",
             "Document number"),
         getRowTextFormFieldAndBarCode(
-            context, _scanItemBarCodeController, "Scan Item Barcode"),
+            context, _scanItemBarCodeController, "Scan Item Barcode", 0, () {}),
         getRowTextFormFieldAndBarCode(
-            context, _scanLocationController, "Scan Location"),
+            context, _scanLocationController, "Scan Location", 3, () {}),
         getGridWidget(),
         getButtons()
       ],

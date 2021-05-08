@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 nextFocusNode: passwordFocusNode),
             getTextFormField(
                 context, _passwordController, "Password", "Password",
-                currentFocusNode: passwordFocusNode),
+                currentFocusNode: passwordFocusNode, obscureText: true),
             getLoginButton(),
           ],
         ),

@@ -113,6 +113,7 @@ class HttpSource {
         if (dataAfterParsing['isSuccess']) {
           Map<dynamic, dynamic> map = jsonDecode(s);
 
+          // ignore: deprecated_member_use
           List<UserTaskModel> mapToReturn = new List();
 
           List listFromResponse = map["GRP2"];
@@ -120,6 +121,7 @@ class HttpSource {
             mapToReturn.add(UserTaskModel.fromJson(element));
           });
 
+          // ignore: deprecated_member_use
           List<UserTaskModel> reducedList = new List();
 
           mapToReturn.reduce((value, element) {
