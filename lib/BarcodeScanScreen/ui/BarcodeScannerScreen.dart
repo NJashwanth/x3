@@ -111,16 +111,21 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
   }
 
   Widget getDocumentNumberField(BuildContext context) {
-    return Row(children: [
-      Expanded(
-        child: getTextFormField(context, _documentNumberController,
-            "Document number", "Document number"),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("Bar Code Count : 0"),
-      )
-    ]);
+    return StreamBuilder<int>(
+        stream: _bloc.numberOfItemsStream,
+        initialData: 0,
+        builder: (context, snapshot) {
+          return Row(children: [
+            Expanded(
+              child: getTextFormField(context, _documentNumberController,
+                  "Document number", "Document number"),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Bar Code Count : ${snapshot.data ?? 0}"),
+            )
+          ]);
+        });
   }
 
   Widget getButtons() {
@@ -155,14 +160,16 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
     _bloc.updateStreamList([]);
   }
 
-  void onSendButtonPressed() {
+  Future<void> onSendButtonPressed() async {
     print("Send Button Pressed");
     if (barCodeModelList != [] && barCodeModelList.isNotEmpty) {
       List<BarCodeGridModel> listToSend = [];
       for (BarCodeGridModel barCodeGridModel in barCodeModelList) {
         if (barCodeGridModel.isChecked) listToSend.add(barCodeGridModel);
       }
-      _bloc.addDataToServer(listToSend);
+      int numberOfItems = await _bloc.addDataToServer(listToSend);
+      print("No of items = $numberOfItems");
+      _bloc.addNoOfItemsToStream(numberOfItems);
     }
   }
 

@@ -1,7 +1,10 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:x3/BarcodeScanScreen/Model/BarcodeScannerGridModel.dart';
+import 'package:x3/Repository/repo.dart';
 
 class BarCodeScannerBloc {
+  Repo _repo = Repo.getInstance();
+
   static BarCodeScannerBloc _instance;
 
   static BarCodeScannerBloc getInstance() {
@@ -16,6 +19,11 @@ class BarCodeScannerBloc {
   Stream<List<BarCodeGridModel>> get listOfGridStream =>
       _listOfGridController.stream;
 
+  // ignore: close_sinks
+  BehaviorSubject<int> _noOfItemsController = new BehaviorSubject();
+
+  Stream<int> get numberOfItemsStream => _noOfItemsController.stream;
+
   void addItemToListStream(
       BarCodeGridModel barCodeGridModel, List<BarCodeGridModel> list) {
     list.add(barCodeGridModel);
@@ -26,7 +34,12 @@ class BarCodeScannerBloc {
     _listOfGridController.add(list);
   }
 
-  void addDataToServer(List<BarCodeGridModel> barCodeModelList) {
+  Future<int> addDataToServer(List<BarCodeGridModel> barCodeModelList) async {
     print(barCodeModelList.toString());
+    return await _repo.sendUBEntries(barCodeModelList);
+  }
+
+  void addNoOfItemsToStream(int numberOfItems) {
+    _noOfItemsController.add(numberOfItems);
   }
 }
