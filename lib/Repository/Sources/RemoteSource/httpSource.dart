@@ -210,9 +210,20 @@ class HttpSource {
       json = json["soapenv\$Envelope"];
       json = json["soapenv\$Body"];
       json = json["wss\$runResponse"];
-      print(json["runReturn"]);
+      json = json["runReturn"];
+      json = json["resultXml"];
+      print(json["__cdata"].toString());
+      if (json["__cdata"] != null) {
+        myTransformer.parse(json["__cdata"].toString());
+        json = jsonDecode(myTransformer.toGData());
+        print("Cdata = " + json["RESULT"].toString());
+        print("Cdata = " + json["RESULT"]["TAB"]["SIZE"].toString());
+        return intjson["RESULT"]["TAB"]["SIZE"];
+      } else {
+        print("null");
 
-      return 8;
+        return 8;
+      }
     } else {
       print("Reason phrase " + request.toString());
       return -1;
