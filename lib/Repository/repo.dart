@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:x3/BarcodeScanScreen/Model/BarcodeScannerGridModel.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
@@ -28,6 +29,11 @@ class Repo {
 
   Stream<TextConfiguration> getTextConfiguration() {
     return _localSource.getTextConfiguration();
+  }
+
+  Future<int> sendUBEntries(List<BarCodeGridModel> ubEntries) async {
+    await Future.delayed(Duration(seconds: 2));
+    return 5;
   }
 
   void setLanguage(String language) {

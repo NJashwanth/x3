@@ -1,1 +1,2 @@
 Make password as masked field
+dont show barcode to invisible when 0
