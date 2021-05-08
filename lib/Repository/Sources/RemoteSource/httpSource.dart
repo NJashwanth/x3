@@ -116,9 +116,7 @@ class HttpSource {
 
           List listFromResponse = map["GRP2"];
           listFromResponse.forEach((element) {
-            // mapToReturn.add(UserTaskModel.fromJson(element));
             mapToReturn.add(UserTaskModel.fromJson(element));
-            UserTaskModel userTaskModel = UserTaskModel.fromJson(element);
           });
 
           List<UserTaskModel> reducedList = new List();

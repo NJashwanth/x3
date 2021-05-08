@@ -520,3 +520,43 @@ Container getDrawerHeader() {
     ),
   );
 }
+
+Widget getRowTextFormFieldAndBarCode(
+    BuildContext context, TextEditingController _controller, String labelText) {
+  return Row(
+    children: [
+      Expanded(
+        flex: 9,
+        child: getTextFormField(context, _controller, labelText, labelText),
+      ),
+      Expanded(
+        flex: 1,
+        child: IconButton(
+          icon: Icon(Icons.add_circle),
+          onPressed: () {},
+        ),
+      )
+    ],
+  );
+}
+
+List<DataColumn> getDataRowForBarCodeScannerScreen() {
+  return [
+    getDataColumn(Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.check_box),
+        Padding(
+          padding: const EdgeInsets.only(left: 4.0),
+          child: Text("Document"),
+        )
+      ],
+    )),
+    getDataColumn(Text("Barcode")),
+    getDataColumn(Text("Location"))
+  ];
+}
+
+DataColumn getDataColumn(Widget widget) {
+  return DataColumn(label: widget);
+}

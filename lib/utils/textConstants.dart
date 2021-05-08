@@ -22,6 +22,10 @@ class TextConstants {
   static const TEST_CONNECTION_BUTTON_NAME = "TEST_CONNECTION_BUTTON_NAME";
   static const SAVE_BUTTON_NAME = "SAVE_BUTTON_NAME";
   static const LOGIN_BUTTON_NAME = "LOGIN_BUTTON_NAME";
+
+  static const SEND_BUTTON_NAME = "SEND_BUTTON_NAME";
+  static const CLEAR_BUTTON_NAME = "CLEAR_BUTTON_NAME";
+
   static const SUCCESS_TEXT_IN_DIALOG = "SUCCESS_TEXT_IN_DIALOG";
   static const FAILURE_TEXT_IN_DIALOG = "FAILURE_TEXT_IN_DIALOG";
   static const SUCCESS_CONTENT_TEXT_IN_DIALOG =
@@ -65,6 +69,8 @@ class TextConstants {
         "You've successfully connected to Sage X3. If you would like to use these credentials, please press the Save button";
     texts['$FAILURE_CONTENT_TEXT_IN_DIALOG-ENG'] =
         "The server has report an undefined error. The most likely cause is an incorrect Folder and/or Language value in the application setup. Please contact your administrator";
+    texts['$SEND_BUTTON_NAME-ENG'] = "Send";
+    texts['$CLEAR_BUTTON_NAME-ENG'] = "Clear Screen";
   }
 
   Future<bool> load() async {
