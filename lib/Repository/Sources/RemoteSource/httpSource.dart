@@ -218,7 +218,7 @@ class HttpSource {
         json = jsonDecode(myTransformer.toGData());
         print("Cdata = " + json["RESULT"].toString());
         print("Cdata = " + json["RESULT"]["TAB"]["SIZE"].toString());
-        return intjson["RESULT"]["TAB"]["SIZE"];
+        return int.parse(json["RESULT"]["TAB"]["SIZE"]);
       } else {
         print("null");
 
