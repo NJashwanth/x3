@@ -15,6 +15,7 @@ import 'package:x3/PurchaseOrderReceipt/UI/Purchase_Order_Receipt.dart';
 import 'package:x3/SalesDelivery/UI/SalesDelivery.dart';
 import 'package:x3/Splash/splashScreen.dart';
 import 'package:x3/StockChangeScreen/ui/stockExchangeScreen.dart';
+import 'package:x3/utils/FocusNodeForTextFormField.dart';
 import 'package:x3/utils/TextUtils.dart';
 import 'package:x3/utils/textConstants.dart';
 
@@ -29,63 +30,40 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
     FocusNode currentFocusNode,
     FocusNode nextFocusNode,
     String prefixText,
-    bool obscureText}) {
+    bool obscureText,
+    bool autoFocus}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
-    child: textFormFieldWithoutPadding(context, controller, textInputType,
-        textStyle, labelText, hintText, preText,
-        capitalise: capitalise,
-        validationType: validationType,
-        textInputFormatter: textInputFormatter,
-        currentFocusNode: currentFocusNode,
-        nextFocusNode: nextFocusNode,
-        prefixText: prefixText,
-        obscureText: obscureText),
-  );
-}
-
-TextFormField textFormFieldWithoutPadding(
-    BuildContext context,
-    TextEditingController controller,
-    TextInputType textInputType,
-    TextStyle textStyle,
-    String labelText,
-    String hintText,
-    String preText,
-    {bool capitalise,
-    int validationType,
-    TextInputFormatter textInputFormatter,
-    FocusNode currentFocusNode,
-    FocusNode nextFocusNode,
-    String prefixText,
-    bool obscureText}) {
-  return TextFormField(
-    obscureText: obscureText ?? false,
-    focusNode: currentFocusNode != null ? currentFocusNode : null,
-    onFieldSubmitted: (term) {
-      if (currentFocusNode != null) currentFocusNode.unfocus();
-      if (nextFocusNode != null)
-        FocusScope.of(context).requestFocus(nextFocusNode);
-    },
-    controller: controller,
-    keyboardType: textInputType ?? TextInputType.text,
-    inputFormatters: textInputFormatter != null ? [textInputFormatter] : null,
-    textCapitalization: (capitalise ?? false)
-        ? TextCapitalization.characters
-        : TextCapitalization.none,
-    style: textStyle,
-    onChanged: (value) {
-      if (capitalise ?? false) if (controller.text != value.toUpperCase()) {
-        // ReCase rc = new ReCase(value);
-        // controller.text = rc.titleCase;
-        controller.value = controller.value.copyWith(text: value.toUpperCase());
-      }
-    },
-    validator: (s) => validationType == null
-        ? validate(s, labelText)
-        : getValidation(s, validationType, labelText),
-    decoration:
-        inputDecoration(labelText, hintText, preText, controller, prefixText),
+    child: TextFormField(
+      obscureText: obscureText ?? false,
+      focusNode: currentFocusNode != null ? currentFocusNode : null,
+      onFieldSubmitted: (term) {
+        if (currentFocusNode != null) currentFocusNode.unfocus();
+        if (nextFocusNode != null)
+          FocusScope.of(context).requestFocus(nextFocusNode);
+      },
+      autofocus: autoFocus ?? false,
+      controller: controller,
+      keyboardType: textInputType ?? TextInputType.text,
+      inputFormatters: textInputFormatter != null ? [textInputFormatter] : null,
+      textCapitalization: (capitalise ?? false)
+          ? TextCapitalization.characters
+          : TextCapitalization.none,
+      style: textStyle,
+      onChanged: (value) {
+        if (capitalise ?? false) if (controller.text != value.toUpperCase()) {
+          // ReCase rc = new ReCase(value);
+          // controller.text = rc.titleCase;
+          controller.value =
+              controller.value.copyWith(text: value.toUpperCase());
+        }
+      },
+      validator: (s) => validationType == null
+          ? validate(s, labelText)
+          : getValidation(s, validationType, labelText),
+      decoration:
+          inputDecoration(labelText, hintText, preText, controller, prefixText),
+    ),
   );
 }
 
@@ -119,10 +97,10 @@ InputDecoration inputDecoration(String labelText, String hintText,
         preText ?? "",
       ),
       prefixText: prefixText ?? null,
-      suffixIcon: inkWell(controller));
+      suffixIcon: clearIconInTextFieldSuffix(controller));
 }
 
-InkWell inkWell(TextEditingController controller) {
+InkWell clearIconInTextFieldSuffix(TextEditingController controller) {
   return InkWell(
       onTap: () => controller.clear(),
       child: Icon(
@@ -338,11 +316,12 @@ Transform getCrossIcon() {
       ));
 }
 
-Widget getAppBar(String textKey) {
+Widget getAppBar(String textKey, {bool type}) {
   return AppBar(
     title: PText(
       textType: TextType.appBar,
       textKey: textKey,
+      type: type ?? true,
     ),
   );
 }
@@ -544,13 +523,16 @@ Widget getRowTextFormFieldAndBarCode(
   return Row(
     children: [
       Expanded(
-        flex: 9,
+        flex: 4,
         child: getTextFormField(context, _controller, labelText, labelText,
-            validationType: validationType),
+            validationType: validationType,
+            currentFocusNode: FirstDisabledFocusNode()),
       ),
       Expanded(
-        flex: 1,
-        child: IconButton(icon: Icon(Icons.add_circle), onPressed: onPressed),
+        flex: 2,
+        child: Container(
+            alignment: Alignment.centerLeft,
+            child: InkWell(onTap: onPressed, child: Icon(Icons.add_circle))),
       )
     ],
   );
@@ -558,7 +540,6 @@ Widget getRowTextFormFieldAndBarCode(
 
 List<DataColumn> getDataRowForBarCodeScannerScreen() {
   return [
-    getDataColumn(Icon(Icons.check_box)),
     getDataColumn(Text("Document")),
     getDataColumn(Text("Barcode")),
     getDataColumn(Text("Location"))

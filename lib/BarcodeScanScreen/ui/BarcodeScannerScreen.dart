@@ -33,11 +33,14 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
   BarCodeScannerBloc _bloc = BarCodeScannerBloc.getInstance();
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final FocusNode documentNumberFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     this.userTaskModel = widget.userTaskModel;
+    _scanLocationController.text = userTaskModel.yXDESTLOC;
+    print("location is " + _scanLocationController.text);
   }
 
   @override
@@ -46,10 +49,16 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
       onWillPop: () => onUserPressBackButton(),
       child: Scaffold(
           key: _scaffoldKey,
-          appBar: getAppBar(userTaskModel.yXTASKNAM.toString()),
+          appBar: getAppBar(userTaskModel.yXTASKNAM.toString(), type: false),
           drawer: DrawerInAppBar(),
           body: getBody()),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.clearDocumentsCount();
   }
 
   Widget getBody() {
@@ -87,20 +96,31 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
     if (snapshot.hasData && snapshot.data.isNotEmpty) {
       barCodeModelList = snapshot.data;
       rowList = snapshot.data.map(((element) {
-        return DataRow(cells: <DataCell>[
-          DataCell(
-              Icon(element.isChecked
-                  ? Icons.check_box
-                  : Icons.check_box_outline_blank), onTap: () {
+        return DataRow(
+          cells: <DataCell>[
+            DataCell(Text(element.document, softWrap: false)),
+            DataCell(Text(element.barcode, softWrap: false)),
+            DataCell(Text(element.location, softWrap: false))
+          ],
+          selected: element.isChecked,
+          onSelectChanged: (value) {
             onTapOnCheckBox(element, snapshot.data);
-          }),
-          DataCell(SelectableText(element.document)),
-          DataCell(SelectableText(element.barcode)),
-          DataCell(SelectableText(element.location))
-        ]);
+          },
+        );
       })).toList();
     } else {
-      rowList = [];
+      rowList = [
+        DataRow(
+          cells: <DataCell>[
+            DataCell(Container()),
+            DataCell(Container()),
+            DataCell(Container()),
+          ],
+          onSelectChanged: (value) {
+            // onTapOnCheckBox(element, snapshot.data);
+          },
+        )
+      ];
       barCodeModelList = [];
     }
   }
@@ -112,19 +132,29 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
         builder: (context, snapshot) {
           return Row(children: [
             Expanded(
+              flex: 4,
               child: getTextFormField(context, _documentNumberController,
-                  "Document number", "Document number"),
+                  "Document number", "Document number",
+                  currentFocusNode: documentNumberFocusNode, validationType: 3),
             ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
+            Expanded(
+              flex: 2,
+              child: Visibility(
+                visible: snapshot.data != null && snapshot.data != 0,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     PText(
                         textKey: TextConstants.BARCODE_COUNT_TEXT,
                         textType: TextType.body2),
-                    Text(" : ${snapshot.data ?? 0}")
+                    PText(
+                        textKey: " : ${snapshot.data ?? 0}",
+                        textType: TextType.body2,
+                        type: false)
                   ],
-                ))
+                ),
+              ),
+            )
           ]);
         });
   }
@@ -170,7 +200,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
           _scanLocationController.text ?? "",
           true);
       _bloc.addItemToListStream(barCodeGridModel, barCodeModelList ?? []);
-      clearTextFormFields();
+      // clearTextFormFields();
     }
   }
 
@@ -184,7 +214,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
     if (_scanLocationController.text != null) {
       print("Validated");
       addLocationToTheItemsWithOutLocation();
-      clearTextFormFields();
+      // clearTextFormFields();
     }
   }
 
@@ -198,6 +228,8 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
             MaterialStateColor.resolveWith((states) => Colors.red.shade200),
         dataRowHeight: 50,
         dividerThickness: 2,
+        sortColumnIndex: 2,
+        showCheckboxColumn: true,
         columns: getDataRowForBarCodeScannerScreen(),
         rows: rowList ?? [],
       ),
@@ -242,6 +274,9 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
           _bloc.addNoOfItemsToStream(numberOfItems);
           _bloc.updateStreamList(listToLeft);
           clearTextFormFields();
+          showErrorMessageInSnackBar(
+              context, "Data Sent Successfully", _scaffoldKey);
+          FocusScope.of(context).requestFocus(documentNumberFocusNode);
         } else {
           _bloc.addNoOfItemsToStream(0);
           showErrorMessageInSnackBar(

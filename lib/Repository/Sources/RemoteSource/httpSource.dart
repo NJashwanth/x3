@@ -233,7 +233,7 @@ class HttpSource {
 
 class UBRequestBody {
   // "GRP1":[{"YXSLO":"REG","YXLOC":"MIG","YXLOT":"PIN","YXINTEGRATED":1},{"YXSLO":"5632","YXLOC":"541","YXLOT":"5463","YXINTEGRATED":1}]
-  List<BarCodeGridModel> entries = new List();
+  List<BarCodeGridModel> entries = [];
 
   UBRequestBody(this.entries);
 

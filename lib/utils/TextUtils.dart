@@ -7,8 +7,10 @@ import 'package:x3/utils/textConstants.dart';
 class PText extends StatelessWidget {
   final String textKey;
   final TextType textType;
+  final bool type;
 
-  const PText({Key key, @required this.textKey, @required this.textType})
+  const PText(
+      {Key key, @required this.textKey, @required this.textType, this.type})
       : super(key: key);
 
   @override
@@ -23,11 +25,17 @@ class PText extends StatelessWidget {
             future: TextConstants.getInstance()
                 .get(textKey, languageSnapshot.data.language),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              return Text(
-                snapshot.data == null ? "No value found" : snapshot.data,
-                style: getTextStyle(languageSnapshot.data.incrementer),
-                softWrap: true,
-              );
+              return (type ?? true)
+                  ? Text(
+                      snapshot.data == null ? "No value found" : snapshot.data,
+                      style: getTextStyle(languageSnapshot.data.incrementer),
+                      softWrap: true,
+                    )
+                  : Text(
+                      textKey,
+                      style: getTextStyle(languageSnapshot.data.incrementer),
+                      softWrap: true,
+                    );
             },
           );
         else {

@@ -43,4 +43,8 @@ class BarCodeScannerBloc {
   void addNoOfItemsToStream(int numberOfItems) {
     _noOfItemsController.add(numberOfItems);
   }
+
+  void clearDocumentsCount() {
+    _noOfItemsController.add(0);
+  }
 }

@@ -40,7 +40,8 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
     return Column(
       children: [
         getTextFormField(context, _documentNumberController, "Document number",
-            "Document number"),
+            "Document number",
+            validationType: 3),
         getRowTextFormFieldAndBarCode(
             context, _scanItemBarCodeController, "Scan Item Barcode", 0, () {}),
         getRowTextFormFieldAndBarCode(
