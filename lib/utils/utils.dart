@@ -523,13 +523,13 @@ Widget getRowTextFormFieldAndBarCode(
   return Row(
     children: [
       Expanded(
-        flex: 4,
+        flex: 6,
         child: getTextFormField(context, _controller, labelText, labelText,
             validationType: validationType,
             currentFocusNode: FirstDisabledFocusNode()),
       ),
       Expanded(
-        flex: 2,
+        flex: 4,
         child: Container(
             alignment: Alignment.centerLeft,
             child: InkWell(onTap: onPressed, child: Icon(Icons.add_circle))),

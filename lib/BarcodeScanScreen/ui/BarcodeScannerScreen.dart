@@ -132,17 +132,18 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
         builder: (context, snapshot) {
           return Row(children: [
             Expanded(
-              flex: 4,
+              flex: 6,
               child: getTextFormField(context, _documentNumberController,
                   "Document number", "Document number",
                   currentFocusNode: documentNumberFocusNode, validationType: 3),
             ),
             Expanded(
-              flex: 2,
+              flex: 4,
               child: Visibility(
                 visible: snapshot.data != null && snapshot.data != 0,
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  // mainAxisSize: MainAxisSize.min,
+
                   children: [
                     PText(
                         textKey: TextConstants.BARCODE_COUNT_TEXT,
@@ -272,7 +273,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
         if (numberOfItems != -1) {
           print("No of items = $numberOfItems");
           _bloc.addNoOfItemsToStream(numberOfItems);
-          _bloc.updateStreamList(listToLeft);
+          _bloc.updateStreamList([]);
           clearTextFormFields();
           showErrorMessageInSnackBar(
               context, "Data Sent Successfully", _scaffoldKey);
