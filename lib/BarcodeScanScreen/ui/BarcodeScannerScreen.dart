@@ -137,27 +137,31 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
                   "Document number", "Document number",
                   currentFocusNode: documentNumberFocusNode, validationType: 3),
             ),
-            Expanded(
-              flex: 4,
-              child: Visibility(
-                visible: snapshot.data != null && snapshot.data != 0,
-                child: Row(
-                  // mainAxisSize: MainAxisSize.min,
-
-                  children: [
-                    PText(
-                        textKey: TextConstants.BARCODE_COUNT_TEXT,
-                        textType: TextType.body2),
-                    PText(
-                        textKey: " : ${snapshot.data ?? 0}",
-                        textType: TextType.body2,
-                        type: false)
-                  ],
-                ),
-              ),
-            )
+            barcodeCountTextWidget(snapshot)
           ]);
         });
+  }
+
+  Expanded barcodeCountTextWidget(AsyncSnapshot<int> snapshot) {
+    return Expanded(
+      flex: 4,
+      child: Visibility(
+        visible: snapshot.data != null && snapshot.data != 0,
+        child: Row(
+          // mainAxisSize: MainAxisSize.min,
+
+          children: [
+            PText(
+                textKey: TextConstants.BARCODE_COUNT_TEXT,
+                textType: TextType.body2),
+            PText(
+                textKey: " : ${snapshot.data ?? 0}",
+                textType: TextType.body2,
+                type: false)
+          ],
+        ),
+      ),
+    );
   }
 
   Widget getButtons() {

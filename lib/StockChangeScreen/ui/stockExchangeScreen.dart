@@ -25,12 +25,14 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
   void initState() {
     super.initState();
     this.userTaskModel = widget.userTaskModel;
+    _scanLocationController.text = userTaskModel.yXDESTLOC;
+    print("location is  ${_scanLocationController.text} $userTaskModel");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(userTaskModel.yXTASKNAM.toString()),
+      appBar: getAppBar(userTaskModel.yXTASKNAM.toString(), type: false),
       drawer: DrawerInAppBar(),
       body: getBody(),
     );
@@ -38,17 +40,26 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
 
   Widget getBody() {
     return Column(
-      children: [
-        getTextFormField(context, _documentNumberController, "Document number",
-            "Document number",
-            validationType: 3),
-        getRowTextFormFieldAndBarCode(
-            context, _scanItemBarCodeController, "Scan Item Barcode", 0, () {}),
-        getRowTextFormFieldAndBarCode(
-            context, _scanLocationController, "Scan Location", 3, () {}),
-        getGridWidget(),
-        getButtons()
-      ],
+      children: [getTopWidget(), getButtons()],
+    );
+  }
+
+  Widget getTopWidget() {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            getTextFormField(context, _documentNumberController,
+                "Document number", "Document number",
+                validationType: 3),
+            getRowTextFormFieldAndBarCode(context, _scanItemBarCodeController,
+                "Scan Item Barcode", 0, () {}),
+            getRowTextFormFieldAndBarCode(
+                context, _scanLocationController, "Scan Location", 3, () {}),
+            getGridWidget(),
+          ],
+        ),
+      ),
     );
   }
 
