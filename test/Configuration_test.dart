@@ -11,6 +11,7 @@ import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
 import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Repository/repo.dart';
+import 'package:x3/utils/HTTPUtils.dart';
 
 void main() {
   final ConfigurationSettings workingConfigurationSettings =
@@ -20,7 +21,9 @@ void main() {
           port: "8124",
           language: "ENG",
           password: "admin",
-          userName: "admin");
+          userName: "admin",
+          path:
+              "soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC");
 
   test('IsTestConnectionReturningSuccessWithValidConfiguration', () async {
     // Build our app and trigger a frame.
@@ -33,23 +36,29 @@ void main() {
     // Build our app and trigger a frame.
     Repo repo = Repo.getInstance();
     ConfigurationSettings wrongSettings = new ConfigurationSettings(
-        server: workingConfigurationSettings.server,
-        port: workingConfigurationSettings.port);
+        folder: "GITDEV",
+        server: "http://sagex3v12.germinit.com",
+        port: "8124",
+        language: "ENG",
+        password: "admina",
+        userName: "admin",
+        path:
+            "soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC");
     String a = await repo.testConnection(wrongSettings);
     expect(a, "Failure");
   });
 
   test('Auth header test', () {
     HttpSource httpSource = HttpSource.getInstance();
-    expect(httpSource.getAuthorization("admin", "admin"),
-        "Basic YWRtaW46YWRtaW4=");
+    expect(
+        HttpUtils.getAuthorization("admin", "admin"), "Basic YWRtaW46YWRtaW4=");
   });
 
   test('Login Test without config', () async {
     // Build our app and trigger a frame.
     Repo repo = Repo.getInstance();
     LoginResponse loginResponse =
-        await repo.login(new UserModel("USR01", "USR01"));
+        await repo.login(new UserModel("USR02", "USR01"));
     expect(loginResponse.isSuccess, false);
   });
 
@@ -78,6 +87,8 @@ void main() {
     // Build our app and trigger a frame.
     Repo repo = Repo.getInstance();
     await repo.saveConfiguration(workingConfigurationSettings);
+    ConfigurationSettings settings = await repo.getConfiguration();
+    print("path at settings $settings.path");
     LoginResponse loginResponse =
         await repo.login(new UserModel("USR01", "USR01"));
     expect(loginResponse.isSuccess, true);

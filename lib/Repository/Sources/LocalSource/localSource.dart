@@ -90,7 +90,7 @@ class LocalSource {
     Hive.box("configuration").put("folder", configurationSettings.folder);
     Hive.box("configuration").put("language", configurationSettings.language);
     Hive.box("configuration").put("urlType", configurationSettings.urlType);
-    Hive.box("configuration").put("url", configurationSettings.url);
+    Hive.box("configuration").put("path", configurationSettings.path);
   }
 
   Stream<TextConfiguration> getTextConfiguration() {
@@ -106,6 +106,9 @@ class LocalSource {
     savedSettings.userName = Hive.box("configuration").get("userName");
     savedSettings.port = Hive.box("configuration").get("port");
     savedSettings.server = Hive.box("configuration").get("server");
+    savedSettings.path = Hive.box("configuration").get("path");
+    savedSettings.urlType = Hive.box("configuration").get("urlType");
+
     return savedSettings;
   }
 }

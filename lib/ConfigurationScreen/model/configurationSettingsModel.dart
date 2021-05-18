@@ -6,7 +6,7 @@ class ConfigurationSettings {
   String folder;
   String language;
   String urlType;
-  String url;
+  String path;
 
   ConfigurationSettings(
       {this.server,
@@ -16,7 +16,7 @@ class ConfigurationSettings {
       this.folder,
       this.language,
       this.urlType,
-      this.url});
+      this.path});
 
   ConfigurationSettings.fromJson(Map<String, dynamic> json) {
     server = json['server'];
@@ -25,11 +25,12 @@ class ConfigurationSettings {
     password = json['password'];
     folder = json['folder'];
     language = json['language'];
+    path = json['path'];
   }
 
   @override
   String toString() {
-    return 'ConfigurationSettings{server: $server, port: $port, userName: $userName, password: $password, folder: $folder, language: $language}';
+    return 'ConfigurationSettings{server: $server, port: $port, userName: $userName, password: $password, folder: $folder, language: $language, urlType: $urlType, path: $path}';
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +41,7 @@ class ConfigurationSettings {
     data['password'] = this.password;
     data['folder'] = this.folder;
     data['language'] = this.language;
+    data['path'] = this.path;
     return data;
   }
 }

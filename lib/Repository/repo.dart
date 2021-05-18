@@ -1,4 +1,3 @@
-import 'package:hive/hive.dart';
 import 'package:x3/BarcodeScanScreen/Model/BarcodeScannerGridModel.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
@@ -47,7 +46,7 @@ class Repo {
 
   Future<String> testConnection(
       ConfigurationSettings configurationSettings) async {
-    return await httpSource.testConnectionNew(configurationSettings);
+    return await httpSource.testConnection(configurationSettings);
   }
 
   Future<String> saveConfiguration(
@@ -62,16 +61,8 @@ class Repo {
   }
 
   Future<LoginResponse> login(UserModel userModel) async {
-    ConfigurationSettings savedSettings = new ConfigurationSettings();
-    savedSettings.language = Hive.box("configuration").get("language");
-    savedSettings.folder = Hive.box("configuration").get("folder");
-    savedSettings.password = Hive.box("configuration").get("password");
-    savedSettings.userName = Hive.box("configuration").get("userName");
-    savedSettings.port = Hive.box("configuration").get("port");
-    savedSettings.server = Hive.box("configuration").get("server");
-    savedSettings.url = Hive.box("configuration").get("url") ??
-        "soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC";
-    return await httpSource.loginNew(userModel, savedSettings);
+    ConfigurationSettings savedSettings = await _localSource.getConfiguration();
+    return await httpSource.login(userModel, savedSettings);
   }
 
   Future<ConfigurationSettings> getConfiguration() {

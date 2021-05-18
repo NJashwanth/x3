@@ -417,7 +417,7 @@ void navigateToInquiryScreen(
       ));
 }
 
-void initialNavigateToConfigurationSettingsScreen(BuildContext context) {
+void navigateToConfigurationScreen(BuildContext context) {
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(

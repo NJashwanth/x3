@@ -210,7 +210,7 @@ class _ConfigurationSettingsScreenState
       password: _passwordController.text,
       folder: _folderController.text,
       language: _languageController.text,
-      url: _urlController.text,
+      path: _urlController.text,
     );
   }
 

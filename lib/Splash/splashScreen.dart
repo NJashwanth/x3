@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void onStateChange(LoginState event) {
     switch (event.lState) {
       case LState.NEW:
-        initialNavigateToConfigurationSettingsScreen(context);
+        navigateToConfigurationScreen(context);
         break;
       case LState.SETTINGS_CONFIGURED:
         navigateToLoginScreen(context);
