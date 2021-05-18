@@ -156,7 +156,7 @@ class HttpSource {
         print("Cdata = " + json["RESULT"]["TAB"]["SIZE"].toString());
         return int.parse(json["RESULT"]["TAB"]["SIZE"]);
       } else {
-        print("null");
+        print("c data is null");
 
         return -1;
       }
