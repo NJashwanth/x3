@@ -123,31 +123,25 @@ class HttpSource {
 
   Future<int> createUB(List<BarCodeGridModel> ubEntries,
       ConfigurationSettings configurationSettings) async {
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            "http://sagex3v12.germinit.com:8124/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC"));
     UBRequestBody requestBody = new UBRequestBody(ubEntries);
-    String body =
-        '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS">\r\n<soapenv:Header/>\r\n<soapenv:Body>\r\n<wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\r\n<callContext xsi:type="wss:CAdxCallContext">\r\n<codeLang xsi:type="xsd:string">ENG</codeLang>\r\n<poolAlias xsi:type="xsd:string">GITDEV</poolAlias>\r\n<poolId xsi:type="xsd:string"></poolId>\r\n<requestConfig xsi:type="xsd:string">adxwss.beautify=true</requestConfig>\r\n</callContext>\r\n<publicName xsi:type="xsd:string">YXCREATEUB</publicName>\r\n<inputXml xsi:type="xsd:string">\r\n{\r\n${requestBody.toJson()}\r\n}\r\n</inputXml>\r\n</wss:run>\r\n</soapenv:Body>\r\n</soapenv:Envelope>\r\n''';
-    request.body = body;
-    request.headers.addAll(HttpUtils.headers(
-        configurationSettings.userName, configurationSettings.password));
-
+    var request = HttpUtils.createRequest(configurationSettings, "YXCREATEUB",
+        "${requestBody.toJson().toString()}");
     http.StreamedResponse response = await request.send();
-    print(request.body);
 
     if (response.statusCode == 200) {
       String responseStream = await response.stream.bytesToString();
-      print(responseStream);
+      print("responseStream " + responseStream);
       final myTransformer = Xml2Json();
       myTransformer.parse(responseStream);
       Map<dynamic, dynamic> json = jsonDecode(myTransformer.toGData());
+
       json = json["soapenv\$Envelope"];
       json = json["soapenv\$Body"];
+
       json = json["wss\$runResponse"];
       json = json["runReturn"];
       json = json["resultXml"];
+
       print(json["__cdata"].toString());
       if (json["__cdata"] != null) {
         myTransformer.parse(json["__cdata"].toString());

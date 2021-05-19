@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
-import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Repository/repo.dart';
 import 'package:x3/utils/HTTPUtils.dart';
 
@@ -49,7 +48,6 @@ void main() {
   });
 
   test('Auth header test', () {
-    HttpSource httpSource = HttpSource.getInstance();
     expect(
         HttpUtils.getAuthorization("admin", "admin"), "Basic YWRtaW46YWRtaW4=");
   });
