@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/StockChangeScreen/bloc/StockChangeBloc.dart';
-import 'package:x3/StockChangeScreen/model/StockExchangeGridModel.dart';
+import 'package:x3/StockChangeScreen/model/StockTransacionRequest.dart';
 import 'package:x3/utils/DrawerInAppBar.dart';
 import 'package:x3/utils/textConstants.dart';
 import 'package:x3/utils/utils.dart';
@@ -28,9 +28,10 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
   final FocusNode scanItemFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  List<FLD> completeGridList = [];
+  List<Stock> completeGridList = [];
   List<DataRow> rowList;
   List<DataColumn> columnList;
+  final FocusNode documentNumberFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -42,11 +43,51 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: getAppBar(userTaskModel.yXTASKNAM.toString(), type: false),
-      drawer: DrawerInAppBar(),
-      body: getBody(),
+    return WillPopScope(
+      onWillPop: () => onUserPressBackButton(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: getAppBar(userTaskModel.yXTASKNAM.toString(), type: false),
+        drawer: DrawerInAppBar(),
+        body: getBody(),
+      ),
+    );
+  }
+
+  onUserPressBackButton() {
+    if (completeGridList.isNotEmpty) {
+      showAlertDialog();
+    } else
+      Navigator.pop(context);
+  }
+
+  void showAlertDialog() {
+    Widget okButton = TextButton(
+      child: Text("Ok"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget cancelButton = TextButton(
+      child: Text("Discard changes and Go Back"),
+      onPressed: () {
+        Navigator.pop(context);
+        onClearButtonPressed();
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+        title: Text("Warning"),
+        content: Text("You didn't submitted your records."),
+        actions: [cancelButton, okButton]);
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
@@ -57,7 +98,7 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
   }
 
   Widget getTopWidget() {
-    return StreamBuilder<StockExchangeGridModel>(
+    return StreamBuilder<List<Stock>>(
         stream: _bloc.listOfGridStream,
         builder: (context, snapshot) {
           addDataToRowList(snapshot);
@@ -164,28 +205,90 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
     if (_formKey.currentState.validate()) {
       ProgressDialog dialog = getProgressDialog(context);
       await dialog.show();
-      StockExchangeGridModel stockExchangeGridModel = await _bloc
+      /*StockExchangeGridModel stockExchangeGridModel = await _bloc
           .getGridDataForStockExchange(_documentNumberController.text);
-      _bloc.updateStreamList(stockExchangeGridModel ?? []);
+      _bloc.updateStreamList(stockExchangeGridModel ?? []);*/
+      List<Stock> stocksList = _bloc.getStocksList();
+      _bloc.updateStreamList(stocksList ?? []);
       await dialog.hide();
     }
   }
 
   void onScanItemPressed() {
     print("Scan Item Pressed");
+    if (_scanItemBarCodeController.text != null) {
+      completeGridList.forEach((element) {
+        if (element.yXITMREF == _scanItemBarCodeController.text) {
+          element.isChecked = !element.isChecked;
+        }
+      });
+      _bloc.updateStreamList(completeGridList);
+    }
   }
 
   void onAddLocationPressed() {
     print("Add Location Pressed");
+    if (_scanLocationController.text != null) {
+      completeGridList.forEach((element) {
+        if (element.isChecked) {
+          element.yXDESTLOC = _scanLocationController.text;
+        }
+      });
+    }
+    _bloc.updateStreamList(completeGridList);
   }
 
   void onClearButtonPressed() {
     print("Clear Button Pressed");
     clearTextFormFields();
+    _bloc.updateStreamList([]);
   }
 
-  void onSendButtonPressed() {
+  Future<void> onSendButtonPressed() async {
     print("Send Button Pressed");
+
+    List<Stock> listToSend = [];
+    List<Stock> listToLeft = [];
+    for (Stock stock in completeGridList) {
+      if (stock.isChecked)
+        listToSend.add(stock);
+      else
+        listToLeft.add(stock);
+    }
+    print(listToSend.every((element) =>
+        element.yXDESTLOC != null && element.yXDESTLOC.isNotEmpty));
+    if (listToSend.isNotEmpty &&
+        listToSend.every((element) =>
+            element.yXDESTLOC != null && element.yXDESTLOC.isNotEmpty)) {
+      ProgressDialog dialog = getProgressDialog(context);
+      await dialog.show();
+      print(userTaskModel.yXSOURCEPRG);
+      GRP1 grp1 = new GRP1(
+          yXDESC: userTaskModel.yXTASKNAM, yXSTOFCY: userTaskModel.yXSOUSTOFCY);
+      StockTransacionRequest stockTransacionRequest =
+          new StockTransacionRequest(
+              gRP1: grp1,
+              publicName: userTaskModel.yXSOURCEPRG,
+              gRP2: listToSend);
+      Map<String, dynamic> mapFromServer =
+          await _bloc.createStockTransaction(stockTransacionRequest);
+      print("mapFromServer for create Stock Transaction = $mapFromServer");
+      await dialog.hide();
+
+      if (mapFromServer != null) {
+        clearTextFormFields();
+        _bloc.updateStreamList(listToLeft);
+        showErrorMessageInSnackBar(
+            context, "Data Sent Successfully", _scaffoldKey);
+        FocusScope.of(context).requestFocus(documentNumberFocusNode);
+      } else
+        showErrorMessageInSnackBar(
+            context, "Error Occurred, Please Try Again Later", _scaffoldKey);
+    } else
+      showErrorMessageInSnackBar(
+          context,
+          "No Items Selected / Destination Location Cannot be empty",
+          _scaffoldKey);
   }
 
   void clearTextFormFields() {
@@ -194,59 +297,56 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
     _scanLocationController.clear();
   }
 
-  void addDataToRowList(AsyncSnapshot<StockExchangeGridModel> snapshot) {
-    if (snapshot.hasData &&
-        snapshot.data != null &&
-        snapshot.data.gRP != null &&
-        snapshot.data.tAB != null) {
-      completeGridList = snapshot.data.tAB.lIN.fLD;
-      print("Snapshot data is = ${snapshot.data}");
-      columnList = getDataColumnList(snapshot.data.gRP.fLD);
-      rowList = snapshot.data.tAB.lIN.fLD.map((element) {
+  void addDataToRowList(AsyncSnapshot<List<Stock>> snapshot) {
+    if (snapshot.hasData && snapshot.data != null) {
+      completeGridList = snapshot.data;
+      completeGridList.sort((a, b) {
+        if (b.isChecked ?? false) {
+          return 1;
+        }
+        return -1;
+      });
+      columnList = getColumnList();
+      rowList = completeGridList.map(((element) {
+        element.isChecked = element.isChecked ?? false;
         return DataRow(
           cells: <DataCell>[
-            /* DataCell(Text(element.nAME ?? "", softWrap: false),
-                placeholder: true, showEditIcon: true, onTap: () {
-              print("onTap");
-            }),*/
-            DataCell(Text(element.nAME ?? "", softWrap: false)),
-            DataCell(Text(element.t ?? "", softWrap: false)),
-            DataCell(Text(element.tYPE ?? "", softWrap: false)),
-            DataCell(Text(element.nAME ?? "", softWrap: false)),
-            DataCell(Text(element.t ?? "", softWrap: false)),
-            DataCell(Text(element.tYPE ?? "", softWrap: false))
+            DataCell(Text(element.yXITMREF, softWrap: false)),
+            DataCell(Text(element.yXDESTLOC ?? "", softWrap: false)),
+            DataCell(Text(element.yXPCU, softWrap: false)),
+            DataCell(Text(element.yXQTY, softWrap: false)),
+            DataCell(Text(element.yXSTA, softWrap: false)),
+            DataCell(Text(element.yXLOCTYP, softWrap: false)),
+            DataCell(Text(element.yXLOC, softWrap: false)),
+            DataCell(Text(element.yXSTADEST, softWrap: false)),
+            DataCell(Text(element.yXLOT, softWrap: false)),
+            DataCell(Text(element.yXSUBLOT, softWrap: false))
           ],
-          selected: element.isChecked ?? true,
+          selected: element.isChecked,
           onSelectChanged: (value) {
             onTapOnCheckBox(element, snapshot.data);
           },
         );
-      }).toList();
+      })).toList();
     }
   }
 
-  List<DataCell> getDataCellList(List<String> dataCellValues) {
-    List<DataCell> listToReturn = [];
-    for (String value in dataCellValues) {
-      DataCell dataCell = DataCell(Text(value));
-      listToReturn.add(dataCell);
-    }
-    return listToReturn;
+  List<DataColumn> getColumnList() {
+    return [
+      getDataColumn(Text("yXITMREF")),
+      getDataColumn(Text("yXDESTLOC")),
+      getDataColumn(Text("yXPCU")),
+      getDataColumn(Text("yXQTY")),
+      getDataColumn(Text("yXSTA")),
+      getDataColumn(Text("yXLOCTYP")),
+      getDataColumn(Text("yXLOC")),
+      getDataColumn(Text("yXSTADEST")),
+      getDataColumn(Text("yXLOT")),
+      getDataColumn(Text("yXSUBLOT"))
+    ];
   }
 
-  List<DataColumn> getDataColumnList(List<FLD> fldList) {
-    List<DataColumn> listToReturn = [];
-    print(fldList);
-    // listToReturn.add(getDataColumn(Text("Move To")));
-    for (FLD fld in fldList) {
-      listToReturn.add(getDataColumn(Text(fld.nAME)));
-    }
-
-    print(listToReturn);
-    return listToReturn;
-  }
-
-  void onTapOnCheckBox(FLD element, StockExchangeGridModel data) {
+  void onTapOnCheckBox(Stock element, List<Stock> data) {
     element.isChecked = !element.isChecked;
     _bloc.updateStreamList(data ?? []);
   }

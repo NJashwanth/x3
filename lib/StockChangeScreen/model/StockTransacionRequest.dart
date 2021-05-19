@@ -59,6 +59,7 @@ class Stock {
   String yXSTADEST;
   String yXLOT;
   String yXSUBLOT;
+  bool isChecked;
 
   Stock(
       {this.yXITMREF,
@@ -70,7 +71,8 @@ class Stock {
       this.yXDESTLOC,
       this.yXSTADEST,
       this.yXLOT,
-      this.yXSUBLOT});
+      this.yXSUBLOT,
+      this.isChecked});
 
   Stock.fromJson(Map<String, dynamic> json) {
     yXITMREF = json['YXITMREF'];

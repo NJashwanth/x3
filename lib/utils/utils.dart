@@ -66,7 +66,7 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
           ? validate(s, labelText)
           : getValidation(s, validationType, labelText),
       decoration:
-      inputDecoration(labelText, hintText, preText, controller, prefixText),
+          inputDecoration(labelText, hintText, preText, controller, prefixText),
     ),
   );
 }

@@ -45,7 +45,7 @@ class Repo {
       StockTransacionRequest request) async {
     ConfigurationSettings configurationSettings =
         await _localSource.getConfiguration();
-    return httpSource.createStockTransactionRequest(
+    return await httpSource.createStockTransactionRequest(
         request, configurationSettings);
   }
 

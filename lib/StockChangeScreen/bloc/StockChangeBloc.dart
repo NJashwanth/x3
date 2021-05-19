@@ -1,6 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:x3/Repository/repo.dart';
 import 'package:x3/StockChangeScreen/model/StockExchangeGridModel.dart';
+import 'package:x3/StockChangeScreen/model/StockTransacionRequest.dart';
 
 class StockChangeBloc {
   static StockChangeBloc _instance;
@@ -12,11 +13,9 @@ class StockChangeBloc {
   }
 
   // ignore: close_sinks
-  BehaviorSubject<StockExchangeGridModel> _listOfGridController =
-      new BehaviorSubject();
+  BehaviorSubject<List<Stock>> _listOfGridController = new BehaviorSubject();
 
-  Stream<StockExchangeGridModel> get listOfGridStream =>
-      _listOfGridController.stream;
+  Stream<List<Stock>> get listOfGridStream => _listOfGridController.stream;
 
   getEntriesWithDocumentId() {}
 
@@ -32,7 +31,30 @@ class StockChangeBloc {
     }
   }
 
-  void updateStreamList(StockExchangeGridModel list) {
+  void updateStreamList(List<Stock> list) {
     _listOfGridController.add(list);
+  }
+
+  List<Stock> getStocksList() {
+    List<Stock> listToReturn = [];
+    for (int i = 0; i < 10; i++) {
+      Stock stock = new Stock(
+          yXITMREF: "Random$i",
+          yXLOC: "Random$i",
+          yXLOCTYP: "Random$i",
+          yXLOT: "Random$i",
+          yXPCU: "Random$i",
+          yXQTY: "Random$i",
+          yXSTA: "Random$i",
+          yXSTADEST: "Random$i",
+          yXSUBLOT: "Random$i");
+      listToReturn.add(stock);
+    }
+    return listToReturn;
+  }
+
+  Future<Map<String, dynamic>> createStockTransaction(
+      StockTransacionRequest stockTransacionRequest) async {
+    return await _repo.createStockTransaction(stockTransacionRequest);
   }
 }
