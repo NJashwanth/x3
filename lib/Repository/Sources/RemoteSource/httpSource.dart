@@ -67,10 +67,8 @@ class HttpSource {
           Map<dynamic, dynamic> map = jsonDecode(s);
           List<UserTaskModel> mapToReturn = new List();
           List listFromResponse = map["GRP2"];
-          int i = 0;
           listFromResponse.forEach((element) {
-            mapToReturn.add(UserTaskModel.fromJson(element, i));
-            i++;
+            mapToReturn.add(UserTaskModel.fromJson(element));
           });
           List<UserTaskModel> reducedList = new List();
           mapToReturn.reduce((value, element) {
@@ -159,6 +157,46 @@ class HttpSource {
     } else {
       print("Reason phrase " + request.toString());
       return -1;
+    }
+  }
+
+  getStockDetails(ConfigurationSettings configurationSettings) async {
+    var headers = {
+      'soapaction': '*',
+      'Authorization': 'Basic YWRtaW46YWRtaW4=',
+      'Content-Type': 'application/xml'
+    };
+
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            'http://sagex3v12.germinit.com:8124/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC'));
+    String api = "YXSTKCHGPL";
+    String inputXml =
+        "{\"GRP1\":{\"YXSRCTYP\":\"19\",\"YXSTOFCY\":\"AU012\",\"YXDOCNUM\":\"MRCAU0120011\",\"YXSLO\":\"STO1201\",\"YXSRCLOC\":\"QUA01\",\"YXDSTLOC\":\"QUA02\"}}";
+
+    request.body =
+        '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS"><soapenv:Header/><soapenv:Body><wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><callContext xsi:type="wss:CAdxCallContext"><codeLang xsi:type="xsd:string">ENG</codeLang><poolAlias xsi:type="xsd:string">GITDEV</poolAlias><poolId xsi:type="xsd:string"></poolId><requestConfig xsi:type="xsd:string">adxwss.beautify=true</requestConfig></callContext><publicName xsi:type="xsd:string">$api</publicName><inputXml xsi:type="xsd:string">$inputXml</inputXml></wss:run></soapenv:Body></soapenv:Envelope>''';
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String responseStream = await response.stream.bytesToString();
+      Map<String, dynamic> dataAfterParsing = parseResponse(responseStream);
+      String s = dataAfterParsing['message'];
+      // print("response = " + s);
+      if (dataAfterParsing['isSuccess']) {
+        final myTransformer = Xml2Json();
+        myTransformer.parse(s);
+        Map<dynamic, dynamic> json = jsonDecode(myTransformer.toGData());
+        print(json["RESULT"].toString());
+        return json;
+      } else
+        return "Failure2";
+    } else {
+      print("Error " + response.reasonPhrase);
+      return "Failure1";
     }
   }
 }

@@ -91,4 +91,10 @@ void main() {
         await repo.login(new UserModel("USR01", "USR01"));
     expect(loginResponse.isSuccess, true);
   });
+  test('isGetStockDetailsWorking', () async {
+    // Build our app and trigger a frame.
+    Repo repo = Repo.getInstance();
+    String loginResponse = await repo.getStockDetails();
+    expect(loginResponse, "Success");
+  });
 }
