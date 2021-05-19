@@ -13,10 +13,10 @@ class BarCodeScannerBloc {
   }
 
   // ignore: close_sinks
-  BehaviorSubject<List<BarCodeGridModel>> _listOfGridController =
+  BehaviorSubject<List<UBEntriesGridModel>> _listOfGridController =
       new BehaviorSubject();
 
-  Stream<List<BarCodeGridModel>> get listOfGridStream =>
+  Stream<List<UBEntriesGridModel>> get listOfGridStream =>
       _listOfGridController.stream;
 
   // ignore: close_sinks
@@ -25,16 +25,16 @@ class BarCodeScannerBloc {
   Stream<int> get numberOfItemsStream => _noOfItemsController.stream;
 
   void addItemToListStream(
-      BarCodeGridModel barCodeGridModel, List<BarCodeGridModel> list) {
+      UBEntriesGridModel barCodeGridModel, List<UBEntriesGridModel> list) {
     list.add(barCodeGridModel);
     _listOfGridController.add(list);
   }
 
-  void updateStreamList(List<BarCodeGridModel> list) {
+  void updateStreamList(List<UBEntriesGridModel> list) {
     _listOfGridController.add(list);
   }
 
-  Future<int> addDataToServer(List<BarCodeGridModel> barCodeModelList) async {
+  Future<int> addDataToServer(List<UBEntriesGridModel> barCodeModelList) async {
     print(barCodeModelList.toString());
     print("Items To Be Sent = ${barCodeModelList.length}");
     return await _repo.sendUBEntries(barCodeModelList);

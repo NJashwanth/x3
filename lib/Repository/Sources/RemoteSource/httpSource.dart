@@ -121,7 +121,7 @@ class HttpSource {
     }
   }
 
-  Future<int> createUB(List<BarCodeGridModel> ubEntries,
+  Future<int> createUB(List<UBEntriesGridModel> ubEntries,
       ConfigurationSettings configurationSettings) async {
     UBRequestBody requestBody = new UBRequestBody(ubEntries);
     var request = HttpUtils.createRequest(configurationSettings, "YXCREATEUB",
@@ -202,8 +202,10 @@ class HttpSource {
 }
 
 class UBRequestBody {
-  List<BarCodeGridModel> entries = [];
+  List<UBEntriesGridModel> entries = [];
+
   UBRequestBody(this.entries);
+
   String toJson() {
     String mapToReturn = "\"GRP1\":[";
     int totalEntries = 0;

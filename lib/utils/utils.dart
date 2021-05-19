@@ -31,10 +31,13 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
     FocusNode nextFocusNode,
     String prefixText,
     bool obscureText,
-    bool autoFocus}) {
+    bool autoFocus,
+    bool enable,
+    void Function() onEditingCompleted}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: TextFormField(
+      onEditingComplete: onEditingCompleted,
       obscureText: obscureText ?? false,
       focusNode: currentFocusNode != null ? currentFocusNode : null,
       onFieldSubmitted: (term) {
@@ -42,6 +45,7 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
         if (nextFocusNode != null)
           FocusScope.of(context).requestFocus(nextFocusNode);
       },
+      enabled: enable ?? true,
       autofocus: autoFocus ?? false,
       controller: controller,
       keyboardType: textInputType ?? TextInputType.text,
@@ -62,7 +66,7 @@ Widget getTextFormField(BuildContext context, TextEditingController controller,
           ? validate(s, labelText)
           : getValidation(s, validationType, labelText),
       decoration:
-          inputDecoration(labelText, hintText, preText, controller, prefixText),
+      inputDecoration(labelText, hintText, preText, controller, prefixText),
     ),
   );
 }

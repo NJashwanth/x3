@@ -30,7 +30,7 @@ class Repo {
     return _localSource.getTextConfiguration();
   }
 
-  Future<int> sendUBEntries(List<BarCodeGridModel> ubEntries) async {
+  Future<int> sendUBEntries(List<UBEntriesGridModel> ubEntries) async {
     ConfigurationSettings settings = await _localSource.getConfiguration();
     return await httpSource.createUB(ubEntries, settings);
   }
@@ -40,10 +40,10 @@ class Repo {
     return _localSource.setLanguage(language);
   }
 
-  getStockDetails() async {
+  Future<Map<dynamic, dynamic>> getStockDetails() async {
     ConfigurationSettings configurationSettings =
         await _localSource.getConfiguration();
-    return httpSource.getStockDetails(configurationSettings);
+    return await httpSource.getStockDetails(configurationSettings);
   }
 
   void setIncrementer(int incrementer) {

@@ -1,10 +1,11 @@
-class BarCodeGridModel {
+class UBEntriesGridModel {
   String document;
   String barcode;
   String location;
   bool isChecked;
 
-  BarCodeGridModel(this.document, this.barcode, this.location, this.isChecked);
+  UBEntriesGridModel(
+      this.document, this.barcode, this.location, this.isChecked);
 
   @override
   String toString() {

@@ -27,7 +27,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
   TextEditingController _scanLocationController = new TextEditingController();
   UserTaskModel userTaskModel;
   List<DataRow> rowList;
-  List<BarCodeGridModel> barCodeModelList = [];
+  List<UBEntriesGridModel> barCodeModelList = [];
 
   bool disableKeyboard = true;
   BarCodeScannerBloc _bloc = BarCodeScannerBloc.getInstance();
@@ -69,7 +69,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
 
   Widget getTopWidget() {
     return Expanded(
-        child: StreamBuilder<List<BarCodeGridModel>>(
+        child: StreamBuilder<List<UBEntriesGridModel>>(
             stream: _bloc.listOfGridStream,
             initialData: [],
             builder: (context, snapshot) {
@@ -92,7 +92,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
             ])));
   }
 
-  void addDataToRowList(AsyncSnapshot<List<BarCodeGridModel>> snapshot) {
+  void addDataToRowList(AsyncSnapshot<List<UBEntriesGridModel>> snapshot) {
     if (snapshot.hasData && snapshot.data.isNotEmpty) {
       barCodeModelList = snapshot.data;
       rowList = snapshot.data.map(((element) {
@@ -199,7 +199,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
   void onScanItemPressed() {
     if (_formKey.currentState.validate()) {
       print("Validated");
-      BarCodeGridModel barCodeGridModel = new BarCodeGridModel(
+      UBEntriesGridModel barCodeGridModel = new UBEntriesGridModel(
           _documentNumberController.text,
           _scanItemBarCodeController.text,
           _scanLocationController.text ?? "",
@@ -242,7 +242,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
   }
 
   void onTapOnCheckBox(
-      BarCodeGridModel element, List<BarCodeGridModel> completeList) {
+      UBEntriesGridModel element, List<UBEntriesGridModel> completeList) {
     element.isChecked = !element.isChecked;
     _bloc.updateStreamList(completeList ?? []);
   }
@@ -260,9 +260,9 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
   Future<void> onSendButtonPressed() async {
     print("Send Button Pressed");
     if (barCodeModelList != [] && barCodeModelList.isNotEmpty) {
-      List<BarCodeGridModel> listToSend = [];
-      List<BarCodeGridModel> listToLeft = [];
-      for (BarCodeGridModel barCodeGridModel in barCodeModelList) {
+      List<UBEntriesGridModel> listToSend = [];
+      List<UBEntriesGridModel> listToLeft = [];
+      for (UBEntriesGridModel barCodeGridModel in barCodeModelList) {
         if (barCodeGridModel.isChecked)
           listToSend.add(barCodeGridModel);
         else
@@ -273,6 +273,7 @@ class _BarCodeScannerScreenState extends State<BarCodeScannerScreen> {
         await dialog.show();
 
         int numberOfItems = await _bloc.addDataToServer(listToSend);
+        print("No od Items Returned = $numberOfItems");
         await dialog.hide();
         if (numberOfItems != -1) {
           print("No of items = $numberOfItems");
