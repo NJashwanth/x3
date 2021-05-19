@@ -5,6 +5,7 @@ import 'package:x3/Login/model/userModel.dart';
 import 'package:x3/Repository/Sources/LocalSource/localSource.dart';
 import 'package:x3/Repository/Sources/RemoteSource/httpSource.dart';
 import 'package:x3/Splash/model/LoginState.dart';
+import 'package:x3/StockChangeScreen/model/StockTransacionRequest.dart';
 
 class Repo {
   static Repo _instance;
@@ -38,6 +39,14 @@ class Repo {
   void setLanguage(String language) {
     print("setLanguage in repo");
     return _localSource.setLanguage(language);
+  }
+
+  Future<Map<dynamic, dynamic>> createStockTransaction(
+      StockTransacionRequest request) async {
+    ConfigurationSettings configurationSettings =
+        await _localSource.getConfiguration();
+    return httpSource.createStockTransactionRequest(
+        request, configurationSettings);
   }
 
   Future<Map<dynamic, dynamic>> getStockDetails() async {

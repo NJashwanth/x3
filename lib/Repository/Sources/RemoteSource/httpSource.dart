@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:x3/BarcodeScanScreen/Model/BarcodeScannerGridModel.dart';
 import 'package:x3/ConfigurationScreen/model/configurationSettingsModel.dart';
 import 'package:x3/HomeScreen/model/UserTaskModel.dart';
 import 'package:x3/Login/model/LoginResponse.dart';
 import 'package:x3/Login/model/userModel.dart';
+import 'package:x3/StockChangeScreen/model/StockTransacionRequest.dart';
 import 'package:x3/utils/HTTPUtils.dart';
 import 'package:xml2json/xml2json.dart';
 
@@ -160,25 +162,17 @@ class HttpSource {
     }
   }
 
-  getStockDetails(ConfigurationSettings configurationSettings) async {
-    var headers = {
-      'soapaction': '*',
-      'Authorization': 'Basic YWRtaW46YWRtaW4=',
-      'Content-Type': 'application/xml'
-    };
-
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            'http://sagex3v12.germinit.com:8124/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC'));
+  Future<Map<String, dynamic>> getStockDetails(
+      ConfigurationSettings configurationSettings) async {
     String api = "YXSTKCHGPL";
     String inputXml =
         "{\"GRP1\":{\"YXSRCTYP\":\"19\",\"YXSTOFCY\":\"AU012\",\"YXDOCNUM\":\"MRCAU0120011\",\"YXSLO\":\"STO1201\",\"YXSRCLOC\":\"QUA01\",\"YXDSTLOC\":\"QUA02\"}}";
 
+    Request request =
+        HttpUtils.createRequest(configurationSettings, api, inputXml);
+
     request.body =
         '''<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wss="http://www.adonix.com/WSS"><soapenv:Header/><soapenv:Body><wss:run soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><callContext xsi:type="wss:CAdxCallContext"><codeLang xsi:type="xsd:string">ENG</codeLang><poolAlias xsi:type="xsd:string">GITDEV</poolAlias><poolId xsi:type="xsd:string"></poolId><requestConfig xsi:type="xsd:string">adxwss.beautify=true</requestConfig></callContext><publicName xsi:type="xsd:string">$api</publicName><inputXml xsi:type="xsd:string">$inputXml</inputXml></wss:run></soapenv:Body></soapenv:Envelope>''';
-    request.headers.addAll(headers);
-
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
@@ -193,10 +187,37 @@ class HttpSource {
         print(json["RESULT"].toString());
         return json;
       } else
-        return "Failure2";
+        return null;
     } else {
       print("Error " + response.reasonPhrase);
-      return "Failure1";
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> createStockTransactionRequest(
+      StockTransacionRequest stockTransactionRequest,
+      ConfigurationSettings configurationSettings) async {
+    http.Request request = HttpUtils.createRequest(
+        configurationSettings,
+        stockTransactionRequest.publicName,
+        stockTransactionRequest.toJson().toString());
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      String responseStream = await response.stream.bytesToString();
+      Map<String, dynamic> dataAfterParsing = parseResponse(responseStream);
+      String s = dataAfterParsing['message'];
+      // print("response = " + s);
+      if (dataAfterParsing['isSuccess']) {
+        final myTransformer = Xml2Json();
+        myTransformer.parse(s);
+        Map<dynamic, dynamic> json = jsonDecode(myTransformer.toGData());
+        print(json["RESULT"].toString());
+        return json;
+      } else
+        return null;
+    } else {
+      print("Error " + response.reasonPhrase);
+      return null;
     }
   }
 }

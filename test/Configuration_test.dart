@@ -94,7 +94,7 @@ void main() {
   test('isGetStockDetailsWorking', () async {
     // Build our app and trigger a frame.
     Repo repo = Repo.getInstance();
-    String loginResponse = await repo.getStockDetails();
-    expect(loginResponse, "Success");
+    Map<String, dynamic> stockDetails = await repo.getStockDetails();
+    expect(stockDetails.isNotEmpty, true);
   });
 }
