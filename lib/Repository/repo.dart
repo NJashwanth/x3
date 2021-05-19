@@ -40,8 +40,9 @@ class Repo {
     return _localSource.setLanguage(language);
   }
 
-  Future<String> getStockExchangeDocumentId() async {
-    return _localSource.getStockExchangeDocumentId();
+  Future<String> getStockExchangeDocumentId(int uniqueRowId) async {
+    String valueToReturn = await _localSource.getStockExchangeDocumentId();
+    return valueToReturn + uniqueRowId.toString();
   }
 
   void setIncrementer(int incrementer) {
