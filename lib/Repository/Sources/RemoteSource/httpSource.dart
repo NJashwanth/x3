@@ -47,7 +47,6 @@ class HttpSource {
       } catch (e) {}
       maptoReturn = {"isSuccess": true, "message": s};
     }
-    print("map to return after parsing is $maptoReturn");
     return maptoReturn;
   }
 
@@ -68,8 +67,10 @@ class HttpSource {
           Map<dynamic, dynamic> map = jsonDecode(s);
           List<UserTaskModel> mapToReturn = new List();
           List listFromResponse = map["GRP2"];
+          int i = 0;
           listFromResponse.forEach((element) {
-            mapToReturn.add(UserTaskModel.fromJson(element));
+            mapToReturn.add(UserTaskModel.fromJson(element, i));
+            i++;
           });
           List<UserTaskModel> reducedList = new List();
           mapToReturn.reduce((value, element) {
@@ -82,6 +83,7 @@ class HttpSource {
             return element;
           });
           reducedList.add(mapToReturn.last);
+          print(reducedList.toString());
           return new LoginResponse(true, reducedList);
         } else {
           return new LoginResponse(false, null, failureReason: s);

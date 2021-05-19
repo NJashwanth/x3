@@ -111,6 +111,14 @@ class LocalSource {
 
     return savedSettings;
   }
+
+  Future<String> getStockExchangeDocumentId() async {
+    String documentId;
+    if (!Hive.isBoxOpen("configuration")) await openBoxes();
+    documentId =
+        Hive.box("configuration").get("documentId", defaultValue: null);
+    return documentId;
+  }
 }
 
 class TextConfiguration {

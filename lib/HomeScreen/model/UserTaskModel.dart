@@ -1,4 +1,5 @@
 class UserTaskModel {
+  int uniqueNumber;
   String yXTASKNUM0;
   String yXTASKNAM;
   String yXTASKDESC;
@@ -30,7 +31,8 @@ class UserTaskModel {
   int yXDSTLOCLEN;
 
   UserTaskModel(
-      {this.yXTASKNUM0,
+      {this.uniqueNumber,
+      this.yXTASKNUM0,
       this.yXTASKNAM,
       this.yXTASKDESC,
       this.yXAPP,
@@ -42,25 +44,25 @@ class UserTaskModel {
       this.yXSOURCESUBP,
       this.yXSCANFIELD,
       this.yXSOUSTOFCY,
-      this.yXSOULOC,
-      this.yXDESTPRG,
-      this.yXDESTSUBP,
-      this.yXDESTSTOFCY,
-      this.yXDESTLOC,
-      this.yXTASKLIN,
-      this.yXTASKNUM,
-      this.yXPARAM,
-      this.yXPARAMTEXT,
-      this.yXDISPLAY,
-      this.yXCOLUMNORD,
-      this.yXSORTORD,
-      this.yXSTOFCYLEN,
-      this.yXDOCNUMLEN,
-      this.yXSLOLEN,
-      this.yXSRCLOCLEN,
-      this.yXDSTLOCLEN});
+    this.yXSOULOC,
+    this.yXDESTPRG,
+    this.yXDESTSUBP,
+    this.yXDESTSTOFCY,
+    this.yXDESTLOC,
+    this.yXTASKLIN,
+    this.yXTASKNUM,
+    this.yXPARAM,
+    this.yXPARAMTEXT,
+    this.yXDISPLAY,
+    this.yXCOLUMNORD,
+    this.yXSORTORD,
+    this.yXSTOFCYLEN,
+    this.yXDOCNUMLEN,
+    this.yXSLOLEN,
+    this.yXSRCLOCLEN,
+    this.yXDSTLOCLEN});
 
-  UserTaskModel.fromJson(Map<String, dynamic> json) {
+  UserTaskModel.fromJson(Map<String, dynamic> json, this.uniqueNumber) {
     yXTASKNUM0 = json['YXTASKNUM0'];
     yXTASKNAM = json['YXTASKNAM'];
     yXTASKDESC = json['YXTASKDESC'];
@@ -128,6 +130,6 @@ class UserTaskModel {
 
   @override
   String toString() {
-    return 'UserTaskModel{yXTASKNUM0: $yXTASKNUM0, yXTASKNAM: $yXTASKNAM, yXTASKDESC: $yXTASKDESC, yXAPP: $yXAPP, yXGUITY: $yXGUITY, yXTASKORD: $yXTASKORD, yXSOURCEDOC: $yXSOURCEDOC, yXSOURCETYP: $yXSOURCETYP, yXSOURCEPRG: $yXSOURCEPRG, yXSOURCESUBP: $yXSOURCESUBP, yXSCANFIELD: $yXSCANFIELD, yXSOUSTOFCY: $yXSOUSTOFCY, yXSOULOC: $yXSOULOC, yXDESTPRG: $yXDESTPRG, yXDESTSUBP: $yXDESTSUBP, yXDESTSTOFCY: $yXDESTSTOFCY, yXDESTLOC: $yXDESTLOC, yXTASKLIN: $yXTASKLIN, yXTASKNUM: $yXTASKNUM, yXPARAM: $yXPARAM, yXPARAMTEXT: $yXPARAMTEXT, yXDISPLAY: $yXDISPLAY, yXCOLUMNORD: $yXCOLUMNORD, yXSORTORD: $yXSORTORD, yXSTOFCYLEN: $yXSTOFCYLEN, yXDOCNUMLEN: $yXDOCNUMLEN, yXSLOLEN: $yXSLOLEN, yXSRCLOCLEN: $yXSRCLOCLEN, yXDSTLOCLEN: $yXDSTLOCLEN}';
+    return 'UserTaskModel{uniqueNumber: $uniqueNumber, yXTASKNUM0: $yXTASKNUM0, yXTASKNAM: $yXTASKNAM, yXTASKDESC: $yXTASKDESC, yXAPP: $yXAPP, yXGUITY: $yXGUITY, yXTASKORD: $yXTASKORD, yXSOURCEDOC: $yXSOURCEDOC, yXSOURCETYP: $yXSOURCETYP, yXSOURCEPRG: $yXSOURCEPRG, yXSOURCESUBP: $yXSOURCESUBP, yXSCANFIELD: $yXSCANFIELD, yXSOUSTOFCY: $yXSOUSTOFCY, yXSOULOC: $yXSOULOC, yXDESTPRG: $yXDESTPRG, yXDESTSUBP: $yXDESTSUBP, yXDESTSTOFCY: $yXDESTSTOFCY, yXDESTLOC: $yXDESTLOC, yXTASKLIN: $yXTASKLIN, yXTASKNUM: $yXTASKNUM, yXPARAM: $yXPARAM, yXPARAMTEXT: $yXPARAMTEXT, yXDISPLAY: $yXDISPLAY, yXCOLUMNORD: $yXCOLUMNORD, yXSORTORD: $yXSORTORD, yXSTOFCYLEN: $yXSTOFCYLEN, yXDOCNUMLEN: $yXDOCNUMLEN, yXSLOLEN: $yXSLOLEN, yXSRCLOCLEN: $yXSRCLOCLEN, yXDSTLOCLEN: $yXDSTLOCLEN}';
   }
 }

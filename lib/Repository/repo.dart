@@ -41,7 +41,7 @@ class Repo {
   }
 
   Future<String> getStockExchangeDocumentId() async {
-    return "abc";
+    return _localSource.getStockExchangeDocumentId();
   }
 
   void setIncrementer(int incrementer) {
