@@ -412,12 +412,12 @@ void navigateToPurchaseOrderReceiptScreen(
       ));
 }
 
-void navigateToInquiryScreen(
-    BuildContext context, UserTaskModel userTaskModel) {
+void navigateToInquiryScreen(BuildContext context,
+    {UserTaskModel userTaskModel}) {
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => InquiryScreen(userTaskModel),
+        builder: (context) => InquiryScreen(userTaskModel: userTaskModel),
       ));
 }
 

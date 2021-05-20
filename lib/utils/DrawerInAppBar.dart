@@ -26,6 +26,8 @@ class _DrawerInAppBarState extends State<DrawerInAppBar> {
             child: Column(
               children: [
                 getDrawerHeader(),
+                buildListTileForDrawer(TextConstants.INQUIRY_TITLE_TEXT,
+                    () => navigateToInquiryScreen(context)),
                 buildListTileForDrawer(
                     TextConstants.CONFIGURATION_SETTINGS_IN_DRAWER,
                     () => navigateToConfigurationSettingsScreen(context)),

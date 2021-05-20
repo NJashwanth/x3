@@ -269,7 +269,8 @@ class _StockExchangeScreenState extends State<StockExchangeScreen> {
           new StockTransacionRequest(
               gRP1: grp1,
               publicName: userTaskModel.yXSOURCEPRG,
-              gRP2: listToSend);
+              gRP2: listToSend,
+              userTaskModel: userTaskModel);
       Map<String, dynamic> mapFromServer =
           await _bloc.createStockTransaction(stockTransacionRequest);
       print("mapFromServer for create Stock Transaction = $mapFromServer");

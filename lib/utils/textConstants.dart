@@ -33,6 +33,7 @@ class TextConstants {
   static const FAILURE_CONTENT_TEXT_IN_DIALOG =
       "FAILURE_CONTENT_TEXT_IN_DIALOG";
   static const BARCODE_COUNT_TEXT = "BARCODE_COUNT_TEXT";
+  static const INQUIRY_TITLE_TEXT = "INQUIRY_TITLE_TEXT";
 
   Map<String, String> texts = new Map();
 
@@ -73,6 +74,7 @@ class TextConstants {
     texts['$SEND_BUTTON_NAME-ENG'] = "Send";
     texts['$CLEAR_BUTTON_NAME-ENG'] = "Clear Screen";
     texts['$BARCODE_COUNT_TEXT-ENG'] = "Barcode Count";
+    texts['$INQUIRY_TITLE_TEXT-ENG'] = "Inquiry Screen";
   }
 
   Future<bool> load() async {

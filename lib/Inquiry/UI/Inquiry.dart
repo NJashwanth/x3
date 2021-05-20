@@ -8,9 +8,9 @@ import 'package:x3/utils/utils.dart';
 class InquiryScreen extends StatefulWidget {
   final UserTaskModel userTaskModel;
 
-  InquiryScreen(
+  InquiryScreen({
     this.userTaskModel,
-  );
+  });
 
   @override
   _InquiryScreenState createState() => _InquiryScreenState();
@@ -28,14 +28,15 @@ class _InquiryScreenState extends State<InquiryScreen> {
   @override
   void initState() {
     super.initState();
-    this.userTaskModel = widget.userTaskModel;
+    // this.userTaskModel = widget.userTaskModel;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        appBar: getAppBar(userTaskModel.yXTASKNAM.toString(), type: false),
+        appBar: getAppBar(/*userTaskModel.yXTASKNAM.toString()*/ "Inquiry",
+            type: false),
         drawer: DrawerInAppBar(),
         body: getBody());
   }

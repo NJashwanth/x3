@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return navigateToPurchaseOrderReceiptScreen(context, userTaskModel);
         break;
       case 'Inquiry':
-        return navigateToInquiryScreen(context, userTaskModel);
+        return navigateToInquiryScreen(context, userTaskModel: userTaskModel);
         break;
       case 'Unintelligent Barcode':
         return navigateToBarCodeScannerScreen(context, userTaskModel);

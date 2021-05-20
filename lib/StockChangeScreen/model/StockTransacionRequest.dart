@@ -1,9 +1,13 @@
+import 'package:x3/HomeScreen/model/UserTaskModel.dart';
+
 class StockTransacionRequest {
   GRP1 gRP1;
   List<Stock> gRP2;
   String publicName;
+  UserTaskModel userTaskModel;
 
-  StockTransacionRequest({this.gRP1, this.gRP2, this.publicName});
+  StockTransacionRequest(
+      {this.gRP1, this.gRP2, this.publicName, this.userTaskModel});
 
   StockTransacionRequest.fromJson(Map<String, dynamic> json) {
     gRP1 = json['GRP1'] != null ? new GRP1.fromJson(json['GRP1']) : null;
@@ -61,18 +65,17 @@ class Stock {
   String yXSUBLOT;
   bool isChecked;
 
-  Stock(
-      {this.yXITMREF,
-      this.yXPCU,
-      this.yXQTY,
-      this.yXSTA,
-      this.yXLOCTYP,
-      this.yXLOC,
-      this.yXDESTLOC,
-      this.yXSTADEST,
-      this.yXLOT,
-      this.yXSUBLOT,
-      this.isChecked});
+  Stock({this.yXITMREF,
+    this.yXPCU,
+    this.yXQTY,
+    this.yXSTA,
+    this.yXLOCTYP,
+    this.yXLOC,
+    this.yXDESTLOC,
+    this.yXSTADEST,
+    this.yXLOT,
+    this.yXSUBLOT,
+    this.isChecked});
 
   Stock.fromJson(Map<String, dynamic> json) {
     yXITMREF = json['YXITMREF'];
